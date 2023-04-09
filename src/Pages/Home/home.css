@@ -10,18 +10,59 @@
     margin: 0;
     padding: 0;
 }
+.criador {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 45%;
+  }
   
+  .criador::before {
+    content: "";
+    background-image: url('./images/girl_01.png');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    z-index: -1;
+  }
   
-  .criador {
-    height: 50%;
-    width: 100%;
-    background-color: red;
+  .criador h1,
+  .criador button {
+    position: relative;
+    z-index: 1;
+  }
 
-  }
-  
+.criador button{
+ margin-top: 30%;
+}
+
+.criador h1{
+    color: #fff;
+}
+
   .fa {
-    height: 50%;
+    height: 45%;
     background-color: black;
-   
-  }
-  
+}
+
+
+
+.criminal{
+    height: 10%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.criminal h1{
+   color: white;
+}
