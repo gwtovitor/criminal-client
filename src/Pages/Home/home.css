@@ -3,28 +3,30 @@
     margin: 0;
 
 }
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+.container-sl {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+
 }
+
 .criador {
+  width: 40%;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 45%;
+    background-image: url('./images/girl_01.png');
+    margin-bottom: 2px;
   }
   
   .criador::before {
-    content: "";
-    background-image: url('./images/girl_01.png');
-    background-size: cover;
-    background-position: center;
-    position: absolute;
+      
     top: 0;
     left: 0;
     right: 0;
@@ -47,22 +49,45 @@
     color: #fff;
 }
 
-  .fa {
-    height: 45%;
-    background-color: black;
-}
-
-
-
-.criminal{
-    height: 10%;
-    width: 100%;
-    background-color: black;
+.fa {
+  width: 40%;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 45%;
+    background-image: url('./images/girl_01.png');
+    margin-top: 2px;
+  }
+.criminal {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
+
 .criminal h1{
    color: white;
+}
+
+.criminal h1{
+color: black;
+}
+
+
+
+
+
+@media screen and (max-width: 600px)  {
+  .fa  {
+    width: 100%;
+  }
+  .criador  {
+    width: 100%;
+  }
 }
