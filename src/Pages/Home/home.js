@@ -1,6 +1,8 @@
 import React from 'react';
 import './home.css'
-import { button } from 'bootstrap';
+import { Image } from 'react-bootstrap';
+import logo from './images/logo.png';
+
 function Home() {
   return (
     <div className="container-sl">
@@ -13,7 +15,7 @@ function Home() {
        
       </div>
       <div className='criminal'>
-          <h1>CRIMINAL CLUB</h1>
+          <Image className="logo" src={logo}alt="Logo da empresa" fluid />
       </div>  
       <div className="fa">
       <h1>FÃ</h1>
