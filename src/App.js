@@ -10,7 +10,7 @@ function App() {
     <ToastContainer autoClose={3000}></ToastContainer>
     <RoutesApp/>
     </ProSidebarProvider>
-    </> 
+    </>       
   );
 }
 
