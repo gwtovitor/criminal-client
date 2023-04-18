@@ -15,7 +15,7 @@ section#post-list{
 
 section#post-list article{
     background: #fff;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     margin-top: 30px;
 } 
 .user-avatar {

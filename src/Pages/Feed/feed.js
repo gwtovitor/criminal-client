@@ -59,7 +59,7 @@ function Feed() {
                 "likes": 30
             },
             {
-                "_id": "3",
+                "_id": "4",
                 "author": "Lidia Beatriz",
                 "profile": lidia,
                 "user": "lidiabzz",
@@ -71,7 +71,7 @@ function Feed() {
             }
             ,
             {
-                "_id": "3",
+                "_id": "5",
                 "author": "Voce Sabia?",
                 "profile": vocesabia,
                 "user": "vc_sabia",
@@ -115,8 +115,8 @@ function Feed() {
 
                     <Sidebar className='navbarside-feed' collapsedWidth='50px'>
                         <Menu>
-                            <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
                             <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
+                            <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
                             <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
                             <MenuItem icon={<AttachMoneyIcon />}>Finanças</MenuItem>
                             <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
@@ -179,8 +179,8 @@ function Feed() {
 
             </div>
             <footer className="footer">
-                <IconButton onClick={console.log('oi')}><CottageIcon /></IconButton>
                 <IconButton><PersonalVideoIcon /></IconButton>
+                <IconButton onClick={()=>{console.log('oi')}}><CottageIcon /></IconButton>
                 <IconButton><SendIcon /></IconButton>
                 <IconButton><AttachMoneyIcon /></IconButton>
                 <IconButton><AccountCircleIcon /></IconButton>
