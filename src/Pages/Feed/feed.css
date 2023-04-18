@@ -1,3 +1,11 @@
+.container-feed{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 50px
+}
+  
 section#post-list{
     width: 100%;
     max-width: 580px;
@@ -28,7 +36,6 @@ section#post-list article{
 .user-info-row{
     display: flex;
     flex-direction: row ;
-
     align-items: center;
 }
 section#post-list article header{
@@ -87,3 +94,89 @@ section#post-list article footer p span {
     color: #7159c1;
     display: block;
 }
+
+.videoplayer-feed{
+    width: 100%;
+}
+.navlateral{
+    padding: 10px;
+}
+.botaonavbar{
+   background-color: white;
+}
+.navbarside-feed{
+    padding-left: 60px;
+    padding-top: 30px;
+   
+}
+
+.navlateral{
+    position: fixed;
+}
+ 
+.footer {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px; /* altura desejada para o footer */
+    background-color: #fff;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+@media (min-width: 320px) and (max-width:480px) {
+    .navbarside-feed{
+display: none;
+    }
+    .footer {
+        display: flex;
+    }
+    .container-feed{
+        padding-bottom: 50px;
+    }
+  
+  }
+  
+  
+  @media (min-width: 0px) and (max-width:768px) {
+  
+    .navbarside-feed{
+        display: none;
+            }
+            .footer {
+                display: flex;
+            }
+            .container-feed{
+                padding-bottom: 50px;
+            }
+
+  }
+  
+  @media (min-width:769px) and (max-width:1045px) {
+  
+    .navbarside-feed{
+        display: none;
+    }
+    .footer {
+        display: flex;
+    }
+    .container-feed{
+        padding-bottom: 50px;
+    }
+    
+  }
+  
+    
+  @media (min-width:1000px) and (max-width:1100px) {
+  
+    .navbarside-feed{
+        padding-left: 10px;
+        padding-top: 30px;
+       
+    }
+  }
+  
+  

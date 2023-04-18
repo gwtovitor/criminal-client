@@ -2,8 +2,7 @@ import { Form, Button, Image } from 'react-bootstrap'
 import logo from './images/logo.png'
 import React, { useState } from "react";
 import './login.css'
-import { Link } from 'react-router-dom';
-import { FaGoogle, FaFacebookF, FaMicrosoft } from 'react-icons/fa';
+
 function Login() {
 
     const [email, setEmail] = useState("");
