@@ -90,7 +90,7 @@ function MyCriminal() {
     }
 
     const mountMyMenu = (user) => {
-      if (user == 'criado') {
+      if (user === 'criado') {
         setMenu([
           'Favorites',
           'Subscribing',
