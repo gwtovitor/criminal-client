@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './feed.css';
-import { Sidebar, Menu, MenuItem, useProSidebar } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import more from './Images/more.svg';
 import like from './Images/like.svg';
 import comment from './Images/comment.svg';
@@ -111,20 +111,6 @@ function Feed() {
     return (
         <div>
             <div className="container-feed">
-                <div className='navlateral'>
-
-                    <Sidebar className='navbarside-feed' collapsedWidth='50px'>
-                        <Menu>
-                            <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
-                            <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
-                            <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
-                            <MenuItem icon={<AttachMoneyIcon />}>Finanças</MenuItem>
-                            <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
-
-                        </Menu>
-                    </Sidebar>
-
-                </div>
                 <section id="post-list">
                     {feed.map((post) => (
                         <article key={post._id}>
@@ -159,7 +145,6 @@ function Feed() {
                                     <source src={post.video} type="video/mp4" />
                                 </video>
                             )}
-
                             <footer>
                                 <div className="actions">
                                     <button type="button" onClick={() => handleLike(post._id)}>
@@ -176,16 +161,7 @@ function Feed() {
 
                     ))}
                 </section>
-
             </div>
-            <footer className="footer">
-                <IconButton><PersonalVideoIcon /></IconButton>
-                <IconButton onClick={()=>{console.log('oi')}}><CottageIcon /></IconButton>
-                <IconButton><SendIcon /></IconButton>
-                <IconButton><AttachMoneyIcon /></IconButton>
-                <IconButton><AccountCircleIcon /></IconButton>
-            </footer>
-
         </div>
     );
 }
