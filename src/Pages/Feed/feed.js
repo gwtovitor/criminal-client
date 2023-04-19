@@ -109,7 +109,7 @@ function Feed() {
     }
 
     return (
-        <div>
+       
             <div className="container-feed">
                 <section id="post-list">
                     {feed.map((post) => (
@@ -162,7 +162,7 @@ function Feed() {
                     ))}
                 </section>
             </div>
-        </div>
+ 
     );
 }
 

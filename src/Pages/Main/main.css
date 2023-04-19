@@ -1,14 +1,3 @@
-.container-feed {
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    margin-bottom: 50px
-}
-
-.navlateral {
-    padding: 10px;
-}
 
 .botaonavbar {
     background-color: white;

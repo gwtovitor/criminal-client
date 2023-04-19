@@ -12,6 +12,7 @@ import Compras from './Pages/Financas/Compras';
 import Balanco from './Pages/Financas/Balanco';
 import Banco from './Pages/Financas/Banco'
 import Main from './Pages/Main/main'
+import Verts from './Pages/Verts/verts'
 
 function RoutesApp() {
     return (
@@ -29,6 +30,8 @@ function RoutesApp() {
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/banco' element={<Banco />} />
                     <Route path='/mycriminal' element={<MyCriminal />} />
+                    <Route path='/verts' element={<Verts />} />
+                    
                 </Route>
                 {/* <Route path='/financas' element={<Financas />} > */}
                 {/* </Route> */}

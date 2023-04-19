@@ -1,6 +1,5 @@
 .container-feed {
-    display: flex;
-    flex-direction: row;
+
     padding: 0;
     margin: 0;
     margin-bottom: 50px
@@ -8,7 +7,7 @@
 
 section#post-list {
     width: 100%;
-    max-width: 580px;
+    max-width:550px;
     margin: 0 auto;
     padding: 0 30px;
 }

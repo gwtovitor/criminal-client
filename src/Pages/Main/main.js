@@ -15,7 +15,7 @@ function Main() {
         <div className='row'>
             <div className='col-1 col-sm-1 col-lg-3'>
                 <div className='navlateral'>
-                    <Sidebar className='navbarside-feed' collapsedWidth='50px'>
+                    <Sidebar className='navbarside-feed'>
                         <Menu>
                             <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
                             <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
