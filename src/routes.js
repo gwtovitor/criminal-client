@@ -8,6 +8,7 @@ import DadosBancarios from './Pages/Signcriador/dadosbancarios'
 import Feed from './Pages/Feed/feed'
 import Financas from './Pages/Financas';
 import MyCriminal from './Pages/MyCriminal';
+import Main from './Pages/Main/main'
 
 
 function RoutesApp() {
@@ -15,13 +16,15 @@ function RoutesApp() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Home />} />
+               {/* <Route path='/' element={<Home />} />*/}
                 <Route path='/login' element={<Login />} />
                 <Route path='/loginfa' element={<Loginfa />} />
                 <Route path='/signfa' element={<Signfa />} />
                 <Route path='/signcriador' element={<Signcriador />} />
                 <Route path='/signcriador/dados' element={<DadosBancarios />} />
-                <Route path='/feed' element={<Feed />} />
+                <Route path='/' element={<Main />}>
+                    <Route index element={<Feed />} />
+                </Route>
                 <Route path='/financas' element={<Financas />} />
                 <Route path='/mycriminal' element={<MyCriminal />} />
             </Routes>
