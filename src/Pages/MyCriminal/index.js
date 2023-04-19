@@ -90,7 +90,7 @@ function MyCriminal() {
     }
 
     const mountMyMenu = (user) => {
-      if (user === 'criado') {
+      if (user === 'criador') {
         setMenu([
           'Favorites',
           'Subscribing',
@@ -110,17 +110,17 @@ function MyCriminal() {
     }
 
     getInitialData();
-    mountMyMenu('criado');
+    mountMyMenu('fa');
   }, []);
 
   const getData = (page) => {
     const data = () => {
-      if (page == 'Favorites') return favorites;
-      if (page == 'Subscribing') return subscribing;
-      if (page == 'Subscribers') return subscribers;
-      if (page == 'Following') return following;
-      if (page == 'Followers') return followers;
-      if (page == 'Blocks') return blocks;
+      if (page === 'Favorites') return favorites;
+      if (page === 'Subscribing') return subscribing;
+      if (page === 'Subscribers') return subscribers;
+      if (page === 'Following') return following;
+      if (page === 'Followers') return followers;
+      if (page === 'Blocks') return blocks;
     }
 
     setData(data);
@@ -130,13 +130,13 @@ function MyCriminal() {
     <div className='container'>
       <div className='row mt-4'>
         <div className='col-10'>
-          <h4 className='text-secondary'>{data.page} ({data.data.length})</h4>
+          <h4>{data.page} ({data.data?.length})</h4>
           <div className='row mt-2'>
             {
               data.data?.map(d => {
                 return (
                   <div className='col-4'>
-                    <a className='link-secondary link-underline-opacity-0' href="#">
+                    <a className='link-dark link-underline-opacity-0' href="#">
                       <div className='row mt-3'>
                         <div class="col-4">
                           <img src={d.img} class="img-fluid" alt={d.username} />
@@ -154,7 +154,7 @@ function MyCriminal() {
           </div>
         </div>
         <div className='col-2'>
-          <h5 className='text-secondary'>My Page</h5>
+          <h5>My Criminal</h5>
           <hr />
           {
             menu?.map(page => {
