@@ -8,7 +8,9 @@ import DadosBancarios from './Pages/Signcriador/dadosbancarios'
 import Feed from './Pages/Feed/feed'
 import Financas from './Pages/Financas';
 import MyCriminal from './Pages/MyCriminal';
-
+import Compras from './Pages/Financas/Compras';
+import Balanco from './Pages/Financas/Balanco';
+import Banco from './Pages/Financas/Banco'
 
 function RoutesApp() {
 
@@ -22,8 +24,12 @@ function RoutesApp() {
                 <Route path='/signcriador' element={<Signcriador />} />
                 <Route path='/signcriador/dados' element={<DadosBancarios />} />
                 <Route path='/feed' element={<Feed />} />
-                <Route path='/financas' element={<Financas />} />
                 <Route path='/mycriminal' element={<MyCriminal />} />
+                <Route path='/financas' element={<Financas />} >
+                    <Route index element={<Compras />} />
+                    <Route path='balanco' element={<Balanco />} />
+                    <Route path='banco' element={<Banco />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )
