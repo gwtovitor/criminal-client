@@ -12,25 +12,29 @@ import { Outlet } from 'react-router-dom';
 function Main() {
 
     return (
-        <div>
-            <div className='navlateral'>
-                <Sidebar className='navbarside-feed' collapsedWidth='50px'>
-                    <Menu>
-                        <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
-                        <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
-                        <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
+        <div className='row'>
+            <div className='col-1 col-sm-1 col-lg-3'>
+                <div className='navlateral'>
+                    <Sidebar className='navbarside-feed' collapsedWidth='50px'>
+                        <Menu>
+                            <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
+                            <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
+                            <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
 
-                        <SubMenu label="My Criminak">
-      <MenuItem> Finanças </MenuItem>
-      <MenuItem> Subscribe</MenuItem>
-    </SubMenu>
-                        <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
+                            <SubMenu label="My Criminak">
+                                <MenuItem> Finanças </MenuItem>
+                                <MenuItem> Subscribe</MenuItem>
+                            </SubMenu>
+                            <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
 
-                    </Menu>
-                </Sidebar>
+                        </Menu>
+                    </Sidebar>
 
+                </div>
             </div>
-            < Outlet />
+            <div className='col-9 col-lg-6 mt-5'>
+                < Outlet />
+            </div>
             <footer className="footer">
                 <IconButton><PersonalVideoIcon /></IconButton>
                 <IconButton onClick={() => { console.log('oi') }}><CottageIcon /></IconButton>
