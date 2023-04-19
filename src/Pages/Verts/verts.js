@@ -3,95 +3,143 @@ import "./verts.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
-  faPause,
   faVolumeUp,
   faVolumeMute,
   faHeart,
-  faComment,
+  faPause,
+  faHeartCirclePlus
+
 } from "@fortawesome/free-solid-svg-icons";
 
 function Verts() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [showControls, setShowControls] = useState(true);
-  const videoRef = useRef(null);
+  
+  const [hovering, setHovering] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const videoRef = useRef([]);
 
-  function togglePlay() {
-    setIsPlaying(!isPlaying);
-    const video = videoRef.current;
-    if (isPlaying) {
-      video.pause();
-    } else {
+  const handleMouseEnter = () => {
+    setHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovering(false);
+  };
+
+
+
+  const handleVideoClick = (index) => {
+    const video = videoRefs[index].current;
+    if (video.paused) {
       video.play();
+      setPlaying(true);
+    } else {
+      video.pause();
+      setPlaying(false);
     }
-  }
+  };
 
-  function toggleMute() {
-    setIsMuted(!isMuted);
-    const video = videoRef.current;
-    video.muted = !video.muted;
-  }
+  const handleMuteClick = (index) => {
+  const newIsMuted = [...isMuted];
+  newIsMuted[index] = !newIsMuted[index];
+  setIsMuted(newIsMuted);
+  const video = videoRefs[index].current;
+  video.muted = !video.muted;
+  };
 
-  useEffect(() => {
-    if (showControls) {
-      const timer = setTimeout(() => {
-        setShowControls(false);
-      }, 3000);
+  const handleLikeClick = (index) => {
+    setVideos((prevVideos) => {
+      const newVideos = [...prevVideos];
+      const isLiked = newVideos[index].isLiked;
+      const increment = isLiked ? -1 : 1;
+      newVideos[index] = {
+        ...newVideos[index],
+        isLiked: !isLiked,
+        likes: newVideos[index].likes + increment,
+      };
+      return newVideos;
+    });
+  };
+  
 
-      return () => clearTimeout(timer);
-    }
-  }, [showControls]);
 
-  function handleMouseMove() {
-    setShowControls(true);
-  }
+  const [video, setVideos] = useState([
+    {
+      src: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
+      isPlaying: false,
+      isMuted: false,
+      showControls: true,
+      isLiked: false,
+      likes: 45,
+    },
+    {
+      src: 'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
+      isMuted: false,
+      showControls: true,
+      isLiked: false,
+      likes: 10
+    },
+    {
+      src: 'https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-1259-large.mp4',
+      isMuted: false,
+      showControls: true,
+      isLiked: false,
+      likes: 15
+     
+    },
+    {
+      src: 'https://assets.mixkit.co/videos/preview/mixkit-red-sports-car-74-large.mp4',
+      isMuted: false,
+      showControls: true,
+      isLiked: false,
+      likes: 22
+    },
+  ]);
+  const [isMuted, setIsMuted] = useState(Array(video.length).fill(false));
 
-  const videos = [    "https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4",    "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",    "https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4",    "https://assets.mixkit.co/videos/preview/mixkit-mysterious-pale-looking-fashion-woman-at-winter-39878-large.mp4",    "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",    "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",  ];
+  const videoRefs = Array(video.length)
+    .fill(0)
+    .map(() => React.createRef());
+  
+  
+    return (
 
-  return (
     <div>
-      {videos.map((videoSrc) => (
-        <div
-          className="verts-player-container"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => setShowControls(false)}
-        >
+      {video.map((src, index) => (
+        <div className="verts-player-container" key={index}>
           <video
-            ref={videoRef}
+           onMouseEnter={handleMouseEnter}
+           onMouseOut={handleMouseLeave}
             className="verts-player"
-            src={videoSrc}
-            onClick={togglePlay}
+            src={src.src}
+            muted={src.isMuted}
+            onClick={() => handleVideoClick(index)}
+            ref={videoRefs[index]}
           />
-          {showControls && (
+          {hovering && (
             <div className="play-button-verts">
-              <button className="verts-play-pause-button" onClick={togglePlay}>
-                {isPlaying ? (
-                  <FontAwesomeIcon icon={faPause} />
-                ) : (
-                  <FontAwesomeIcon icon={faPlay} />
-                )}
+              <button className="verts-play-pause-button">
+                <FontAwesomeIcon icon={playing ? faPause : faPlay} />
               </button>
             </div>
           )}
           <div className="verts-controls">
+          <button className="verts-mute-button">
+              <FontAwesomeIcon  onClick={() => handleLikeClick(index)} style={{ color: src.isLiked ? 'red' : 'black' }} icon={faHeart} />
+            </button>
+            <text style={{padding:0, marginTop: -20,  marginBottom: 10}}>{src.likes}</text>
+            
             <button className="verts-mute-button">
-              <FontAwesomeIcon icon={faHeart} />
+              <FontAwesomeIcon onClick={() => handleMuteClick(index)} style={{ color: "black" }} icon={isMuted[index] ? faVolumeMute : faVolumeUp} />
             </button>
-            <button className="verts-mute-button" onClick={toggleMute}>
-              <FontAwesomeIcon icon={faComment} />
-            </button>
-            <button className="verts-mute-button" onClick={toggleMute}>
-              {isMuted ? (
-                <FontAwesomeIcon icon={faVolumeMute} />
-              ) : (
-                <FontAwesomeIcon icon={faVolumeUp} />
-              )}
-            </button>
+            
+         
           </div>
         </div>
       ))}
+
     </div>
   );
-};
+}
+
 
 export default Verts;

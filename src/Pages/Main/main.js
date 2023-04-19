@@ -17,13 +17,15 @@ function Main() {
                 <div className='navlateral'>
                     <Sidebar className='navbarside-feed'>
                         <Menu>
-                            <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
+                            <MenuItem onClick={() => {
+                                ;
+                            }} icon={<PersonalVideoIcon />}>Verts</MenuItem>
                             <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
                             <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
 
-                            <SubMenu label="My Criminak">
+                            <SubMenu icon={<AttachMoneyIcon/>} label="My Criminal">
                                 <MenuItem> Finanças </MenuItem>
-                                <MenuItem> Subscribe</MenuItem>
+                                <MenuItem> Inscrições</MenuItem>
                             </SubMenu>
                             <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
 
@@ -32,7 +34,7 @@ function Main() {
 
                 </div>
             </div>
-            <div className='col-9 col-lg-6 mt-5'>
+            <div className='col-8 col-lg-6 mt-2'>
                 < Outlet />
             </div>
             <footer className="footer">

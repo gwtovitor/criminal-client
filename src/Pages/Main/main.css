@@ -1,4 +1,6 @@
-
+.row{
+    max-width: 100%;
+}
 .botaonavbar {
     background-color: white;
 }
@@ -20,7 +22,6 @@
     left: 0;
     right: 0;
     height: 50px;
-
     background-color: #fff;
     justify-content: space-around;
     align-items: center;
