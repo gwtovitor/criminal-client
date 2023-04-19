@@ -19,11 +19,10 @@ function Main() {
                         <MenuItem icon={<PersonalVideoIcon />}>Verts</MenuItem>
                         <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
                         <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
-
                         <SubMenu label="My Criminak">
-      <MenuItem> Finanças </MenuItem>
-      <MenuItem> Subscribe</MenuItem>
-    </SubMenu>
+                            <MenuItem> Finanças </MenuItem>
+                            <MenuItem> Subscribe</MenuItem>
+                        </SubMenu>
                         <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
 
                     </Menu>
