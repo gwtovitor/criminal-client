@@ -34,7 +34,7 @@ function Main() {
 
                 </div>
             </div>
-            <div className='col-8 col-lg-6 mt-2'>
+            <div className='container-outlet'>
                 < Outlet />
             </div>
             <footer className="footer">

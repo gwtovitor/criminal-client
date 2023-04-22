@@ -4,7 +4,13 @@
 .botaonavbar {
     background-color: white;
 }
-
+.container-outlet{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column ;
+    max-width: 1000px;
+}
 .navbarside-feed {
     padding-left: 60px;
     padding-top: 30px;

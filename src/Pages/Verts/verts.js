@@ -7,7 +7,6 @@ import {
   faVolumeMute,
   faHeart,
   faPause,
-  faHeartCirclePlus
 
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,6 +15,7 @@ function Verts() {
   const [hovering, setHovering] = useState(false);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const handleMouseEnter = () => {
     setHovering(true);
@@ -24,6 +24,13 @@ function Verts() {
   const handleMouseLeave = () => {
     setHovering(false);
   };
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
 
 
@@ -99,8 +106,9 @@ function Verts() {
   const videoRefs = Array(video.length)
     .fill(0)
     .map(() => React.createRef());
-  
-  
+
+
+
     return (
 
     <div>
@@ -124,9 +132,10 @@ function Verts() {
           )}
           <div className="verts-controls">
           <button className="verts-mute-button">
-              <FontAwesomeIcon  onClick={() => handleLikeClick(index)} style={{ color: src.isLiked ? 'red' : 'black' }} icon={faHeart} />
+              <FontAwesomeIcon className={`control-buttons ${isMobile ? "mobile" : ""}`} onClick={() => handleLikeClick(index)} style={{ color: src.isLiked ? 'red ': 'black', }} icon={faHeart} />
+              
             </button>
-            <text style={{padding:0, marginTop: -20,  marginBottom: 10}}>{src.likes}</text>
+            <text className="text-likes">{src.likes}</text>
             
             <button className="verts-mute-button">
               <FontAwesomeIcon onClick={() => handleMuteClick(index)} style={{ color: "black" }} icon={isMuted[index] ? faVolumeMute : faVolumeUp} />
@@ -140,6 +149,7 @@ function Verts() {
     </div>
   );
 }
+
 
 
 export default Verts;

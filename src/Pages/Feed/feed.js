@@ -80,6 +80,17 @@ function Feed() {
                 "description": "Descrição do post 3",
                 "hashtags": "#hashtag5 #hashtag6",
                 "likes": 30
+            },
+            {
+                "_id": "6",
+                "author": "Voce Sabia?",
+                "profile": vocesabia,
+                "user": "vc_sabia",
+                "place": "",
+                "video": "https://assets.mixkit.co/videos/preview/mixkit-winter-fashion-cold-looking-woman-concept-video-39874-large.mp4",
+                "description": "Descrição do post 3",
+                "hashtags": "#hashtag5 #hashtag6",
+                "likes": 30
             }
         ]
 
