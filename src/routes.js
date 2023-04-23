@@ -19,7 +19,7 @@ function RoutesApp() {
     return (
         <BrowserRouter>
             <Routes>
-                {/* <Route path='/' element={<Home />} />*/}
+                <Route path='/home' element={<Home />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/loginfa' element={<Loginfa />} />
                 <Route path='/signfa' element={<Signfa />} />
@@ -30,14 +30,15 @@ function RoutesApp() {
                     <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/banco' element={<Banco />} />
-                    <Route path='/mycriminal' element={<MyCriminal />} />
                     <Route path='/verts' element={<Verts />} />
                     <Route path='/menssagens' element={<Menssagens />} />
-                    
-                    
+                    <Route path='/assinando' element={<MyCriminal page='Assinando' />} />
+                    <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
+                    <Route path='/seguindo' element={<MyCriminal page='Seguindo' />} />
+                    <Route path='/seguidores' element={<MyCriminal page='Seguidores' />} />
+                    <Route path='/favoritos' element={<MyCriminal page='Favoritos' />} />
+                    <Route path='/bloqueados' element={<MyCriminal page='Bloqueados' />} />
                 </Route>
-                {/* <Route path='/financas' element={<Financas />} > */}
-                {/* </Route> */}
             </Routes>
         </BrowserRouter>
     )
