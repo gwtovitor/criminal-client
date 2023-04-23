@@ -8,33 +8,46 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import { redirect } from 'next/dist/server/api-utils';
+import { ClosedCaptionOff } from '@mui/icons-material';
 
 function Main() {
 
     return (
         <div className='row'>
-            <div className='col-1 col-sm-1 col-lg-3'>
+            <div className='col col-lg-3'>
                 <div className='navlateral'>
                     <Sidebar className='navbarside-feed'>
                         <Menu>
                             <MenuItem onClick={() => {
-                                ;
-                            }} icon={<PersonalVideoIcon />}>Verts</MenuItem>
-                            <MenuItem icon={<CottageIcon />}>Feed</MenuItem>
-                            <MenuItem icon={<SendIcon />}>Menssagens</MenuItem>
+                                window.location.href = './verts'
+                            }} icon={<PersonalVideoIcon />}> Verts</MenuItem>
+                            <MenuItem onClick={() => {
+                                window.location.href = '../'
+                            }} icon={<CottageIcon />}>Feed</MenuItem>
+                            <MenuItem onClick={() => {
+                                window.location.href = '#'
+                            }} icon={<SendIcon />}>Menssagens</MenuItem>
 
-                            <SubMenu icon={<AttachMoneyIcon/>} label="My Criminal">
-                                <MenuItem> Finanças </MenuItem>
-                                <MenuItem> Inscrições</MenuItem>
+                            <SubMenu icon={<AttachMoneyIcon />} label="Finanças">
+                                <MenuItem onClick={() => {
+                                    window.location.href = './balanco'
+                                }}> Balanço </MenuItem>
+                                <MenuItem onClick={() => {
+                                    window.location.href = './compras'
+                                }}> Compras</MenuItem>
+                                <MenuItem onClick={() => {
+                                    window.location.href = './banco'
+                                }}> Banco</MenuItem>
                             </SubMenu>
-                            <MenuItem icon={<AccountCircleIcon />}>Perfil</MenuItem>
+                            <MenuItem icon={<ClosedCaptionOff />}>My Criminal</MenuItem>
 
                         </Menu>
                     </Sidebar>
 
                 </div>
             </div>
-            <div className='container-outlet'>
+            <div className='col-12 col-lg-9 container-outlet mb-3'>
                 < Outlet />
             </div>
             <footer className="footer">
@@ -42,7 +55,7 @@ function Main() {
                 <IconButton onClick={() => { console.log('oi') }}><CottageIcon /></IconButton>
                 <IconButton><SendIcon /></IconButton>
                 <IconButton><AttachMoneyIcon /></IconButton>
-                <IconButton><AccountCircleIcon /></IconButton>
+                <IconButton><ClosedCaptionOff /></IconButton>
             </footer>
 
         </div>
