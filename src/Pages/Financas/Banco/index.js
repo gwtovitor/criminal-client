@@ -1,14 +1,14 @@
 function Banco() {
   return (
-    <div>
+    <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row'>
-        <h4>Meu Banco</h4>
+        <strong>Meu Banco</strong>
       </div>
       <div className='row mt-4'>
         <h5>Dados Bancarios</h5>
       </div>
-      <div className='row'>
-        <div className='col-12 col-lg-6 mt-2'>
+      <div className='row mt-2'>
+        <div className='col-12 col-lg-6'>
           <div class="card">
             <div class="card-header">
               Banco
@@ -20,9 +20,11 @@ function Banco() {
                 </a>
 
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="#">Nubank</a></li>
+                  <li><a class="dropdown-item" href="#">Bradesco</a></li>
+                  <li><a class="dropdown-item" href="#">Banco Inter</a></li>
+                  <li><a class="dropdown-item" href="#">Itau</a></li>
+                  <li><a class="dropdown-item" href="#">Santander</a></li>
                 </ul>
               </div>
             </div>
@@ -83,9 +85,9 @@ function Banco() {
                 </a>
 
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="#">CPF</a></li>
+                  <li><a class="dropdown-item" href="#">Celular</a></li>
+                  <li><a class="dropdown-item" href="#">Email</a></li>
                 </ul>
               </div>
             </div>

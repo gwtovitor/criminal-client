@@ -1,8 +1,8 @@
 function Balanco() {
   return (
-    <div>
+    <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row'>
-        <h4>Balanco</h4>
+        <strong>Balanco</strong>
       </div>
       <div className='row mt-4'>
         <h5>Faturamento</h5>

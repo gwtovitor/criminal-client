@@ -18,16 +18,18 @@ function Compras() {
   }, [])
 
   return (
-    <div>
-      <h5 className='mb-4'>Minhas Compras</h5>
+    <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
+      <div className='row mb-4'>
+        <strong>Minhas Compras</strong>
+      </div>
       {
         data?.map(compra => {
           return (
             <div className='row'>
-              <div className='col-2 col-sm-1 me-2'>
+              <div className='col-2'>
                 <img className='rounded-circle' style={{ width: "50px", height: "50px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT43SGFWUfgzDc9ZpkHevk681gUpfj5exmJyA&usqp=CAU" alt="" />
               </div>
-              <div className='col'>
+              <div className='col-7 ms-3'>
                 <p><strong>{compra.perfil}</strong> <br /> <small>{compra.tipo}</small></p>
               </div>
               <div className='col-2'>
