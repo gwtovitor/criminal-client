@@ -13,7 +13,8 @@ import Balanco from './Pages/Financas/Balanco';
 import Banco from './Pages/Financas/Banco'
 import Main from './Pages/Main/main'
 import Verts from './Pages/Verts/verts'
-import Menssagens from './Pages/Menssagens/menssagens'
+import Mensagens from './Pages/Mensagens/mensagens'
+import Profile from './Pages/Profile/profile'
 
 function RoutesApp() {
     return (
@@ -27,11 +28,12 @@ function RoutesApp() {
                 <Route path='/signcriador/dados' element={<DadosBancarios />} />
                 <Route path='/' element={<Main />}>
                     <Route index element={<Feed />} />
+                    <Route path='/profile' element={<Profile />} />
                     <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/banco' element={<Banco />} />
                     <Route path='/verts' element={<Verts />} />
-                    <Route path='/menssagens' element={<Menssagens />} />
+                    <Route path='/menssagens' element={<Mensagens />} />
                     <Route path='/assinando' element={<MyCriminal page='Assinando' />} />
                     <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
                     <Route path='/seguindo' element={<MyCriminal page='Seguindo' />} />

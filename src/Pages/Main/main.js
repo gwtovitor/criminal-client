@@ -27,7 +27,7 @@ function Main() {
                             }} icon={<CottageIcon />}>Feed</MenuItem>
                             <MenuItem onClick={() => {
                                 window.location.href = '#'
-                            }} icon={<SendIcon />}>Menssagens</MenuItem>
+                            }} icon={<SendIcon />}>Mensagens</MenuItem>
 
                             <SubMenu icon={<AttachMoneyIcon />} label="Finanças">
                                 <MenuItem onClick={() => {
