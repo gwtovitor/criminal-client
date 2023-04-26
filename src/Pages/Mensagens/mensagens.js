@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './menssagens.css';
+import './mensagens.css';
 import vocesabia from './Images/vocesabia.jpg'
 import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
@@ -39,7 +39,7 @@ const messages = [
   },
 ];
 
-function Menssagens() {
+function Mensagens() {
   const [selectedContact, setSelectedContact] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [showMenu, setShowMenu] = useState(false);
@@ -102,7 +102,7 @@ function Menssagens() {
   return (
     <div className="app">
       <div className={`contacts ${showMenu ? 'show' : ''}`}>
-        <h2 style={{ textAlign: 'center' }}>Menssagens</h2>
+        <h2 style={{ textAlign: 'center' }}>Mensagens</h2>
         <ul className="message-list">
           {messages.map((message) => (
             <li key={message.author} data-name={message.author} onClick={() => {
@@ -153,4 +153,4 @@ function Menssagens() {
   );
 }
 
-export default Menssagens;
+export default Mensagens;
