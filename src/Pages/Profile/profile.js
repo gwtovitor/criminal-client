@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import './profile.css'
 import Background from './Images/creator.jpg'
-import { faInstagram, faTiktok, faAmazon } from "@fortawesome/free-brands-svg-icons";
+import { faInstagram, faTiktok, faAmazon} from "@fortawesome/free-brands-svg-icons";
+import { faStar, faShareSquare } from '@fortawesome/free-regular-svg-icons';
+import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import ToggleButton from 'react-bootstrap/ToggleButton';
@@ -66,14 +68,16 @@ function Profile() {
         <div className="profile-container">
             <div className="background-profile" style={{
                 backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255,0), rgba(255, 255, 255,1)), url(${Background})`,
+
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 alignItems: 'center',
                 flexDirection: 'column',
-                display: 'flex'
+                display: 'flex',
+                border: 'none'
             }}>
-                <div style={{ width: '70%', justifyContent: 'center', alignItems: 'center', marginTop: '55%' }}>
+                <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
                         <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>10k</span> </span>
                         <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
@@ -85,23 +89,31 @@ function Profile() {
                         <h6>@lidiabzz</h6>
                         <h6>B L O G U E I R A</h6>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Button variant="secondary" type="submit">
-                                <span style={{ fontWeight: 'bold' }}>Seguir</span>
+                            <Button className="buttons-profile" variant="secondary" type="submit">
+                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
                             </Button>
-                            <Button variant="secondary" type="submit">
-                                <span style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
+                            <Button className="buttons-profile" variant="secondary" type="submit">
+                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
                             </Button>
-                            <Button variant="secondary" type="submit">
-                                <span style={{ fontWeight: 'bold' }}>Pedidos</span>
+                            <Button className="buttons-profile" variant="secondary" type="submit">
+                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
                             </Button>
                         </div>
+
                     </div>
+                    <div className="social-networks">
+                        <span>Tips <FontAwesomeIcon icon={faCoins} /></span>
+                        <span>Favoritar <FontAwesomeIcon icon={faStar} /></span>
+                        <span>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></span>
+                    </div>
+
                     <div className="social-networks">
                         <span>Instagram <FontAwesomeIcon icon={faInstagram} /></span>
                         <span>TikTok <FontAwesomeIcon icon={faTiktok} /></span>
-                        <span>Amazon <FontAwesomeIcon icon={faAmazon} /></span>
+                        <span>Lista Amazon <FontAwesomeIcon icon={faAmazon} /></span>
                     </div>
 
+                    
 
                 </div>
                 <div style={{ width: '100%', marginTop: '60px' }}>
@@ -140,17 +152,17 @@ function Profile() {
                             </ToggleButton>
                         ))}
                     </ButtonGroup>
-                    
+
 
                 </div>
                 <div className="grid-profile">
                     {images.map((image, index) => (
                         <div
-                        className= 'img-grid'
-                        key={index} style={{
-                            background: `url(${image}) no-repeat center center / cover`,
-                           
-                        }}>
+                            className='img-grid'
+                            key={index} style={{
+                                background: `url(${image}) no-repeat center center / cover`,
+
+                            }}>
                         </div>
                     ))}
                 </div>
