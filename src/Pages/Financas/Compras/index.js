@@ -22,23 +22,25 @@ function Compras() {
       <div className='row mb-4'>
         <strong>Minhas Compras</strong>
       </div>
-      {
-        data?.map(compra => {
-          return (
-            <div className='row'>
-              <div className='col-2'>
-                <img className='rounded-circle' style={{ width: "50px", height: "50px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT43SGFWUfgzDc9ZpkHevk681gUpfj5exmJyA&usqp=CAU" alt="" />
+      <div className='row'>
+        {
+          data?.map(compra => {
+            return (
+              <div className='row'>
+                <div className='col-2'>
+                  <img className='rounded-circle' style={{ width: "50px", height: "50px" }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT43SGFWUfgzDc9ZpkHevk681gUpfj5exmJyA&usqp=CAU" alt="" />
+                </div>
+                <div className='col-7 ms-3'>
+                  <p><strong>{compra.perfil}</strong> <br /> <small>{compra.tipo}</small></p>
+                </div>
+                <div className='col-2'>
+                  <small>{compra.valor}</small>
+                </div>
               </div>
-              <div className='col-7 ms-3'>
-                <p><strong>{compra.perfil}</strong> <br /> <small>{compra.tipo}</small></p>
-              </div>
-              <div className='col-2'>
-                <small>{compra.valor}</small>
-              </div>
-            </div>
-          )
-        })
-      }
+            )
+          })
+        }
+      </div>
     </div >
   )
 }

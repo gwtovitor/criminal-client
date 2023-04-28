@@ -9,7 +9,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { redirect } from 'next/dist/server/api-utils';
-import { ClosedCaptionOff } from '@mui/icons-material';
+import { ArrowBack, ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
 
 function Main() {
 
@@ -71,15 +71,41 @@ function Main() {
             <footer className="footer border-top border-dark-subtle border-2">
                 <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon /></IconButton>
                 <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon /></IconButton>
-                <IconButton><SendIcon /></IconButton>
-                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-label="Toggle navigation"><AttachMoneyIcon /></IconButton>
-                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-label="Toggle navigation"><ClosedCaptionOff /></IconButton>
+                <IconButton onClick={() => { window.location.href = './post' }}><AddBoxOutlined /></IconButton>
+                <IconButton onClick={() => { window.location.href = '../' }}><SendIcon /></IconButton>
+                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger /></IconButton>
             </footer>
+
+            <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
+                <div class="offcanvas-header">
+                    <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">Minha Conta</strong>
+                    <a type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <h5><a class="nav-link active" aria-current="page" href="../"><Search className='me-2' />Procurar</a></h5>
+                        </li>
+                        <li class="nav-item">
+                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-current="page" hi9><AttachMoneyIcon className='me-2' />Finanças</a></h5>
+                        </li>
+                        <li class="nav-item">
+                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff className='me-2' />My Criminal</a></h5>
+                        </li>
+                        <li class="nav-item">
+                            <h5><a class="nav-link active" aria-current="page" href="#"><AccountCircleIcon className='me-2' />Perfil</a></h5>
+                        </li>
+                        <li class="nav-item">
+                            <h5><a class="nav-link active" aria-current="page" href="./home"><Logout className='me-2' />Sair</a></h5>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMyCriminal" aria-labelledby="offcanvasNavbarMyCriminalLabel">
                 <div class="offcanvas-header">
-                    <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMyCriminalLabel"><ClosedCaptionOff /> My Criminal</strong>
-                    <a type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
+                    <strong class="offcanvas-title" id="offcanvasNavbarMyCriminal"><ClosedCaptionOff /> My Criminal</strong>
+                    <a type="button" class="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
@@ -98,12 +124,6 @@ function Main() {
                         <li class="nav-item">
                             <h5><a class="nav-link active" aria-current="page" href="./favoritos">Galeria</a></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="../">Perfil</a></h5>
-                        </li>
-                        <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./home">Sair</a></h5>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -111,7 +131,8 @@ function Main() {
             <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarFinancas" aria-labelledby="offcanvasNavbarFinancasLabel">
                 <div class="offcanvas-header">
                     <strong class="offcanvas-title" id="offcanvasNavbarFinancas"><AttachMoneyIcon /> Finanças</strong>
-                    <a type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
+                    <a type="button" class="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
+                    {/* <a type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-label="Close"></a> */}
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav flex-grow-1 pe-3">
