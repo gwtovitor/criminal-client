@@ -12,13 +12,12 @@
     margin-left: 60px;
     width: 60%;
     height: calc(100vh - 30px);
- 
+    border: none;
 }
 
 .seguidores-posts-likes {
     justify-content: space-around;
     display: flex;
-
 }
 
 .seguidores-posts-likes span {
@@ -26,33 +25,37 @@
     font-weight: bold;
 }
 
-.seguidores-posts-likes2 span {
-    padding: 66px;
-}
 
 .social-networks span {
     text-align: center;
     font-weight: bold;
+
+    font-size: 13px;
 }
 
 .social-networks {
+    justify-content: center;
     justify-content: space-around;
     display: flex;
     align-items: center;
     margin-top: 20px;
+    width: 100%;
+    
 }
 
-.botao-assinar {
-    background-color: green;
+.buttons-profile{
+    height: 30px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 130px;
 }
 
-.botao-assinar:hover {
-    background-color: rgb(46, 219, 46);
-}
-
-.grid-profile{
+.grid-profile {
     width: 70%;
-    align-items:center;
+    align-items: center;
     justify-content: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -60,47 +63,72 @@
     padding-bottom: 10px
 }
 
-.img-grid{
+.img-grid {
     width: 180px;
     height: 180px;
 }
+
+.div-central-profile{
+    width: 70%; 
+    justify-content: center;
+    align-items: center;
+    margin-top: 55%;
+}
+
 @media (min-width: 0px) and (max-width:768px) {
     .grid-profile {
-        width:80%;
+        width: 80%;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 10px;
-        padding-bottom: 10px;
-    }
-    .background-profile {
-         
-        width: 100%;
-        height:100vh;
-        margin-top: 0;
-    }
-    .profile-container{
-        margin-right: 80px;
-        margin-top: 0;
+        padding-bottom: 15%;
+          
     }
     
+    .buttons-name-profile{
+        font-size: 10px;
+    }
+
+    .background-profile {
+        max-width: 100%;
+        height: 100vh;
+        margin-right: 20px;
+        margin-left: 10px;
+        min-width: 100%;
+    }
+
+    .profile-container {
+        width: 100%;
+        padding: 0;     
+    }
+
+    .div-central-profile{
+        margin-top: 115%;
+    }
+    .buttons-profile{
+        width:  90px;
+    }
+
 }
 
 
 @media (min-width: 769px) and (max-width:1299px) {
     .grid-profile {
-        width:80%;
+        width: 80%;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 10px;
         padding-bottom: 10px;
     }
+
     .background-profile {
-         
+
         width: 100%;
-        height:100vh;
+        height: 100vh;
         margin-top: 0;
     }
-    .profile-container{
+
+    .profile-container {
         margin-right: 90px;
         margin-top: 0;
     }
@@ -108,9 +136,8 @@
 
 
 @media (min-width: 0px) and (max-width:580px) {
-    .img-grid{
+    .img-grid {
         width: 110px;
         height: 110px;
     }
 }
-
