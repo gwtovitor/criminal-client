@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './mensagens.css';
-import vocesabia from './Images/vocesabia.jpg'
 import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
 import { Image } from 'react-bootstrap';
-import { Diversity1 } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
 
 const messages = [
   {
@@ -126,29 +127,33 @@ function Mensagens() {
       </button>
       <div className="messages">
         {selectedContact ? (
-          <>
+          <div>
             <h2>{selectedContact.name}</h2>
-            <ul>
-              {selectedContact.messages.map((message) => (
-                <li
-                  key={message.id}
-                  className={message.author === 'Me' ? 'sent' : 'received'}
-                >
-                  <span className="message-content">{message.message}</span>
-                  <span className="message-time">{message.time}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="message-list-container">
+              <ul>
+                {selectedContact.messages.map((message) => (
+                  <li key={message.id} className={message.author === 'Me' ? 'sent' : 'received'}>
+                    <span className="message-content">{message.message}</span>
+                    <span className="message-time">{message.time}</span>
+                  </li>
+                ))}
+
+              </ul>
+            </div>
 
             <div className="new-message">
               <input type="text" value={newMessage} onChange={handleMessageChange} />
+              <IconButton>
+                <AddPhotoAlternateIcon />
+              </IconButton>
               <button onClick={handleSendMessage}>Send</button>
             </div>
-          </>
+          </div>
         ) : (
-          <p>Selecione um contato para enviar uma menssagem!</p>
+          <p>Selecione um contato para enviar uma mensagem!</p>
         )}
       </div>
+
     </div>
   );
 }

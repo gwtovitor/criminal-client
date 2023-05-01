@@ -36,7 +36,7 @@ function RoutesApp() {
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/banco' element={<Banco />} />
                     <Route path='/verts' element={<Verts />} />
-                    <Route path='/menssagens' element={<Mensagens />} />
+                    <Route path='/mensagens' element={<Mensagens />} />
                     <Route path='/assinando' element={<MyCriminal page='Assinando' />} />
                     <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
                     <Route path='/seguindo' element={<MyCriminal page='Seguindo' />} />

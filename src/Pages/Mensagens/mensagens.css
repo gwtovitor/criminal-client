@@ -8,10 +8,24 @@
   left: 300px;
 }
 
+.message-content {
+  background-color: #f1f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  max-width: 35%;
+  word-wrap: break-word;
+  font-size: small;
+}
+.message-time{
+font-size: small;
+}
+
 .contacts {
   flex-basis: 30%;
   padding: 20px;
   background-color: #f2f2f2;
+  overflow-x: hidden;
 }
 
 .contacts h2 {
@@ -40,10 +54,11 @@
 }
 
 .messages {
-  flex-basis: 70%;
+  width: 50%;
   padding: 20px;
   position: fixed;
-  right:  270px;
+  right:  10px;
+ 
 }
 
 .messages h2 {
@@ -93,9 +108,11 @@
   align-self: center;
 }
 .new-message {
-  margin-top: 20px;
   display: flex;
   align-items: center;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  position: relative;
 }
 
 .new-message input[type="text"] {
@@ -105,7 +122,23 @@
   border-radius: 5px;
   border: 1px solid #ccc;
   margin-right: 10px;
+  font-size: medium;
 }
+.message-list-container {
+  height: calc(100vh - 250px);
+  overflow: auto;
+}
+.new-message .MuiIconButton-root {
+  position: absolute;
+  right: 80px;
+  background-color: transparent;
+  color: #00bcd4;
+}
+.new-message .MuiIconButton-root:hover{
+  background-color: transparent;
+  color: #024a53;
+}
+
 
 .new-message button {
   font-size: 20px;
@@ -177,18 +210,51 @@ li.received .message-content {
   overflow-y: scroll;
   transition: all 0.3s ease;
 }
+@media (min-width: 0px) and (max-width:299px){
 
-@media (min-width: 0px) and (max-width:768px) {
   .app{
-    left: 5px;
-    max-width: 10%;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
   }
   .messages {
-    flex-basis: 70%;
-    padding: 20px;
+   
     position: fixed;
-    right:  0px;
+    left: 10%;
+    width: 93%;
+    overflow-y: scroll;
+   
   }
+
+  
+  .new-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin-top: 20px;
+  }
+  
+  .new-message input[type="text"] {
+    flex: 1;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 16px;
+    max-width: 90%;
+    margin-left: 10px;
+  }
+  
+  .new-message button {
+    height: 40px;
+    width: 60px;
+    background-color: #00bcd4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+
+  }
+  
   .contacts {
     position: fixed;
     top: 0;
@@ -200,6 +266,7 @@ li.received .message-content {
     overflow-y: scroll;
     transition: all 0.3s ease;
   }
+ 
 
   .contacts.show {
     left: 0;
@@ -210,6 +277,179 @@ li.received .message-content {
     padding: 0;
     margin: 0;
   }
+ 
+  .message-content{
+    font-size: small;
+    padding: 0;
+    margin: 0;
+  }
+  .message-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .author {
+    display: block;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #000;
+  }
+  .hamburger-icon {
+    display: block;
+    width: 20px;
+    height: 2px;
+    margin: 5px auto;
+    background-color: #000;
+  }
+  .nav.show {
+    display: block;
+  }
+      
+  .avatar-message {
+    display: block;
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .hamburger-menu {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    z-index: 1000;
+  }
+
+  .hamburger-icon,
+  .hamburger-icon::before,
+  .hamburger-icon::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: #333;
+    border-radius: 4px;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger-icon::before {
+    top: -10px;
+  }
+
+  .hamburger-icon::after {
+    top: 10px;
+  }
+
+  .hamburger-menu.open .hamburger-icon {
+    transform: rotate(45deg);
+  }
+
+  .hamburger-menu.open .hamburger-icon::before {
+    transform: rotate(90deg);
+    top: 0;
+  }
+
+  .hamburger-menu.open .hamburger-icon::after {
+    transform: rotate(-90deg);
+    top: 0;
+  }
+  .message-content{
+    max-width: 50%;
+  }
+
+}
+@media (min-width: 300px) and (max-width:768px) {
+  .app{
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+  }
+  .new-message .MuiIconButton-root{
+    right: 20%;
+  }
+  .message-content{
+    max-width: 50%;
+  }
+  .message-list-container{
+    margin-right: 50px ;
+  }
+  .messages {
+    position: fixed;
+    left: 10%;
+    width: 100%;
+    overflow-y: scroll;
+   
+  }
+
+  
+  .new-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin-top: 20px;
+  }
+  
+  .new-message input[type="text"] {
+    flex: 1;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 16px;
+    max-width: 90%;
+    margin-left: 10px;
+  }
+  
+  .new-message button {
+    height: 40px;
+    width: 60px;
+    background-color: #00bcd4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+
+  }
+  
+  .contacts {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: #fff;
+    overflow-y: scroll;
+    transition: all 0.3s ease;
+  }
+ 
+
+  .contacts.show {
+    left: 0;
+  }
+
+  .message-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+ 
 
   .message-list li {
     padding: 10px;
@@ -301,7 +541,17 @@ li.received .message-content {
 }
 
 
-@media (min-width:769px) and (max-width:1024px) {
- 
+@media (min-width:769px) and (max-width:1025px) {
+  .messages {
+    flex-basis: 70%;
+    padding: 20px;
+    position: fixed;
+    right:  10px;
+  }
+  .contacts {
+    position: fixed;
+    left: 10px;
+  }
 }
+
 
