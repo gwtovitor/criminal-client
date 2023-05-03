@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './main.css';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
@@ -28,7 +28,17 @@ function Main() {
                             <MenuItem onClick={() => {
                                 window.location.href = '#'
                             }} icon={<SendIcon />}>Mensagens</MenuItem>
-
+                            <SubMenu icon={<AddBoxOutlined />} label="Postar">
+                                <MenuItem onClick={() => {
+                                    window.location.href = './postfeed'
+                                }}> Feed </MenuItem>
+                                <MenuItem onClick={() => {
+                                    window.location.href = './postverts'
+                                }}> Verts</MenuItem>
+                                <MenuItem onClick={() => {
+                                    window.location.href = './banco'
+                                }}>Mensagens</MenuItem>
+                            </SubMenu>
                             <SubMenu icon={<AttachMoneyIcon />} label="Finanças">
                                 <MenuItem onClick={() => {
                                     window.location.href = './balanco'
@@ -71,11 +81,27 @@ function Main() {
             <footer className="footer border-top border-dark-subtle border-2">
                 <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon /></IconButton>
                 <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon /></IconButton>
-                <IconButton onClick={() => { window.location.href = './post' }}><AddBoxOutlined /></IconButton>
+                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined /></IconButton>
                 <IconButton onClick={() => { window.location.href = '../' }}><SendIcon /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger /></IconButton>
+
+
             </footer>
 
+
+            <div class="offcanvas offcanvas-bottom h-50" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Postagem</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body small">
+                   <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+                   <a className='btn btn-info text-white m-1' onClick={() => { window.location.href = './postverts' }}>Verts</a>
+                    <a className='btn btn-info text-white  m-1' onClick={() => { window.location.href = './postfeed' }}>Feed</a>
+                    <a className='btn btn-info text-white  m-1' onClick={() => { window.location.href = './verts' }}>Mensagens</a>
+                   </div>
+                </div>
+            </div>
             <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
                 <div class="offcanvas-header">
                     <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">Minha Conta</strong>

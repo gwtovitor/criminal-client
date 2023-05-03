@@ -1,8 +1,8 @@
-function Post() {
+function Postfeed() {
   return (
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
-        <strong>Postagem</strong>
+        <strong>Postagem Feed</strong>
       </div>
       <div className='row'>
         <div className='row'>
@@ -44,4 +44,4 @@ function Post() {
   )
 }
 
-export default Post;
+export default Postfeed;

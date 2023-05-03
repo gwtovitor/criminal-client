@@ -16,7 +16,8 @@ import Verts from './Pages/Verts/verts'
 import Mensagens from './Pages/Mensagens/mensagens'
 import Profile from './Pages/Profile/profile'
 import Profilefa from './Pages/ProfileFa/profilefa'
-import Post from './Pages/Post'
+import Postfeed from './Pages/Postfeed'
+import Postverts from './Pages/Postverts'
 
 function RoutesApp() {
     return (
@@ -43,7 +44,8 @@ function RoutesApp() {
                     <Route path='/seguidores' element={<MyCriminal page='Seguidores' />} />
                     <Route path='/favoritos' element={<MyCriminal page='Favoritos' />} />
                     <Route path='/bloqueados' element={<MyCriminal page='Bloqueados' />} />
-                    <Route path='/post' element={<Post />} />
+                    <Route path='/postfeed' element={<Postfeed />} />
+                    <Route path='/postverts' element={<Postverts />} />
                 </Route>
             </Routes>
         </BrowserRouter>
