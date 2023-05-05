@@ -1,0 +1,17 @@
+.fullscreen-video-container {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    border-radius: 10px;
+    align-self: center;
+    aspect-ratio: 1/1.5;
+  }
+  
+  @media (min-width: 0px) and (max-width:768px) {
+
+    .fullscreen-video-container{
+        width: 100%;
+    }
+  }
