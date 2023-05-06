@@ -26,7 +26,7 @@ function Main() {
                                 window.location.href = '../'
                             }} icon={<CottageIcon />}>Feed</MenuItem>
                             <MenuItem onClick={() => {
-                                window.location.href = '#'
+                                window.location.href = './mensagens'
                             }} icon={<SendIcon />}>Mensagens</MenuItem>
                             <SubMenu icon={<AddBoxOutlined />} label="Postar">
                                 <MenuItem onClick={() => {

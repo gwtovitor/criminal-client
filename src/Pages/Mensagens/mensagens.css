@@ -7,6 +7,9 @@
   position: fixed;
   left: 300px;
 }
+.btn-postar{
+  margin:auto;
+}
 
 .message-content {
   background-color: #f1f0f0;

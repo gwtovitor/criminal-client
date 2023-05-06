@@ -96,14 +96,14 @@ function Mensagens() {
   }
 
 
-
-
-
-
   return (
     <div className="app">
       <div className={`contacts ${showMenu ? 'show' : ''}`}>
         <h2 style={{ textAlign: 'center' }}>Mensagens</h2>
+
+        <div className='btn-postar text-center mb-2'>
+          <a className='btn btn-info text-white' href="#">Postar Mensagem</a>
+        </div>
         <ul className="message-list">
           {messages.map((message) => (
             <li key={message.author} data-name={message.author} onClick={() => {
