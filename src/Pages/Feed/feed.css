@@ -4,7 +4,6 @@
     margin-right: 300px;
     width: 100%;
     margin-bottom: 50px;
-
 }
 
 section#post-list {
@@ -116,8 +115,10 @@ section#post-list article footer p span {
     align-items: center;
     padding: 0 20px;
 }
-
-@media (min-width: 320px) and (max-width:480px) {
+@media (min-width: 0px) and (max-width:299px) {
+      section#post-list{
+        padding: 0;
+    }
     .navbarside-feed {
         display: none;
     }
@@ -128,15 +129,18 @@ section#post-list article footer p span {
 
     .container-feed {
         padding-bottom: 50px;
+        width: 110%;
+        margin-left: 22.5px;
         margin-right: 0;
-        margin-left: 20px;
+        padding: 0;
     }
-
 }
 
-
-@media (min-width: 0px) and (max-width:478px) {
-
+@media (min-width: 300px) and (max-width:478px) {
+   
+    section#post-list{
+        padding: 0;
+    }
     .navbarside-feed {
         display: none;
     }
@@ -147,12 +151,15 @@ section#post-list article footer p span {
 
     .container-feed {
         padding-bottom: 50px;
-        width: 100%;
+        width: 107%;
+        margin-left: 22.5px;
+        margin-right: 0;
+        padding: 0;
     }
 
 }
 
-@media (min-width:479px) and (max-width:1045px) {
+@media (min-width:479px) and (max-width:1020px) {
 
     .navbarside-feed {
         display: none;
