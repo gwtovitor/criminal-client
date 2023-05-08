@@ -122,34 +122,13 @@ function Verts() {
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     
-  useEffect(() => {
-    function handleScroll() {
-      const scrollPosition = window.innerHeight + window.pageYOffset;
-      const bodyHeight = document.body.offsetHeight;
-
-      if (scrollPosition === bodyHeight) {
-        setCurrentVideoIndex((currentIndex) =>
-          currentIndex === video.length - 1 ? 0 : currentIndex + 1
-        );
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [video]);
 
   return (
 
     <div>
       {video.map((src, index) => {
-        if (index !== currentVideoIndex) {
-          return null;
-        }
-
-      return (
+       
+        return(
         
         <div className="verts-player-container" key={index}>
           <div className="overlay" 
@@ -158,6 +137,7 @@ function Verts() {
             onClick={() => handleVideoClick(index)}>
             <p>CC</p>
           </div>
+         
           <video
             onMouseEnter={handleMouseEnter}
             onMouseOut={handleMouseLeave}
@@ -167,7 +147,7 @@ function Verts() {
             onClick={() => handleVideoClick(index)}
             ref={videoRefs[index]}
           />
-       
+      
           {hovering && (
             <div className="play-button-verts">
               <button className="verts-play-pause-button">
@@ -202,7 +182,7 @@ function Verts() {
           <span className="legenda-verts">{src.legenda}</span>
         </div>
 
-         )})}
+        ) })}
 
     </div>
   );
