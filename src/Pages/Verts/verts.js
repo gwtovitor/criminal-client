@@ -120,13 +120,36 @@ function Verts() {
     .fill(0)
     .map(() => React.createRef());
 
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    
+  useEffect(() => {
+    function handleScroll() {
+      const scrollPosition = window.innerHeight + window.pageYOffset;
+      const bodyHeight = document.body.offsetHeight;
 
+      if (scrollPosition === bodyHeight) {
+        setCurrentVideoIndex((currentIndex) =>
+          currentIndex === video.length - 1 ? 0 : currentIndex + 1
+        );
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [video]);
 
   return (
 
     <div>
-      {video.map((src, index) => (
+      {video.map((src, index) => {
+        if (index !== currentVideoIndex) {
+          return null;
+        }
 
+      return (
         
         <div className="verts-player-container" key={index}>
           <div className="overlay" 
@@ -179,7 +202,7 @@ function Verts() {
           <span className="legenda-verts">{src.legenda}</span>
         </div>
 
-      ))}
+         )})}
 
     </div>
   );
