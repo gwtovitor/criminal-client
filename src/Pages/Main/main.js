@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './main.css';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
-import CottageIcon from '@mui/icons-material/Cottage';
+import CottageIcon  from '@mui/icons-material/Cottage';
 import SendIcon from '@mui/icons-material/Send';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
