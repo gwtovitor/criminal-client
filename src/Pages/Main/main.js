@@ -8,9 +8,9 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { redirect } from 'next/dist/server/api-utils';
 import { ArrowBack, ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
-
+import { Send } from '@mui/icons-material';
+import { SendOutlined } from '@mui/icons-material';
 function Main() {
 
     return (
@@ -24,10 +24,10 @@ function Main() {
                             }} icon={<PersonalVideoIcon />}> Verts</MenuItem>
                             <MenuItem onClick={() => {
                                 window.location.href = '../'
-                            }} icon={<CottageIcon />}>Feed</MenuItem>
+                            }} icon={<SendOutlined />}>Feed</MenuItem>
                             <MenuItem onClick={() => {
                                 window.location.href = './mensagens'
-                            }} icon={<SendIcon />}>Mensagens</MenuItem>
+                            }} icon={<Send />}>Mensagens</MenuItem>
                             <SubMenu icon={<AddBoxOutlined />} label="Postar">
                                 <MenuItem onClick={() => {
                                     window.location.href = './postfeed'
@@ -82,7 +82,7 @@ function Main() {
                 <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon /></IconButton>
                 <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined /></IconButton>
-                <IconButton onClick={() => { window.location.href = '../' }}><SendIcon /></IconButton>
+                <IconButton onClick={() => { window.location.href = '../' }}><SendOutlined /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger /></IconButton>
 
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './feed.css';
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import more from './Images/more.svg';
 import like from './Images/like.svg';
 import comment from './Images/comment.svg';
@@ -10,12 +9,7 @@ import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
-import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
-import CottageIcon from '@mui/icons-material/Cottage';
-import SendIcon from '@mui/icons-material/Send';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { IconButton } from '@mui/material';
+
 
 
 function Feed() {
@@ -133,10 +127,12 @@ function Feed() {
                                             alt="Foto do usuário"
                                             className="user-avatar"
                                         />
+                                      
 
                                         <div className="user-info-column">
                                             <span>{post.author}</span>
                                             <span style={{ fontWeight: "normal" }}>{post.place}</span>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -160,6 +156,7 @@ function Feed() {
                                 <div className="actions">
                                     <button type="button" onClick={() => handleLike(post._id)}>
                                         <img src={like} alt="like" />
+                                    
                                     </button>
                                     <img src={comment} alt="comment" />
                                     <img src={tips} alt="tips" />

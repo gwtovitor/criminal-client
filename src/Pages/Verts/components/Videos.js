@@ -6,6 +6,7 @@ import { Avatar } from "@mui/material";
 import { VolumeOff, VolumeUp } from "@mui/icons-material";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 function Video({
   id,
   src,
@@ -49,7 +50,7 @@ function Video({
 
   return (
     <div className="video">
-
+      <div className="video__cc"><h3>CC</h3></div>
       <div className="video__buttons">
         <button type="button" onClick={scrollUp} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowUpIcon/>
         </button>
