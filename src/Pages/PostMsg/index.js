@@ -93,7 +93,7 @@ export default function PostMsg() {
         },
         {
             id: 7,
-            author: 'Zeca',
+            author: 'Joao',
             message: 'I am doing well, thanks for asking',
             time: '10:03',
             picture: luiz,
@@ -118,7 +118,7 @@ export default function PostMsg() {
     return (
         <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
             <div className='row mb-4'>
-                <strong>Postagem Mensagem</strong>
+                <strong>Publicar Mensagem</strong>
             </div>
             <div className='row'>
                 <div className='row'>
@@ -141,7 +141,7 @@ export default function PostMsg() {
                                 {filteredMessages.length > 0 ? (
                                     filteredMessages.map((message) => (
 
-                                        <li key={message.author} data-name={message.author}>
+                                        <li key={message.id} data-name={message.author}>
                                             <li class="list-group-item">
                                                 <img src={message.picture} class="rounded-circle" style={{ width: '30px', marginRight: '10px' }} alt="Avatar" />
                                                 <input class="form-check-input me-1" type="checkbox" value="" aria-label="..." />
@@ -151,7 +151,7 @@ export default function PostMsg() {
                                     ))
                                 ) : (
                                     messages.map((message) => (
-                                        <li key={message.author} data-name={message.author}>
+                                        <li key={message.id} data-name={message.author}>
                                             <li class="list-group-item">
                                                 <img src={message.picture} class="rounded-circle" style={{ width: '30px', marginRight: '10px' }} alt="Avatar" />
                                                 <input class="form-check-input me-1" type="checkbox" value="" aria-label="..." />
@@ -223,7 +223,7 @@ export default function PostMsg() {
 
                 <div className='row mt-3'>
                     <div className='col-12 d-grid'>
-                        <a className='btn btn-info text-white' href="#">Enviar para Todos</a>
+                        <a className='btn btn-info text-white' href="#">Publicar para Todos</a>
                     </div>
                 </div>
             </div>

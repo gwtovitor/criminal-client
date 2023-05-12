@@ -2,7 +2,7 @@ function Postfeed() {
   return (
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
-        <strong>Postagem Feed</strong>
+        <strong>Publicar no Feed</strong>
       </div>
       <div className='row'>
         <div className='row'>
@@ -36,7 +36,7 @@ function Postfeed() {
         </div>
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
-            <a className='btn btn-info text-white' href="#">Postar</a>
+            <a className='btn btn-info text-white' href="#">Publicar</a>
            
           </div>
         </div>

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { Gallery } from "react-grid-gallery";
+
 
 
 function Profile() {
@@ -83,12 +83,12 @@ function Profile() {
                         <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
                         <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>1k</span>   </span>
                     </div>
-                    <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="dados-profile">
 
                         <h1 style={{ fontWeight: 'bold' }}>Lidia Beatriz</h1>
                         <h6>@lidiabzz</h6>
                         <h6>B L O G U E I R A</h6>
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div className="buttons-profile-wrapper">
                             <Button className="buttons-profile" variant="secondary" type="submit">
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
                             </Button>
@@ -116,7 +116,7 @@ function Profile() {
                     
 
                 </div>
-                <div style={{ width: '100%', marginTop: '60px' }}>
+                <div className="container-sobremim" >
                     <span style={{ fontWeight: 'bold' }}>
                         Sobre mim <br />
                         <span style={{ fontWeight: 'normal' }}>
@@ -135,7 +135,7 @@ function Profile() {
                         </span>
                     </span>
                 </div>
-                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px' }}>
+                <div className="radio-buttons">
                     <ButtonGroup>
                         {radios.map((radio, idx) => (
                             <ToggleButton

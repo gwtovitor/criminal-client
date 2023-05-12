@@ -30,7 +30,7 @@ function Main() {
                             <MenuItem onClick={() => {
                                 window.location.href = './mensagens'
                             }} icon={<Send style={{color:'black'}} />}>Mensagens</MenuItem>
-                            <SubMenu icon={<AddBoxOutlined style={{color:'black'}} />} label="Postar">
+                            <SubMenu icon={<AddBoxOutlined style={{color:'black'}} />} label="Publicar">
                                 <MenuItem onClick={() => {
                                     window.location.href = './postfeed'
                                 }}> Feed </MenuItem>
@@ -69,7 +69,7 @@ function Main() {
                                     window.location.href = './favoritos'
                                 }}> Galeria</MenuItem>
                                 <MenuItem onClick={() => {
-                                    window.location.href = './Perfil'
+                                    window.location.href = './profile'
                                 }}> Perfil</MenuItem>
                             </SubMenu>
                         </Menu>

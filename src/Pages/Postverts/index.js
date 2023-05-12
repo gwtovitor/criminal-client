@@ -21,7 +21,7 @@ function Postverts() {
  
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
-        <strong>Postagem Verts</strong>
+        <strong>Publicar no Verts</strong>
       </div>
      
       <div className='row'>
@@ -70,7 +70,7 @@ function Postverts() {
       )}
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
-            <button className='btn btn-info text-white'>Postar</button>
+            <button className='btn btn-info text-white'>Publicar</button>
           </div>
         </div>
 

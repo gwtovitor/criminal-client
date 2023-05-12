@@ -21,6 +21,14 @@ function Video({
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  function toggleShowFullDescription() {
+    setShowFullDescription(!showFullDescription);
+  }
+
+  const shortDescription = description.split(' ').slice(0, 2).join(' ');
+  const fullDescription = description.split(' ').slice(2).join(' ');
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -119,7 +127,7 @@ function Video({
         src={src}
       />
       <div className="video__controls">
-     
+
         <input
           type="range"
           min="0"
@@ -128,7 +136,7 @@ function Video({
           value={currentTime}
           onChange={handleRangeChange}
         />
-         <div>{formatTime(currentTime)}/</div>
+        <div>{formatTime(currentTime)}/</div>
         <div>{formatTime(duration)}</div>
       </div>
 
@@ -152,8 +160,11 @@ function Video({
         </div>
         <div className="shortsBottom">
           <div className="shortsDesc">
-            <p className="description">{description}</p>
-
+            {showFullDescription ? (
+              <p className="description" onClick={toggleShowFullDescription}>{description}</p>
+            ) : (
+              <p className="description" onClick={toggleShowFullDescription}>{shortDescription}...</p>
+            )}
           </div>
         </div>
       </div>

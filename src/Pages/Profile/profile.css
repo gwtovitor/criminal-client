@@ -2,12 +2,29 @@
     margin: 0;
     padding: 0;
 }
-
+.dados-profile{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.buttons-profile-wrapper{
+    display: flex;
+    flex-direction: row;
+}
 .profile-container {
     width: 100%;
     height: 100%;
 }
-
+.radio-buttons{
+    width: 100%;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    margin-top: 30px;
+}
 .background-profile {
     margin-left: 60px;
     width: 60%;
@@ -29,7 +46,6 @@
 .social-networks span {
     text-align: center;
     font-weight: bold;
-
     font-size: 13px;
 }
 
@@ -77,29 +93,33 @@
 
 @media (min-width: 0px) and (max-width:768px) {
     .grid-profile {
-        width: 80%;
+        width: 50%;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 10px;
+        margin: 0 auto;
         padding-bottom: 15%;
           
     }
-    
+    .container-sobremim{
+        width: 100%;
+        margin-top: 60px;
+        text-align: justify ;
+        padding: 0 10px ;
+    }
     .buttons-name-profile{
         font-size: 10px;
     }
 
     .background-profile {
-        max-width: 100%;
+        margin: 0 auto;
         height: 100vh;
-        margin-right: 20px;
-        margin-left: 10px;
-        min-width: 100%;
+        width: 100%;
     }
 
     .profile-container {
         width: 100%;
-        padding: 0;     
+        padding: 0;    
     }
 
     .div-central-profile{
@@ -122,7 +142,7 @@
     }
 
     .background-profile {
-
+        margin: 0;
         width: 100%;
         height: 100vh;
         margin-top: 0;
