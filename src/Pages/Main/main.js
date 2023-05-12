@@ -8,9 +8,12 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { ArrowBack, ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
+import { ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import { Send } from '@mui/icons-material';
 import { SendOutlined } from '@mui/icons-material';
+import { Icon } from '@mui/material';
+
 function Main() {
 
     return (
