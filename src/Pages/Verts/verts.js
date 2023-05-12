@@ -1,20 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./verts.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlay,
-  faVolumeUp,
-  faVolumeMute,
-  faHeart,
-  faPause,
-  faEllipsisVertical
-} from "@fortawesome/free-solid-svg-icons";
-import vocesabia from './Images/vocesabia.jpg'
 import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
-import { Image } from "react-bootstrap";
 import Videos from "./components/Videos";
 
 function Verts() {
@@ -144,7 +133,7 @@ function Verts() {
           avatar={src.picture}
           >
           </Videos>
-        
+          
         
 
         ) })}

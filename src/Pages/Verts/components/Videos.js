@@ -1,5 +1,5 @@
 import { MoreVert } from "@mui/icons-material";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { ThumbUp } from "@mui/icons-material";
 import "./Video.css";
 import { Avatar } from "@mui/material";
@@ -19,6 +19,56 @@ function Video({
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [muted, setMuted] = useState(false);
   const videoRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+  };
+
+  const handleRangeChange = (event) => {
+    setCurrentTime(parseFloat(event.target.value));
+    videoRef.current.currentTime = parseFloat(event.target.value);
+  };
+
+  useEffect(() => {
+    const handleTimeUpdate = () => {
+      setCurrentTime(videoRef.current.currentTime);
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(videoRef.current.duration);
+    };
+
+    videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
+    videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+    return () => {
+      videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+      videoRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const videoElement = videoRef.current;
+      if (videoElement) {
+        const boundingClientRect = videoElement.getBoundingClientRect();
+        if (boundingClientRect.top >= 0 && boundingClientRect.bottom <= window.innerHeight) {
+          videoElement.play();
+          setPlaying(true);
+        } else {
+          videoElement.pause();
+          setPlaying(false);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleVideoPress = () => {
     if (playing) {
@@ -48,13 +98,14 @@ function Video({
     });
   };
 
+
   return (
     <div className="video">
       <div className="video__cc"><h3>CC</h3></div>
       <div className="video__buttons">
-        <button type="button" onClick={scrollUp} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowUpIcon/>
+        <button type="button" onClick={scrollUp} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowUpIcon />
         </button>
-        <button type="button" onClick={scrollDown} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowDownIcon/>
+        <button type="button" onClick={scrollDown} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowDownIcon />
         </button>
 
       </div>
@@ -67,6 +118,20 @@ function Video({
         ref={videoRef}
         src={src}
       />
+      <div className="video__controls">
+     
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          step="0.01"
+          value={currentTime}
+          onChange={handleRangeChange}
+        />
+         <div>{formatTime(currentTime)}/</div>
+        <div>{formatTime(duration)}</div>
+      </div>
+
 
       <div className="shortsContainer">
         <div className="shortsVideoTop">

@@ -37,6 +37,7 @@ function Postfeed() {
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
             <a className='btn btn-info text-white' href="#">Postar</a>
+           
           </div>
         </div>
       </div>

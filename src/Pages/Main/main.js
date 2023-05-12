@@ -3,7 +3,6 @@ import './main.css';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 import CottageIcon  from '@mui/icons-material/Cottage';
-import SendIcon from '@mui/icons-material/Send';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
@@ -12,7 +11,7 @@ import { ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined
 import { ArrowBack } from '@mui/icons-material';
 import { Send } from '@mui/icons-material';
 import { SendOutlined } from '@mui/icons-material';
-import { Icon } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 
 function Main() {
 
@@ -24,14 +23,14 @@ function Main() {
                         <Menu>
                             <MenuItem onClick={() => {
                                 window.location.href = './verts'
-                            }} icon={<PersonalVideoIcon />}> Verts</MenuItem>
+                            }} icon={<PersonalVideoIcon style={{color:'black'}} />}> Verts</MenuItem>
                             <MenuItem onClick={() => {
-                                window.location.href = '../'
-                            }} icon={<SendOutlined />}>Feed</MenuItem>
+                                window.location.href = '../'    
+                            }} icon={<HomeIcon style={{color:'black'}} />}>Feed</MenuItem>
                             <MenuItem onClick={() => {
                                 window.location.href = './mensagens'
-                            }} icon={<Send />}>Mensagens</MenuItem>
-                            <SubMenu icon={<AddBoxOutlined />} label="Postar">
+                            }} icon={<Send style={{color:'black'}} />}>Mensagens</MenuItem>
+                            <SubMenu icon={<AddBoxOutlined style={{color:'black'}} />} label="Postar">
                                 <MenuItem onClick={() => {
                                     window.location.href = './postfeed'
                                 }}> Feed </MenuItem>
@@ -39,10 +38,10 @@ function Main() {
                                     window.location.href = './postverts'
                                 }}> Verts</MenuItem>
                                 <MenuItem onClick={() => {
-                                    window.location.href = './banco'
+                                    window.location.href = './postmsg'
                                 }}>Mensagens</MenuItem>
                             </SubMenu>
-                            <SubMenu icon={<AttachMoneyIcon />} label="Finanças">
+                            <SubMenu icon={<AttachMoneyIcon  style={{color:'black'}} />} label="Finanças">
                                 <MenuItem onClick={() => {
                                     window.location.href = './balanco'
                                 }}> Balanço </MenuItem>
@@ -53,7 +52,7 @@ function Main() {
                                     window.location.href = './banco'
                                 }}> Banco</MenuItem>
                             </SubMenu>
-                            <SubMenu icon={<ClosedCaptionOff />} label="My Criminal">
+                            <SubMenu icon={<ClosedCaptionOff style={{color:'black'}} />} label="My Criminal">
                                 <MenuItem onClick={() => {
                                     window.location.href = './seguidores'
                                 }}> Seguidores </MenuItem>
@@ -82,11 +81,11 @@ function Main() {
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
-                <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon /></IconButton>
-                <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon /></IconButton>
-                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined /></IconButton>
-                <IconButton onClick={() => { window.location.href = '../' }}><SendOutlined /></IconButton>
-                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger /></IconButton>
+                <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon style={{color:'black'}} /></IconButton>
+                <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon style={{color:'black'}} /></IconButton>
+                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{color:'black'}} /></IconButton>
+                <IconButton onClick={() => { window.location.href = '../' }}><SendOutlined style={{color:'black'}}/></IconButton>
+                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{color:'black'}} /></IconButton>
 
 
             </footer>
@@ -113,19 +112,19 @@ function Main() {
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="../"><Search className='me-2' />Procurar</a></h5>
+                            <h5><a class="nav-link active" aria-current="page" href="../"><Search style={{color:'black'}} className='me-2' />Procurar</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-current="page" hi9><AttachMoneyIcon className='me-2' />Finanças</a></h5>
+                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-current="page" hi9><AttachMoneyIcon style={{color:'black'}} className='me-2' />Finanças</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff className='me-2' />My Criminal</a></h5>
+                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{color:'black'}} className='me-2' />My Criminal</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="#"><AccountCircleIcon className='me-2' />Perfil</a></h5>
+                            <h5><a class="nav-link active" aria-current="page" href="#"><AccountCircleIcon style={{color:'black'}} className='me-2' />Perfil</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./home"><Logout className='me-2' />Sair</a></h5>
+                            <h5><a class="nav-link active" aria-current="page" href="./home"><Logout style={{color:'black'}} className='me-2' />Sair</a></h5>
                         </li>
                     </ul>
                 </div>
