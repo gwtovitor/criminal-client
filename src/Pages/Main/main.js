@@ -121,7 +121,7 @@ function Main() {
                             <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{color:'black'}} className='me-2' />My Criminal</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="#"><AccountCircleIcon style={{color:'black'}} className='me-2' />Perfil</a></h5>
+                            <h5><a class="nav-link active" aria-current="page" href="./profile"><AccountCircleIcon style={{color:'black'}} className='me-2' />Perfil</a></h5>
                         </li>
                         <li class="nav-item">
                             <h5><a class="nav-link active" aria-current="page" href="./home"><Logout style={{color:'black'}} className='me-2' />Sair</a></h5>

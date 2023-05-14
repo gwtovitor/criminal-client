@@ -102,10 +102,10 @@
           
     }
     .container-sobremim{
-        width: 100%;
+        width: 90%;
         margin-top: 60px;
         text-align: justify ;
-        padding: 0 10px ;
+        padding: 0px;
     }
     .buttons-name-profile{
         font-size: 10px;
@@ -119,11 +119,12 @@
 
     .profile-container {
         width: 100%;
-        padding: 0;    
+        padding: 0;
+       
     }
 
     .div-central-profile{
-        margin-top: 115%;
+        margin-top: 100%;
     }
     .buttons-profile{
         width:  90px;
