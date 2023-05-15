@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './profile.css'
 import Background from './Images/creator.jpg'
-import { faInstagram, faTiktok, faAmazon} from "@fortawesome/free-brands-svg-icons";
+import { faInstagram, faTiktok, faAmazon } from "@fortawesome/free-brands-svg-icons";
 import { faStar, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,8 +12,12 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 
 function Profile() {
-
+    const [backgroundImage, setBackgroundImage] = useState(Background);
     const [radioValue, setRadioValue] = useState('1');
+    const [username, setUsername] = useState('Lidia Beatriz');
+    const [userHandle, setUserHandle] = useState('lidiabzz');
+    const [editingFunction, setEditingFunction] = useState('B L O G U E I R A');
+    const [editingProfile, setEditingProfile] = useState(false);
 
     const radios = [
         { name: 'Feed', value: '1' },
@@ -64,11 +68,43 @@ function Profile() {
         return item.url;
     });
 
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
+
+    const handleUserHandleChange = (event) => {
+        setUserHandle(event.target.value);
+    };
+    const handleEditProfileClick = () => {
+        setEditingProfile(true);
+    };
+
+    const handleSaveProfileClick = () => {
+        setEditingProfile(false);
+    };
+    const handleFunctionChange = (event) => {
+        setEditingFunction(event.target.value);
+    };
+
+    const handleFileInputChange = (e) => {
+        const files = e.target.files;
+      
+        for (let i = 0; i < files.length; i++) {
+          const reader = new FileReader();
+          reader.readAsDataURL(files[i]);
+      
+          reader.onload = (e) => {
+            const newImages = e.target.result;
+            setBackgroundImage(newImages);
+          };
+        }
+      };
+      
+
     return (
         <div className="profile-container">
             <div className="background-profile" style={{
-                backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255,0), rgba(255, 255, 255,1)), url(${Background})`,
-
+                backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255,0), rgba(255, 255, 255,1)), url(${backgroundImage})`,
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
@@ -85,12 +121,42 @@ function Profile() {
                     </div>
                     <div className="dados-profile">
 
-                        <h1 style={{ fontWeight: 'bold' }}>Lidia Beatriz</h1>
-                        <h6>@lidiabzz</h6>
-                        <h6>B L O G U E I R A</h6>
-                        <Button className="buttons-profile" variant="secondary" type="submit">
+                        <h1 style={{ fontWeight: 'bold' }}>{username}</h1>
+                        <h6 style={{ marginTop: '10px' }}>@{userHandle}</h6>
+                        <h6 className="function-user">{editingFunction}</h6>
+                        {editingProfile ? (
+                            <>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Nome</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Nome" onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">@</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Nome de Usuário" onChange={handleUserHandleChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Bio</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Biografia" onChange={handleFunctionChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Foto de Perfil</label>
+                                    <input class="form-control" type="file"   onChange={handleFileInputChange} id="formFile"/>
+                                </div>
+                                <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
+                                    <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
+                                </Button>
+                            </>
+                        ) : (
+                            <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
-                        </Button>
+                            </Button>
+                        )}
                         <div className="buttons-profile-wrapper">
                             <Button className="buttons-profile" variant="secondary" type="submit">
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
@@ -116,7 +182,7 @@ function Profile() {
                         <span>Lista Amazon <FontAwesomeIcon icon={faAmazon} /></span>
                     </div>
 
-                    
+
 
                 </div>
                 <div className="container-sobremim" >
