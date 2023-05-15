@@ -88,6 +88,9 @@ function Profile() {
                         <h1 style={{ fontWeight: 'bold' }}>Lidia Beatriz</h1>
                         <h6>@lidiabzz</h6>
                         <h6>B L O G U E I R A</h6>
+                        <Button className="buttons-profile" variant="secondary" type="submit">
+                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
+                        </Button>
                         <div className="buttons-profile-wrapper">
                             <Button className="buttons-profile" variant="secondary" type="submit">
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
