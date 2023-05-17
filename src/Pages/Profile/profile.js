@@ -18,7 +18,9 @@ function Profile() {
     const [userHandle, setUserHandle] = useState('lidiabzz');
     const [editingFunction, setEditingFunction] = useState('B L O G U E I R A');
     const [editingProfile, setEditingProfile] = useState(false);
-
+    const [instagramLink, setInstagramLink] = useState('')
+    const [tiktokLink, setTiktok] = useState('')
+    const [amazonLink, setAmazon] = useState('')
     const radios = [
         { name: 'Feed', value: '1' },
         { name: 'Fotos', value: '2' },
@@ -85,21 +87,30 @@ function Profile() {
     const handleFunctionChange = (event) => {
         setEditingFunction(event.target.value);
     };
+    const instagramChenge = (event) => {
+        setInstagramLink(event.target.value);
+    };
+    const tiktokChange = (event) => {
+        setTiktok(event.target.value);
+    };
+    const amazonChange = (event) => {
+        setAmazon(event.target.value);
+    };
 
     const handleFileInputChange = (e) => {
         const files = e.target.files;
-      
+
         for (let i = 0; i < files.length; i++) {
-          const reader = new FileReader();
-          reader.readAsDataURL(files[i]);
-      
-          reader.onload = (e) => {
-            const newImages = e.target.result;
-            setBackgroundImage(newImages);
-          };
+            const reader = new FileReader();
+            reader.readAsDataURL(files[i]);
+
+            reader.onload = (e) => {
+                const newImages = e.target.result;
+                setBackgroundImage(newImages);
+            };
         }
-      };
-      
+    };
+
 
     return (
         <div className="profile-container">
@@ -144,10 +155,29 @@ function Profile() {
                                     </div>
                                     <input type="text" class="form-control" placeholder="Biografia" onChange={handleFunctionChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="mb-3">
-                                    <label for="formFile" class="form-label">Foto de Perfil</label>
-                                    <input class="form-control" type="file"   onChange={handleFileInputChange} id="formFile"/>
+                                <div class="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                    <label style={{ marginRight: '5px' }} for="formFileSm" class="form-label">Foto de Perfil</label>
+                                    <input onChange={handleFileInputChange} class="form-control form-control-sm" id="formFileSm" type="file" />
                                 </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Amazon List" onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+
                                 <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
                                     <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
                                 </Button>
@@ -171,15 +201,31 @@ function Profile() {
 
                     </div>
                     <div className="social-networks">
-                        <span>Tips <FontAwesomeIcon icon={faCoins} /></span>
-                        <span>Favoritar <FontAwesomeIcon icon={faStar} /></span>
-                        <span>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></span>
+                        <button style={{ border: 'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
+                        <button style={{ border: 'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
+                        <button style={{ border: 'none' }}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
                     </div>
 
                     <div className="social-networks">
-                        <span>Instagram <FontAwesomeIcon icon={faInstagram} /></span>
-                        <span>TikTok <FontAwesomeIcon icon={faTiktok} /></span>
-                        <span>Lista Amazon <FontAwesomeIcon icon={faAmazon} /></span>
+                        {instagramLink !== '' && (
+                            <button style={{ border: 'none' }}>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={instagramLink}>Instagram</a>
+                                <FontAwesomeIcon icon={faInstagram} />
+                            </button>
+                        )}
+                        {tiktokLink !== '' && (
+                            <button style={{ border: 'none' }}>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={tiktokLink}>TikTok</a>
+                                <FontAwesomeIcon icon={faTiktok} />
+                            </button>
+                        )}
+                        {amazonLink !== '' && (
+                            <button style={{ border: 'none' }}>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={amazonLink}>Amazon</a>
+                                <FontAwesomeIcon icon={faAmazon} />
+                            </button>
+                        )}
+
                     </div>
 
 
