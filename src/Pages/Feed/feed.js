@@ -28,7 +28,16 @@ function Feed() {
                 "image": "https://picsum.photos/200",
                 "description": "Descrição do post 1",
                 "hashtags": "#hashtag1 #hashtag2",
-                "likes": 10
+                "likes": 10,
+                "comentarios": {
+                    "Vitor": { "curtidas": 12, "comentario": "que bom" },
+                    "Lidia": { "curtidas": 5, "comentario": ":D" },
+                    "Luiz": { "curtidas": 22, "comentario": "Top demais" },
+                    "Junior": { "curtidas": 1, "comentario": "Isso ai" },
+                    "Lucas": { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             },
             {
                 "_id": "2",
@@ -39,7 +48,16 @@ function Feed() {
                 "image": "https://picsum.photos/300",
                 "description": "Descrição do post 2",
                 "hashtags": "#hashtag3 #hashtag4",
-                "likes": 20
+                "likes": 20,
+                "comentarios": {
+                    "Vitor": { "curtidas": 12, "comentario": "que bom" },
+                    "Lidia": { "curtidas": 5, "comentario": ":D" },
+                    "Luiz": { "curtidas": 22, "comentario": "Top demais" },
+                    "Junior": { "curtidas": 1, "comentario": "Isso ai" },
+                    "Lucas": { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             },
             {
                 "_id": "3",
@@ -50,7 +68,16 @@ function Feed() {
                 "image": "https://picsum.photos/700",
                 "description": "Descrição do post 3",
                 "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30
+                "likes": 30,
+                "comentarios": {
+                    "Vitor": { "curtidas": 12, "comentario": "que bom" },
+                    "Lidia": { "curtidas": 5, "comentario": ":D" },
+                    "Luiz": { "curtidas": 22, "comentario": "Top demais" },
+                    "Junior": { "curtidas": 1, "comentario": "Isso ai" },
+                    "Lucas": { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             },
             {
                 "_id": "4",
@@ -61,7 +88,16 @@ function Feed() {
                 "post": "Ola tudo bem? boa tarde",
                 "description": "",
                 "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30
+                "likes": 30,
+                "comentarios": {
+                    "Vitor": { "curtidas": 12, "comentario": "que bom" },
+                    "Lidia": { "curtidas": 5, "comentario": ":D" },
+                    "Luiz": { "curtidas": 22, "comentario": "Top demais" },
+                    "Junior": { "curtidas": 1, "comentario": "Isso ai" },
+                    "Lucas": { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             }
             ,
             {
@@ -73,7 +109,16 @@ function Feed() {
                 "video": "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",
                 "description": "Descrição do post 3",
                 "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30
+                "likes": 30,
+                "comentarios": {
+                    "Vitor": { "curtidas": 12, "comentario": "que bom" },
+                    "Lidia": { "curtidas": 5, "comentario": ":D" },
+                    "Luiz": { "curtidas": 22, "comentario": "Top demais" },
+                    "Junior": { "curtidas": 1, "comentario": "Isso ai" },
+                    "Lucas": { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             },
             {
                 "_id": "6",
@@ -84,7 +129,16 @@ function Feed() {
                 "video": "https://assets.mixkit.co/videos/preview/mixkit-winter-fashion-cold-looking-woman-concept-video-39874-large.mp4",
                 "description": "Descrição do post 3",
                 "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30
+                "likes": 30,
+                "comentarios": {
+                    Vitor: { "curtidas": 12, "comentario": "que bom" },
+                    Lidia: { "curtidas": 5, "comentario": ":D" },
+                    Luiz: { "curtidas": 22, "comentario": "Top demais" },
+                    Junior: { "curtidas": 1, "comentario": "Isso ai" },
+                    Lucas: { "curtidas": 3, "comentario": "kkkkkkkkkk" },
+
+
+                }
             }
         ]
 
@@ -114,63 +168,66 @@ function Feed() {
     }
 
     return (
-       
-            <div className="container-feed">
-                <section id="post-list">
-                    {feed.map((post) => (
-                        <article key={post._id}>
-                            <header>
-                                <div className="user-info">
-                                    <div className="user-info-row">
-                                        <img
-                                            src={post.profile}
-                                            alt="Foto do usuário"
-                                            className="user-avatar"
-                                        />
-                                      
 
-                                        <div className="user-info-column">
-                                            <span>{post.author}</span>
-                                            <span style={{ fontWeight: "normal" }}>{post.place}</span>
-                                           
-                                        </div>
+        <div className="container-feed">
+            <section id="post-list">
+                {feed.map((post) => (
+                    <article key={post._id}>
+                        <header>
+                            <div className="user-info">
+                                <div className="user-info-row">
+                                    <img
+                                        src={post.profile}
+                                        alt="Foto do usuário"
+                                        className="user-avatar"
+                                    />
+
+
+                                    <div className="user-info-column">
+                                        <span>{post.author}</span>
+                                        <span style={{ fontWeight: "normal" }}>{post.place}</span>
+
                                     </div>
                                 </div>
-                                <img src={more} alt="Mais" />
-                            </header>
+                            </div>
+                            <img src={more} alt="Mais" />
+                        </header>
 
-                            {post.image && <img src={post.image} alt="A imagem do Post" />}
+                        {post.image && <img src={post.image} alt="A imagem do Post" />}
 
-                            {post.post && (
-                                <p style={{ paddingLeft: "20px", paddingTop: "20px" }}>
-                                    {post.post}
-                                </p>
-                            )}
+                        {post.post && (
+                            <p style={{ paddingLeft: "20px", paddingTop: "20px" }}>
+                                {post.post}
+                            </p>
+                        )}
 
-                            {post.video && (
-                                <video className='videoplayer-feed' controls>
-                                    <source src={post.video} type="video/mp4" />
-                                </video>
-                            )}
-                            <footer>
-                                <div className="actions">
-                                    <button type="button" onClick={() => handleLike(post._id)}>
-                                        <img src={like} alt="like" />
-                                    
-                                    </button>
-                                    <img src={comment} alt="comment" />
-                                    <img src={tips} alt="tips" />
-                                </div>
-                                <strong>{post.likes} curtidas</strong>
-                                <p>{post.description}</p>
-                            </footer>
+                        {post.video && (
+                            <video className='videoplayer-feed' controls>
+                                <source src={post.video} type="video/mp4" />
+                            </video>
+                        )}
+                        <footer>
+                            <div className="actions">
+                                <button type="button" onClick={() => handleLike(post._id)}>
+                                    <img src={like} alt="like" />
 
-                        </article>
+                                </button>
+                                <img src={comment} alt="comment" />
+                                <img src={tips} alt="tips" />
+                            </div>
+                            <strong>{post.likes} curtidas</strong>
+                            <p>{post.description}</p>
+                            {Object.entries(post.comentarios).map(([nome, comentario]) => (
+                                <p key={nome}>{nome}: {comentario.comentario}</p>
+                            ))}
+                        </footer>
 
-                    ))}
-                </section>
-            </div>
- 
+                    </article>
+
+                ))}
+            </section>
+        </div>
+
     );
 }
 
