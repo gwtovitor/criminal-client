@@ -165,7 +165,7 @@ function Video({
           <div className="vertsBotton">
            <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
            <p style={{color:'white', fontWeight:'bold', marginRight:'5px'}}>{channel}</p>
-           <p style={{color:'white', fontSize:'12px'}}> - {date}</p>
+           <p style={{color:'gray', fontSize:'12px'}}> - {date}</p>
            </div>
             {showFullDescription ? (
               <p className="description" onClick={toggleShowFullDescription}>{description}</p>
