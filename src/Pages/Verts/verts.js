@@ -69,6 +69,7 @@ function Verts() {
       likes: 45,
       picture: vitor,
       legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+      date: '18/05'
     },
     {
       id: 2 ,
@@ -81,6 +82,7 @@ function Verts() {
       likes: 10,
       picture: lidia,
       legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+      date: '05/04'
     },
     {
       id: 3,
@@ -93,6 +95,7 @@ function Verts() {
       likes: 15,
       picture: luiz,
       legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+      date: '06/03'
 
     },
     {
@@ -106,6 +109,7 @@ function Verts() {
       likes: 22,
       picture: jr,
       legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+      date: '01/02'
     },
   ]);
   const [isMuted, setIsMuted] = useState(Array(video.length).fill(false));
@@ -128,14 +132,10 @@ function Verts() {
           description={src.legenda}
           like={src.likes}
           id={src.id}
-         
           channel={src.name}
           avatar={src.picture}
-          >
-          </Videos>
-          
-        
-
+          date={src.date}
+        />  
         ) })}
 
     </div>

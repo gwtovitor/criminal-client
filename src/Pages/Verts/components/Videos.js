@@ -13,7 +13,8 @@ function Video({
   channel,
   description,
   like,
-  avatar
+  avatar,
+  date
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -159,12 +160,19 @@ function Video({
           <MoreVert style={{ marginTop: '15px' }} className="buttonsShortsSide" />
         </div>
         <div className="shortsBottom">
+          
           <div className="shortsDesc">
+          <div className="vertsBotton">
+           <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+           <p style={{color:'white', fontWeight:'bold', marginRight:'5px'}}>{channel}</p>
+           <p style={{color:'white', fontSize:'12px'}}> - {date}</p>
+           </div>
             {showFullDescription ? (
               <p className="description" onClick={toggleShowFullDescription}>{description}</p>
             ) : (
               <p className="description" onClick={toggleShowFullDescription}>{shortDescription}...</p>
             )}
+          </div>
           </div>
         </div>
       </div>

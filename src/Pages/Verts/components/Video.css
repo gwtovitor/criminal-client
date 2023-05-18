@@ -110,6 +110,10 @@ input[type="range"]:focus::-moz-range-thumb{
   margin-bottom: 100px;
 
 }
+.vertsBotton{
+  display: flex;
+  flex-direction: column;
+}
 
 .btn-circle.btn-xl {
   width: 50px;

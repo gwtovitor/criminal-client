@@ -9,30 +9,22 @@ import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
-import CommentModal from './ComentariosModal';
 import { Avatar } from '@mui/material';
 
 
 function Feed() {
     const [feed, setFeed] = useState([]);
     const [position, setPosition] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+    const [newComment, setNewComment] = useState('');
 
-    const handleCommentClick = () => {
-        setShowModal(true);
+    const handleCommentChange = (event) => {
+        setNewComment(event.target.value);
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
 
     const handleAddComment = (comment) => {
-        // Lógica para adicionar o comentário
+        // Logic to add the comment
     };
-
-    // Supondo que post.comentarios seja um objeto de comentários
-
-    // Obter os dois primeiros comentários
 
 
     const json =
@@ -49,10 +41,10 @@ function Feed() {
                 "likes": 10,
                 "comentarios": {
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
 
 
                 }
@@ -68,11 +60,11 @@ function Feed() {
                 "hashtags": "#hashtag3 #hashtag4",
                 "likes": 20,
                 "comentarios": {
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
                 }
             },
             {
@@ -87,10 +79,10 @@ function Feed() {
                 "likes": 30,
                 "comentarios": {
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
                 }
             },
             {
@@ -104,11 +96,11 @@ function Feed() {
                 "hashtags": "#hashtag5 #hashtag6",
                 "likes": 30,
                 "comentarios": {
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
                 }
             }
             ,
@@ -123,11 +115,11 @@ function Feed() {
                 "hashtags": "#hashtag5 #hashtag6",
                 "likes": 30,
                 "comentarios": {
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
                 }
             },
             {
@@ -141,12 +133,12 @@ function Feed() {
                 "hashtags": "#hashtag5 #hashtag6",
                 "likes": 30,
                 "comentarios": {
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk",  "picture": vocesabia  },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais",  "picture": luiz  },
+                    Lucas: { "id": 5, "curtidas": 3, "comentario": "SADASDASD", "picture": vocesabia },
+                    Luiz: { "id": 3, "curtidas": 22, "comentario": "ASDSADASDASD demais", "picture": luiz },
                     Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D",  "picture": lidia  },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai",  "picture": jr  },
-                  
+                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
+                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
+
                 }
             }
         ]
@@ -224,30 +216,69 @@ function Feed() {
                             </div>
                             <strong>{post.likes} curtidas</strong>
                             <p>{post.description}</p>
-                            {Object.entries(post.comentarios).slice(0, 2).map(([nome, comentario, id, picture]) => (
-                                <div style={{ display: 'flex', flexDirection: 'row', marginTop:'6px', alignItems:'center' }}>
-                                    <Avatar style={{marginRight:'5px'}} src={comentario.picture}></Avatar>
-                                   <div style={{marginTop:'5px', display:'flex', flexDirection:'row'}}>
-                                   <p style={{ fontWeight: 'bold' }}>{nome}</p>
-                                    <span onClick={handleCommentClick} style={{ cursor: 'pointer' }}>
-                                        <p key={id}> : {comentario.comentario}</p>
-                                
-                                    </span>
-                                   </div>
+                            {Object.entries(post.comentarios).slice(0, 2).map(([nome, comentario]) => (
+                                <div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', marginTop: '6px', alignItems: 'center' }} key={nome}>
+                                        <Avatar style={{ marginRight: '5px' }} src={comentario.picture}></Avatar>
+                                        <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row' }}>
+                                            <p style={{ fontWeight: 'bold' }}>{nome}</p>
+                                            <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong${post._id}`}>
+                                                <p>: {comentario.comentario}</p>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             ))}
 
+                            <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
+                                <input type="text" value={newComment} style={{ marginRight: '5px', flex: 1 }} onChange={handleCommentChange} />
+                                <button className="btn btn-primary" onClick={handleAddComment}>Comentar</button>
+                            </div>
+                            <div class="modal fade" id={`exampleModalLong${post._id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle${post._id}`} aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div className="comment-list">
+                                                {Object.entries(post.comentarios).map(([nome, comentario]) => (
+                                                    <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center' }} key={comentario.id}>
+                                                        <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <Avatar style={{ marginRight: '6px' }} src={comentario.picture} />
+                                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                                <p style={{ fontWeight: 'bold' }}>{nome}</p>
+                                                                <p>: {comentario.comentario}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div className="add-comment" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                                <input type="text" value={newComment} style={{ marginRight: '5px', flex: 1 }} onChange={handleCommentChange} />
+                                                <button className="btn btn-primary" onClick={handleAddComment}>Comentar</button>
+                                            </div>
 
-                            {showModal && (
-                                <div>
-                                    <CommentModal
-                                    comments={Object.entries(post.comentarios)}
-                                    onClose={handleCloseModal}
-                                    onAddComment={handleAddComment}
-                                />
+
+
+
+                                        </div>
+                                    </div>
                                 </div>
-                            )}
+                            </div>
+
+
+
+
 
                         </footer>
 
@@ -255,7 +286,7 @@ function Feed() {
 
                 ))}
             </section>
-        </div>
+        </div >
 
     );
 }
