@@ -24,6 +24,8 @@ function Video({
   const [duration, setDuration] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
+
+
   function toggleShowFullDescription() {
     setShowFullDescription(!showFullDescription);
   }
@@ -157,22 +159,57 @@ function Video({
           <div onClick={handleMute}>
             {muted ? <VolumeOff className="buttonsShortsSide" /> : <VolumeUp className="buttonsShortsSide" />}
           </div>
-          <MoreVert style={{ marginTop: '15px' }} className="buttonsShortsSide" />
+          <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong`}>
+            <MoreVert style={{ marginTop: '15px' }} className="buttonsShortsSide" />
+          </span>
+
         </div>
-        <div className="shortsBottom">
-          
-          <div className="shortsDesc">
-          <div className="vertsBotton">
-           <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-           <p style={{color:'white', fontWeight:'bold', marginRight:'5px'}}>{channel}</p>
-           <p style={{color:'gray', fontSize:'12px'}}> - {date}</p>
-           </div>
-            {showFullDescription ? (
-              <p className="description" onClick={toggleShowFullDescription}>{description}</p>
-            ) : (
-              <p className="description" onClick={toggleShowFullDescription}>{shortDescription}...</p>
-            )}
+        <div class="modal fade" id={'exampleModalLong'} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle$`} aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id={`exampleModalLongTitle`}>Comentários</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div className="comment-list d-flex flex-column">
+                  <button type="button" class="btn btn-danger mt-2">Denunciar Video</button>
+                  <button type="button" class="btn btn-primary mt-2">Denunciar Perfil</button>
+                  <button type="button" class="btn btn-primary mt-2 mt-2">Enviar Perfil</button>
+                  <button type="button" class="btn btn-primary mt-2">Enviar Video</button>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <div className="add-comment" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+
+                </div>
+
+
+
+
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div className="shortsBottom">
+
+          <div className="shortsDesc">
+            <div className="vertsBotton">
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <p style={{ color: 'white', fontWeight: 'bold', marginRight: '5px' }}>{channel}</p>
+                <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '12px' }}> - {date}</p>
+
+              </div>
+              {showFullDescription ? (
+                <p className="description" onClick={toggleShowFullDescription}>{description}</p>
+              ) : (
+                <p className="description" onClick={toggleShowFullDescription}>{shortDescription}...</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

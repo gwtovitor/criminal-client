@@ -1,3 +1,4 @@
+
 .row{
     max-width: 100%;
 }
@@ -19,7 +20,27 @@
 .navlateral {
     position: fixed;
 }
-
+.scrollable-submenu {
+    max-height: 300px; /* Defina a altura máxima desejada para o submenu */
+    overflow-y: auto;
+    
+  }
+  .scrollable-submenu::-webkit-scrollbar {
+    width: 0.2em; /* Ajuste a largura da barra de rolagem conforme necessário */
+  }
+  
+  .scrollable-submenu::-webkit-scrollbar-track {
+    background: transparent; /* Define a cor de fundo da barra de rolagem */
+  }
+  
+  .scrollable-submenu::-webkit-scrollbar-thumb {
+    background: gray; /* Define a cor do indicador da barra de rolagem */
+  }
+  
+  .scrollable-submenu::-webkit-scrollbar-thumb:hover {
+    background: transparent; /* Define a cor do indicador da barra de rolagem ao passar o mouse */
+  }
+  
 .footer {
     display: none;
     position: fixed;

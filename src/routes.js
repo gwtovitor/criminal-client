@@ -19,7 +19,7 @@ import Profilefa from './Pages/ProfileFa/profilefa'
 import Postfeed from './Pages/Postfeed'
 import Postverts from './Pages/Postverts'
 import PostMsg from './Pages/PostMsg'
-
+import Suporte from './Pages/Suporte'
 
 function RoutesApp() {
     return (
@@ -50,6 +50,7 @@ function RoutesApp() {
                     <Route path='/postfeed' element={<Postfeed />} />
                     <Route path='/postverts' element={<Postverts />} />
                     <Route path='/postmsg' element={<PostMsg />} />
+                    <Route path='/suporte' element={<Suporte />} />
                 </Route>
             </Routes>
         </BrowserRouter>

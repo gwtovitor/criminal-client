@@ -44,22 +44,6 @@ function Postverts() {
             <textarea className='form-control' placeholder='Legenda' aria-label='With textarea'></textarea>
           </div>
         </div>
-        <div className='row mt-3'>
-          <div className='col-12'>
-            <div className='form-check-reverse text-start form-switch'>
-              <input
-                className='form-check-input'
-                style={{ width: '2.5rem', height: '1.5rem' }}
-                type='checkbox'
-                role='switch'
-                id='flexSwitchCheckDefault'
-              />
-              <label className='form-check-label mt-1' htmlFor='flexSwitchCheckDefault'>
-                Desativar Comentários
-              </label>
-            </div>
-          </div>
-        </div>
      
         {videoURL && (
         <div className='fullscreen-video-container' style={{alignSelf:'center', margin:'0 auto'}}>

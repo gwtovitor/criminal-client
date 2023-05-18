@@ -7,7 +7,7 @@ function Postfeed() {
       <div className='row'>
         <div className='row'>
           <div className='col-12'>
-            <textarea class="form-control" aria-label="With textarea"></textarea>
+            <textarea class="form-control" placeholder="Legenda" aria-label="With textarea"></textarea>
           </div>
         </div>
         <div className='row mt-3'>
@@ -22,15 +22,15 @@ function Postfeed() {
           <div className='col-12'>
             <div class="input-group">
               <span class="input-group-text">Preço</span>
-              <input type="text" class="form-control" />
+              <input placeholder="Em branco para R$ 0,00" type="text" class="form-control" />
             </div>
           </div>
         </div>
         <div className='row mt-3'>
-          <div className='col-12'>
+          <div style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'start'}}>
             <div class="form-check-reverse text-start form-switch">
               <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-              <label class="form-check-label mt-1" for="flexSwitchCheckDefault">Desativar Comentários</label>
+              <label class="form-check-label mt-1" style={{marginRight:'8px'}} for="flexSwitchCheckDefault">Desativar Comentários</label>
             </div>
           </div>
         </div>
