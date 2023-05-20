@@ -20,6 +20,7 @@ import Postfeed from './Pages/Postfeed'
 import Postverts from './Pages/Postverts'
 import PostMsg from './Pages/PostMsg'
 import Suporte from './Pages/Suporte'
+import MyGallery from './Pages/Favoritos'
 
 function RoutesApp() {
     return (
@@ -31,7 +32,7 @@ function RoutesApp() {
                 <Route path='/signfa' element={<Signfa />} />
                 <Route path='/signcriador' element={<Signcriador />} />
                 <Route path='/signcriador/dados' element={<DadosBancarios />} />
-               
+
                 <Route path='/' element={<Main />}>
                     <Route index element={<Feed />} />
                     <Route path='/profile' element={<Profile />} />
@@ -45,12 +46,12 @@ function RoutesApp() {
                     <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
                     <Route path='/seguindo' element={<MyCriminal page='Seguindo' />} />
                     <Route path='/seguidores' element={<MyCriminal page='Seguidores' />} />
-                    <Route path='/favoritos' element={<MyCriminal page='Favoritos' />} />
                     <Route path='/bloqueados' element={<MyCriminal page='Bloqueados' />} />
                     <Route path='/postfeed' element={<Postfeed />} />
                     <Route path='/postverts' element={<Postverts />} />
                     <Route path='/postmsg' element={<PostMsg />} />
                     <Route path='/suporte' element={<Suporte />} />
+                    <Route path='/favoritos' element={<MyGallery />} />
                 </Route>
             </Routes>
         </BrowserRouter>

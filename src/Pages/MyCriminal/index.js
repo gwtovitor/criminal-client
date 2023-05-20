@@ -86,7 +86,6 @@ function MyCriminal(props) {
   useEffect(() => {
     const getData = (page) => {
       const data = () => {
-        if (page === 'Favoritos') return favorites;
         if (page === 'Assinando') return subscribing;
         if (page === 'Assinantes') return subscribers;
         if (page === 'Seguindo') return following;
