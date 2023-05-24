@@ -192,7 +192,14 @@ function Feed() {
                             <img src={more} alt="Mais" />
                         </header>
 
-                        {post.image && <img src={post.image} alt="A imagem do Post" />}
+                        {post.image && (
+                             <div style={{ position: "relative" }}>
+                                <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                    <h6 style={{color:'rgba(255, 255, 255, 0.6)', opacity:'0.8', cursor:'default', userSelect:'none'}}>CC@{post.user}</h6>
+                                </div>
+                                <img style={{ width: '100%' }} src={post.image} alt="A imagem do Post" />
+                            </div>
+                        )}
 
                         {post.post && (
                             <p style={{ paddingLeft: "20px", paddingTop: "20px" }}>
@@ -201,10 +208,16 @@ function Feed() {
                         )}
 
                         {post.video && (
-                            <video className='videoplayer-feed' controls>
-                                <source src={post.video} type="video/mp4" />
-                            </video>
+                            <div style={{ position: "relative" }}>
+                                  <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                    <h6 style={{color:'rgba(255, 255, 255, 0.6)', opacity:'0.8', cursor:'default', userSelect:'none'}}>CC@{post.user}</h6>
+                                </div>
+                                <video className='videoplayer-feed' controls>
+                                    <source src={post.video} type="video/mp4" />
+                                </video>
+                            </div>
                         )}
+
                         <footer>
                             <div className="actions">
                                 <button type="button" onClick={() => handleLike(post._id)}>

@@ -8,7 +8,7 @@ function Home() {
     <div className="container-sl-home">
 
       <div className="fa-home">
-        <h1>FÃ</h1>
+        <h1 style={{cursor:'default', userSelect:'none'}}>FÃ</h1>
         <div>
           <button type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
           <button type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>
@@ -22,7 +22,7 @@ function Home() {
       </div>
 
       <div className="criador-home">
-        <h1>CRIADOR</h1>
+        <h1 style={{cursor:'default', userSelect:'none'}}>CRIADOR</h1>
         <div>
           <button type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
           <button type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>

@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Modal from 'react-bootstrap/Modal';
+
 
 
 
@@ -26,49 +28,186 @@ function Profile() {
         { name: 'Fotos', value: '2' },
         { name: 'Videos', value: '3' },
     ];
+    const [selectedImage, setSelectedImage] = useState(0);
+    const [showModal, setShowModal] = useState(false);
 
-    const feed = [{
-        "media": [{
-            "type": "image",
-            "url": "https://source.unsplash.com/random/800x600",
-            "caption": "Imagem 1"
+    const openModal = (index) => {
+        setSelectedImage(index);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const images2 = [
+        {
+            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Lidia Beatriz',
+            date: '05/02/2023',
+            price: 'R$ 15,00',
+            hora: '22:00',
+            legenda: 'Legenda da Foto',
+            tags: [
+                { value: "Verts", title: "Verts" },
+
+            ],
+            caption: "After Rain (Jeshu John - designerspics.com)",
         },
         {
-            "type": "image",
-            "url": "https://source.unsplash.com/random/800x600",
-            "caption": "Imagem 2"
+            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Luiz',
+            date: '01/01/2020',
+            price: 'R$ 50,00',
+            legenda: 'Legenda da Foto',
+            hora: '18:10',
+            tags: [
+
+                { value: "Mensagem", title: "Mensagem" },
+            ],
+            alt: "Boats (Jeshu John - designerspics.com)",
+        },
+
+        {
+            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Junior Martins',
+            date: '05/05/2022',
+            price: 'R$ 7,00',
+            legenda: 'Legenda da Foto',
+            hora: '15:30',
+            tags: [
+
+                { value: "Feed", title: "Feed" },
+            ],
         },
         {
-            "type": "video",
-            "url": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
-            "poster": "https://source.unsplash.com/random/800x600",
-            "caption": "Vídeo 1"
+            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Vitor Augusto',
+            date: '10/05/2022',
+            price: 'R$ 30,00',
+            legenda: 'Legenda da Foto',
+            hora: '15:22',
+            tags: [
+                { value: "Verts", title: "Verts" },
+
+            ],
+            caption: "After Rain (Jeshu John - designerspics.com)",
         },
         {
-            "type": "image",
-            "url": "https://source.unsplash.com/random/800x600",
-            "caption": "Imagem 3"
+            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Vitor Augusto',
+            date: '10/05/2022',
+            price: 'R$ 30,00',
+            legenda: 'Legenda da Foto',
+            hora: '15:22',
+            tags: [
+
+                { value: "Mensagem", title: "Mensagem" },
+            ],
+            alt: "Boats (Jeshu John - designerspics.com)",
+        },
+
+        {
+            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Vitor Augusto',
+            date: '10/05/2022',
+            legenda: 'Legenda da Foto',
+            price: 'R$ 30,00',
+            hora: '15:22',
+            tags: [
+
+                { value: "Feed", title: "Feed" },
+            ],
         },
         {
-            "type": "video",
-            "url": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
-            "poster": "https://source.unsplash.com/random/800x600",
-            "caption": "Vídeo 2"
+            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Jose',
+            date: '09/04/2023',
+            legenda: 'Legenda da Foto',
+            price: 'R$ 50,00',
+            hora: '16:40',
+            tags: [
+                { value: "Verts", title: "Verts" },
+
+            ],
+            caption: "After Rain (Jeshu John - designerspics.com)",
         },
         {
-            "type": "image",
-            "url": "https://source.unsplash.com/random/800x600",
-            "caption": "Imagem 4"
-        }
-        ]
-    }
+            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Vinicius',
+            date: '07/11/2023',
+            legenda: 'Legenda da Foto',
+            price: 'R$ 15,00',
+            hora: '19:58',
+            tags: [
+
+                { value: "Mensagem", title: "Mensagem" },
+            ],
+            alt: "Boats (Jeshu John - designerspics.com)",
+        },
+
+        {
+            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Lucas',
+            date: '04/08/2023',
+            legenda: 'Legenda da Foto',
+            price: 'R$ 10,00',
+            hora: '14:10',
+            tags: [
+
+                { value: "Feed", title: "Feed" },
+            ],
+        },
+        {
+            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Carlos',
+            date: '15/05/2023',
+            price: 'R$ 5,00',
+            legenda: 'Legenda da Foto',
+            hora: '16:30',
+            tags: [
+
+                { value: "Mensagem", title: "Mensagem" },
+            ],
+            alt: "Boats (Jeshu John - designerspics.com)",
+        },
+
+        {
+            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
+            width: 320,
+            height: 212,
+            profile: 'Joao',
+            date: '05/12/2022',
+            price: 'R$ 10,00',
+            legenda: 'Legenda da Foto',
+            hora: '00:22',
+            tags: [
+
+                { value: "Feed", title: "Feed" },
+            ],
+        },
     ];
-    const images = feed[0].media.map((item) => {
-        if (item.type === 'video') {
-            return item.poster;
-        }
-        return item.url;
-    });
+
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -209,19 +348,19 @@ function Profile() {
                     <div className="social-networks">
                         {instagramLink !== '' && (
                             <button style={{ border: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={instagramLink}>Instagram</a>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={instagramLink}>Instagram</a>
                                 <FontAwesomeIcon icon={faInstagram} />
                             </button>
                         )}
                         {tiktokLink !== '' && (
                             <button style={{ border: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={tiktokLink}>TikTok</a>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={tiktokLink}>TikTok</a>
                                 <FontAwesomeIcon icon={faTiktok} />
                             </button>
                         )}
                         {amazonLink !== '' && (
                             <button style={{ border: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight:'3px' }} href={amazonLink}>Amazon</a>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={amazonLink}>Amazon</a>
                                 <FontAwesomeIcon icon={faAmazon} />
                             </button>
                         )}
@@ -270,18 +409,45 @@ function Profile() {
 
 
                 </div>
-                <div className="grid-profile">
-                    {images.map((image, index) => (
-                        <div
-                            className='img-grid'
-                            key={index} style={{
-                                background: `url(${image}) no-repeat center center / cover`,
+                <div className="row">
+                    {images2.map((images, index) => {
+                        return (
+                            <div class="col-lg-4 col-md-5">
+                                <img
+                                    src={images.src}
+                                    class="w-100 shadow-1-strong rounded mb-1"
+                                    alt="Boat on Calm Water"
+                                    style={{ margin: '0', padding: '0', cursor: 'pointer' }}
+                                    width={images.width}
+                                    height={images.height}
+                                    onClick={() => { openModal(index) }}
 
-                            }}>
-                        </div>
-                    ))}
+                                />
+
+                            </div>
+                        );
+                    })}
                 </div>
+                <Modal show={showModal} onHide={closeModal} centered>
+                    <Modal.Header closeButton>
 
+                    </Modal.Header>
+                    <Modal.Body style={{ flexDirection: 'column' }} className="d-flex justify-content-center align-items-center">
+                        <img src={images2[selectedImage].src} className="img-fluid" alt="Imagem Modal" />
+                        <span>{images2[selectedImage].legenda}</span>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger">
+                            Excluir Foto
+                        </Button>
+                        <Button variant="secondary">
+                            Editar Legenda
+                        </Button>
+                        <Button variant="secondary" onClick={closeModal}>
+                            Fechar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
             </div>
 
