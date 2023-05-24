@@ -5,13 +5,52 @@ import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
 import { Form } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'; import "react-datepicker/dist/react-datepicker.css";
+import { DateField } from '@mui/x-date-pickers/DateField';
+import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimeField } from '@mui/x-date-pickers/TimeField';
 
 
 export default function PostMsg() {
     const [images, setImages] = useState([]);
     const [filteredMessages, setfilteredMessages] = useState([]);
     const [selectedCount, setSelectedCount] = useState(0);
+    const [data, setData] = useState(null);
+    const [hora, setHora] = useState(null);
+
+    const handleDataChange = (newValue) => {
+        const currentDate = dayjs().startOf('day');
+        const selectedDate = dayjs(newValue).startOf('day');
+        if (selectedDate.isBefore(currentDate)) {
+            // A data selecionada é anterior à data atual
+            setData(null); // Limpar a data selecionada
+        } else {
+            setData(newValue);
+            if (dayjs(data).isSame(currentDate, 'day')) {
+                // A data selecionada é a data atual, verifique também a hora selecionada
+                const currentDateTime = dayjs();
+                const selectedDateTime = dayjs(data).set('hour', hora.hour).set('minute', hora.minute);
+                if (selectedDateTime.isBefore(currentDateTime)) {
+                    // A hora selecionada é anterior à hora atual
+                    setHora(null); // Limpar a hora selecionada
+                }
+            }
+        }
+    };
+
+    const handleHoraChange = (newValue) => {
+        const currentDateTime = dayjs();
+        const selectedDateTime = dayjs(data).set('hour', newValue.hour).set('minute', newValue.minute);
+
+        if (selectedDateTime.isBefore(currentDateTime) || dayjs(data).isBefore(dayjs().startOf('day'))) {
+            // A hora selecionada é anterior à hora atual ou a data selecionada é anterior à data atual
+            setHora(null); // Limpar a hora selecionada
+        } else {
+            setHora(newValue);
+        }
+    };
 
     function handleCheckboxChange(e) {
         const isChecked = e.target.checked;
@@ -214,13 +253,45 @@ export default function PostMsg() {
                                 </div>
                             </div>
                         ))}
+                       
                     </div>
                 </div>
+                <div className='row mt-2'>
+                            <div className='col-12'>
+                                <div class="input-group">
+                                    <div class="form-check-reverse text-start form-switch">
+                                        <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                                        <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='row mt-3'>
+                            <div className='col-12'>
+                                <div class="input-group">
 
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DateField
+                                            label="Data"
+                                            value={data}
 
+                                            onChange={handleDataChange}
+                                            views={['day', 'month', 'year']}
+                                            format="DD / MM / YYYY"
+                                        />
+                                    </LocalizationProvider>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <TimeField
+                                            label="Horário"
+                                            value={hora}
+                                            onChange={handleHoraChange}
+                                            format="HH:mm"
+                                        />
+                                    </LocalizationProvider>
 
-
-
+                                </div>
+                            </div>
+                        </div>
                 <div className='row mt-3'>
                     <div className='col-12 d-grid'>
                         <a className='btn btn-info text-white' href="#">Publicar para Todos</a>
@@ -232,16 +303,3 @@ export default function PostMsg() {
 
 
 }
-
-
-
-
-/* {images.map((image) => (
-                            <div className="col-1 m-2" key={image.url} >
-                                <img
-                                    src={image.url}
-                                    style={{ width: "100px", height: "100px", paddingRight:'2px'}}
-                                    alt=""
-                                />
-                            </div>
-                        ))}*/

@@ -176,7 +176,7 @@ const MyGallery = () => {
         <div className="ms-4 mb-5 mt-3">
 
             <div className='mb-5'>
-                <strong>Galeria de compras</strong>
+                <h1>Galeria de compras</h1>
             </div>
 
 

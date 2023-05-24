@@ -437,12 +437,21 @@ function Profile() {
                         <span>{images2[selectedImage].legenda}</span>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger">
-                            Excluir Foto
+                       
+                        <Button variant="secondary">
+                            Arquivar
                         </Button>
                         <Button variant="secondary">
                             Editar Legenda
                         </Button>
+                        <div class="form-check-reverse text-start form-switch">
+                            <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                            <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Desativar Comentários</label>
+                        </div>
+                        <Button variant="danger">
+                            Excluir Foto
+                        </Button>
+              
                         <Button variant="secondary" onClick={closeModal}>
                             Fechar
                         </Button>

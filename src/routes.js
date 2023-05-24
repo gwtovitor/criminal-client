@@ -20,8 +20,10 @@ import Postfeed from './Pages/Postfeed'
 import Postverts from './Pages/Postverts'
 import PostMsg from './Pages/PostMsg'
 import Suporte from './Pages/Suporte'
-import MyGallery from './Pages/Favoritos'
+import MyGallery from './Pages/Galeria'
 import NivelConta from './Pages/Financas/Nivelconta'
+import Arquivados from './Pages/Arquivados'
+
 
 function RoutesApp() {
     return (
@@ -53,6 +55,7 @@ function RoutesApp() {
                     <Route path='/postverts' element={<Postverts />} />
                     <Route path='/postmsg' element={<PostMsg />} />
                     <Route path='/suporte' element={<Suporte />} />
+                    <Route path='/arquivados' element={<Arquivados />} />
                     <Route path='/favoritos' element={<MyGallery />} />
                 </Route>
             </Routes>
