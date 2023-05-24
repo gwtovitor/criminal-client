@@ -21,6 +21,7 @@ import Postverts from './Pages/Postverts'
 import PostMsg from './Pages/PostMsg'
 import Suporte from './Pages/Suporte'
 import MyGallery from './Pages/Favoritos'
+import NivelConta from './Pages/Financas/Nivelconta'
 
 function RoutesApp() {
     return (
@@ -39,6 +40,7 @@ function RoutesApp() {
                     <Route path='/profilefa' element={<Profilefa />} />
                     <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
+                    <Route path='/nivel' element={<NivelConta />} />
                     <Route path='/banco' element={<Banco />} />
                     <Route path='/verts' element={<Verts />} />
                     <Route path='/mensagens' element={<Mensagens />} />
