@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './postmsg.css';
 import luiz from './Images/luiz.jpg'
 import vitor from './Images/profile.png'
-import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
-import { Form } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify'; import "react-datepicker/dist/react-datepicker.css";
+import { toast } from 'react-toastify'; import "react-datepicker/dist/react-datepicker.css";
 import { DateField } from '@mui/x-date-pickers/DateField';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
@@ -19,6 +17,7 @@ export default function PostMsg() {
     const [selectedCount, setSelectedCount] = useState(0);
     const [data, setData] = useState(null);
     const [hora, setHora] = useState(null);
+    const [dataDisable, setDataDisable] = useState(false);
 
     const handleDataChange = (newValue) => {
         const currentDate = dayjs().startOf('day');
@@ -239,7 +238,6 @@ export default function PostMsg() {
                                         style={{ minWidth: '50px' }}
                                         alt=""
                                     />
-
                                     <div className="form-check form-check-inline m-1">
                                         <input
                                             className="form-check-input"
@@ -247,54 +245,59 @@ export default function PostMsg() {
                                             value=""
                                             onClick={handleCheckboxChange}
                                         />
-
-
                                     </div>
                                 </div>
                             </div>
                         ))}
-                       
+
                     </div>
                 </div>
                 <div className='row mt-2'>
-                            <div className='col-12'>
-                                <div class="input-group">
-                                    <div class="form-check-reverse text-start form-switch">
-                                        <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                                        <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
-                                    </div>
-                                </div>
+                    <div className='col-12'>
+                        <div class="input-group">
+                            <div class="form-check-reverse text-start form-switch">
+                                <input
+                                    class="form-check-input"
+                                    style={{ width: '2.5rem', height: '1.5rem' }}
+                                    onChange={(e) => setDataDisable(e.target.checked)}
+                                    type="checkbox"
+                                    role="switch"
+                                    id="flexSwitchCheckDefault"
+                                />
+                                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
                             </div>
                         </div>
-                        <div className='row mt-3'>
-                            <div className='col-12'>
-                                <div class="input-group">
+                    </div>
+                </div>
+                <div className='row mt-3'>
+                    <div className='col-12'>
+                        {dataDisable && (<div class="input-group">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateField
+                                    label="Data"
+                                    value={data}
 
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateField
-                                            label="Data"
-                                            value={data}
+                                    onChange={handleDataChange}
+                                    views={['day', 'month', 'year']}
+                                    format="DD / MM / YYYY"
 
-                                            onChange={handleDataChange}
-                                            views={['day', 'month', 'year']}
-                                            format="DD / MM / YYYY"
-                                        />
-                                    </LocalizationProvider>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <TimeField
-                                            label="Horário"
-                                            value={hora}
-                                            onChange={handleHoraChange}
-                                            format="HH:mm"
-                                        />
-                                    </LocalizationProvider>
+                                />
+                            </LocalizationProvider>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimeField
+                                    label="Horário"
+                                    value={hora}
+                                    onChange={handleHoraChange}
+                                    format="HH:mm"
 
-                                </div>
-                            </div>
-                        </div>
+                                />
+                            </LocalizationProvider>
+                        </div>)}
+                    </div>
+                </div>
                 <div className='row mt-3'>
                     <div className='col-12 d-grid'>
-                        <a className='btn btn-info text-white' href="#">Publicar para Todos</a>
+                        <a className='btn btn-info text-white' href="#">Publicar</a>
                     </div>
                 </div>
             </div>

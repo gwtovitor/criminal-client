@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-
 import "react-datepicker/dist/react-datepicker.css";
-import ptBR from 'date-fns/locale/pt-BR';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
@@ -12,7 +9,7 @@ import { TimeField } from '@mui/x-date-pickers/TimeField';
 function Postfeed() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
-
+  const [dataDisable, setDataDisable] = useState(false);
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
@@ -75,8 +72,15 @@ function Postfeed() {
         <div className='row mt-3'>
           <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'start' }}>
             <div class="form-check-reverse text-start form-switch">
-              <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-              <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Desativar Comentários</label>
+              <input
+                class="form-check-input"
+                style={{ width: '2.5rem', height: '1.5rem' }}
+                onChange={(e) => setDataDisable(e.target.checked)}
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
+              <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
             </div>
           </div>
         </div>
@@ -84,16 +88,22 @@ function Postfeed() {
           <div className='col-12'>
             <div class="input-group">
               <div class="form-check-reverse text-start form-switch">
-                <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
+                <input
+                  class="form-check-input"
+                  style={{ width: '2.5rem', height: '1.5rem' }}
+                  onChange={(e) => setDataDisable(e.target.checked)}
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                />
+                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
               </div>
             </div>
           </div>
         </div>
         <div className='row mt-3'>
           <div className='col-12'>
-            <div class="input-group">
-
+            {dataDisable && (<div class="input-group">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField
                   label="Data"
@@ -102,6 +112,7 @@ function Postfeed() {
                   onChange={handleDataChange}
                   views={['day', 'month', 'year']}
                   format="DD / MM / YYYY"
+
                 />
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -110,10 +121,10 @@ function Postfeed() {
                   value={hora}
                   onChange={handleHoraChange}
                   format="HH:mm"
+
                 />
               </LocalizationProvider>
-
-            </div>
+            </div>)}
           </div>
         </div>
 

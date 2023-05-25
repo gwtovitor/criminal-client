@@ -10,6 +10,7 @@ import { TimeField } from '@mui/x-date-pickers/TimeField';
 function Postverts() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
+  const [dataDisable, setDataDisable] = useState(false);
 
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
@@ -96,16 +97,22 @@ function Postverts() {
           <div className='col-12'>
             <div class="input-group">
               <div class="form-check-reverse text-start form-switch">
-                <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
+                <input
+                  class="form-check-input"
+                  style={{ width: '2.5rem', height: '1.5rem' }}
+                  onChange={(e) => setDataDisable(e.target.checked)}
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                />
+                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
               </div>
             </div>
           </div>
         </div>
         <div className='row mt-3'>
           <div className='col-12'>
-            <div class="input-group">
-
+            {dataDisable && (<div class="input-group">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField
                   label="Data"
@@ -114,6 +121,7 @@ function Postverts() {
                   onChange={handleDataChange}
                   views={['day', 'month', 'year']}
                   format="DD / MM / YYYY"
+
                 />
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -122,10 +130,10 @@ function Postverts() {
                   value={hora}
                   onChange={handleHoraChange}
                   format="HH:mm"
+
                 />
               </LocalizationProvider>
-
-            </div>
+            </div>)}
           </div>
         </div>
         <div className='row mt-3'>
