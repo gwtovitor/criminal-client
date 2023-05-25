@@ -10,6 +10,22 @@ function Postfeed() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const calcularAcrescimo = () => {
+    const valor = parseFloat(inputValue);
+    if (!isNaN(valor)) {
+      const acrescimo = valor * 0.05;
+      const resultado = valor + acrescimo;
+      return resultado.toFixed(2);
+    }
+    return '';
+  };
+
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
@@ -63,24 +79,24 @@ function Postfeed() {
         </div>
         <div className='row mt-3'>
           <div className='col-12'>
-            <div class="input-group">
-              <span class="input-group-text">Preço</span>
-              <input placeholder="Em branco para R$ 0,00" type="text" class="form-control" />
+            <div className="input-group">
+              <span className="input-group-text">Preço</span>
+              <input
+                placeholder="Em branco para R$ 0,00"
+                type="text"
+                className="form-control"
+                value={inputValue}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </div>
         <div className='row mt-3'>
           <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'start' }}>
-            <div class="form-check-reverse text-start form-switch">
-              <input
-                class="form-check-input"
-                style={{ width: '2.5rem', height: '1.5rem' }}
-                onChange={(e) => setDataDisable(e.target.checked)}
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckDefault"
-              />
-              <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
+            <div className="form-check-reverse text-start form-switch">
+              <label className="form-check-label mt-1" style={{ marginRight: '8px' }} htmlFor="flexSwitchCheckDefault">
+                {inputValue ? `O valor a ser cobrado será de R$ ${calcularAcrescimo()} após o acréscimo da Taxa CC` : ''}
+              </label>
             </div>
           </div>
         </div>
@@ -96,7 +112,7 @@ function Postfeed() {
                   role="switch"
                   id="flexSwitchCheckDefault"
                 />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
+                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
               </div>
             </div>
           </div>

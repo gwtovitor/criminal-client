@@ -105,7 +105,7 @@ function Postverts() {
                   role="switch"
                   id="flexSwitchCheckDefault"
                 />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Mensagens</label>
+                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
               </div>
             </div>
           </div>

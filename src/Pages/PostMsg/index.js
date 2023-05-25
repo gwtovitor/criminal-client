@@ -18,7 +18,21 @@ export default function PostMsg() {
     const [data, setData] = useState(null);
     const [hora, setHora] = useState(null);
     const [dataDisable, setDataDisable] = useState(false);
+    const [inputValue, setInputValue] = useState('');
 
+    const handleInputChange = (event) => {
+      setInputValue(event.target.value);
+    };
+  
+    const calcularAcrescimo = () => {
+      const valor = parseFloat(inputValue);
+      if (!isNaN(valor)) {
+        const acrescimo = valor * 0.05;
+        const resultado = valor + acrescimo;
+        return resultado.toFixed(2);
+      }
+      return '';
+    };
     const handleDataChange = (newValue) => {
         const currentDate = dayjs().startOf('day');
         const selectedDate = dayjs(newValue).startOf('day');
@@ -252,6 +266,29 @@ export default function PostMsg() {
 
                     </div>
                 </div>
+                <div className='row mt-3'>
+                    <div className='col-12'>
+                        <div className="input-group">
+                            <span className="input-group-text">Preço</span>
+                            <input
+                                placeholder="Em branco para R$ 0,00"
+                                type="text"
+                                className="form-control"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className='row mt-3'>
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'start' }}>
+                        <div className="form-check-reverse text-start form-switch">
+                            <label className="form-check-label mt-1" style={{ marginRight: '8px' }} htmlFor="flexSwitchCheckDefault">
+                                {inputValue ? `O valor a ser cobrado será de R$ ${calcularAcrescimo()} após o acréscimo da Taxa CC` : ''}
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div className='row mt-2'>
                     <div className='col-12'>
                         <div class="input-group">
@@ -269,6 +306,7 @@ export default function PostMsg() {
                         </div>
                     </div>
                 </div>
+              
                 <div className='row mt-3'>
                     <div className='col-12'>
                         {dataDisable && (<div class="input-group">
