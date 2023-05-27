@@ -1,34 +1,37 @@
 import Form from 'react-bootstrap/Form';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
+import paisesJson from './paises-array.json';
 
-function SelectPaises() {
-  const [paises, setPaises] = useState([]);
-  const [paisSelecionado, setPaisSelecionado] = useState('');
-
+function SelectPaises({ onSelectPais }) {
   useEffect(() => {
-    axios.get('https://servicodados.ibge.gov.br/api/v1/paises/')
-      .then(response => {
-        const nomesDosPaises = response.data.map(pais => pais.nome.abreviado);
-        setPaises(nomesDosPaises);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // Se precisar fazer uma requisição para buscar a lista de países
+    // você pode usar o axios ou outra biblioteca de requisição HTTP aqui
+    // Exemplo:
+    // axios.get('URL_API_PAISES')
+    //   .then(response => {
+    //     const paises = response.data;
+    //     setListaPaises(paises);
+    //   })
+    //   .catch(error => {
+    //     console.error('Erro ao obter a lista de países:', error);
+    //   });
+
+    // Para simular o carregamento do JSON de paises
+    // setListaPaises(paisesJson);
   }, []);
 
   function handleChange(event) {
     const paisSelecionado = event.target.value;
-    setPaisSelecionado(paisSelecionado);
-    console.log('País selecionado:', paisSelecionado);
+    onSelectPais(paisSelecionado);
   }
 
   return (
-    <Form.Select aria-label="Países" onChange={handleChange} value={paisSelecionado}>
+    <Form.Select aria-label="Países" onChange={handleChange}>
       <option value="">Selecione um país</option>
-      {paises.map((pais, index) => (
-        <option key={index} value={pais}>
-          {pais}
+      {paisesJson.map((pais, index) => (
+        <option key={index} value={pais.nome}>
+          {pais.nome}
         </option>
       ))}
     </Form.Select>
