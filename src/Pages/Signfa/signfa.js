@@ -17,6 +17,40 @@ function Signfa() {
   const [sobrenome, setSobrenome] = useState('');
   const [userName, setUsername] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+
+  const handleChangeDataNascimento = (e) => {
+    const input = e.target.value;
+
+    const numeros = input.replace(/\D/g, '');
+
+    const dataFormatada = numeros.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3');
+
+    setDataNascimento(dataFormatada);
+  };
+
+  const validarIdade = (dataNascimento) => {
+    const dataAtual = new Date();
+    const anoAtual = dataAtual.getFullYear();
+    const anoNascimento = parseInt(dataNascimento.substr(6, 4), 10);
+    const idade = anoAtual - anoNascimento;
+
+    
+    if (idade < 18) {
+      toast.error('É necessário ter pelo menos 18 anos para prosseguir.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setDataNascimento('');
+    }
+  };
 
   const handleSelectPais = (paisSelecionado) => {
     setPaisSelecionado(paisSelecionado);
@@ -35,8 +69,19 @@ function Signfa() {
   const enviarsign = async (event) => {
     event.preventDefault();
   
-    if (email === "" || password === "" || name === "" || sobrenome === "" || userName === "" || confirmaSenha === "") {
-      toast.error('Preencha todos os campos', {
+    if (
+      email === "" ||
+      password === "" ||
+      name === "" ||
+      sobrenome === "" ||
+      userName === "" ||
+      confirmaSenha === "" ||
+      dataNascimento === "" ||
+      paisSelecionado === ""
+    ) {
+      // Verifica se algum campo está vazio
+      toast.error("Preencha todos os campos", {
+        // Exibe uma mensagem de erro
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -48,7 +93,9 @@ function Signfa() {
       });
       return;
     } else if (password !== confirmaSenha) {
-      toast.error('As senhas precisam ser iguais', {
+      // Verifica se as senhas são iguais
+      toast.error("As senhas precisam ser iguais", {
+        // Exibe uma mensagem de erro
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -61,13 +108,43 @@ function Signfa() {
       return;
     } else {
       try {
-        const response = await api.post('/login', {
-          username: login,
-          password: senha
-        });
+        // Divide a string da data de nascimento em partes separadas (dia, mês, ano)
+        const partesDataNascimento = dataNascimento.split("/");
+        const dia = parseInt(partesDataNascimento[0], 10);
+        const mes = parseInt(partesDataNascimento[1], 10);
+        const ano = parseInt(partesDataNascimento[2], 10);
   
-        if (response.data.message === 'Username or Password invalid.') {
-          toast.error('Usuário ou senha inválido', {
+        // Verifica se as partes da data são válidas
+        if (isNaN(dia) || isNaN(mes) || isNaN(ano)) {
+          // Exibe uma mensagem de erro se a data de nascimento for inválida
+          toast.error("Data de nascimento inválida", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          return;
+        }
+  
+        // Cria a data de nascimento com as partes separadas
+        const dataNascimentoFormatada = new Date(ano, mes - 1, dia);
+  
+        const formattedDataNascimento = dataNascimentoFormatada.toISOString().slice(0, 10); // Formata a data como "aaaa-mm-dd"
+        const response = await api.post("/user", {
+          email: email,
+          username: userName,
+          password: password,
+          paisResidencia: paisSelecionado,
+          dataNascimento: formattedDataNascimento, // Utiliza a data formatada
+        });
+        
+        if (response.data.message === "Username or Password invalid.") {
+          // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
+          toast.error("Usuário ou senha inválido", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -86,6 +163,8 @@ function Signfa() {
     }
   };
   
+  
+
 
   return (
     <div className='container-signfa'>
@@ -105,6 +184,16 @@ function Signfa() {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Sobrenome</Form.Label>
             <Form.Control onChange={(e) => setSobrenome(e.target.value)} type="text" placeholder="Digite seu sobrenome" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label style={{ fontWeight: 'bold' }}>Data de nascimento</Form.Label>
+            <Form.Control
+              onChange={handleChangeDataNascimento}
+              onBlur={() => validarIdade(dataNascimento)}
+              value={dataNascimento}
+              type="text"
+              placeholder="Digite sua data de nascimento (DD/MM/AAAA)"
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome de Usuário</Form.Label>
