@@ -31,8 +31,8 @@ function Login() {
         } else {
           try {
             const response = await api.post("/login", {
-              email: email,
-              password: password,
+              usuario: email,
+              senha: password,
             });
       
             if (response.data.message === "Username or Password invalid.") {
