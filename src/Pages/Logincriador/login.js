@@ -31,8 +31,8 @@ function Login() {
         } else {
           try {
             const response = await api.post("/login", {
-              usuario: email,
-              senha: password,
+              login: email,
+              password: password,
             });
       
             if (response.data.message === "Username or Password invalid.") {
@@ -48,7 +48,8 @@ function Login() {
                 theme: "light",
               });
             } else {
-              console.log(response.data);
+              console.log(response.data.token);
+              localStorage.setItem("token",response.data.token);
             }
           } catch (error) {
             // Handle error here
