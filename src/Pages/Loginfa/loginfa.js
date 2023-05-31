@@ -11,6 +11,7 @@ function Loginfa() {
     function enviarLogin(event) {
         event.preventDefault();
         console.log(`Email: ${email}, Password: ${password}`);
+        
     }
 
     return (

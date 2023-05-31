@@ -11,9 +11,9 @@ function Login() {
     const [password, setPassword] = useState("");
 
     async function enviarLogin(event) {
+
         event.preventDefault();
-        console.log(`Email: ${email}, Password: ${password}`);
-      
+        
         if (email === "" || password === "") {
           // Verifica se algum campo está vazio
           toast.error("Preencha todos os campos", {
@@ -34,9 +34,14 @@ function Login() {
               login: email,
               password: password,
             });
-      
-            if (response.data.message === "Username or Password invalid.") {
-              // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
+           
+            if(response.data.token){
+              localStorage.setItem("token",response.data.token);
+              console.log(response.data.token)
+            }
+            
+          } catch (error) {
+            if (error.message == 'Request failed with status code 404'){
               toast.error("Usuário ou senha inválido", {
                 position: "top-right",
                 autoClose: 5000,
@@ -47,12 +52,7 @@ function Login() {
                 progress: undefined,
                 theme: "light",
               });
-            } else {
-              console.log(response.data.token);
-              localStorage.setItem("token",response.data.token);
             }
-          } catch (error) {
-            // Handle error here
           }
         }
       }

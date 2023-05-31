@@ -6,6 +6,7 @@ import GetPaises from './Services/getpais';
 import api from '../../Services/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApiTwoTone } from '@mui/icons-material';
 
 function Signfa() {
   const [isChecked, setIsChecked] = useState(false);
@@ -141,8 +142,8 @@ function Signfa() {
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
         });
-        
-        if (response.data.message === "Username or Password invalid.") {
+
+      if (response.data.message === "Username or Password invalid.") {
           // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
           toast.error("Usuário ou senha inválido", {
             position: "top-right",
@@ -155,12 +156,25 @@ function Signfa() {
             theme: "light",
           });
         } else {
-          console.log(response.data);
+          console.log(response.data._id);
+          try{
+            const responseUser = await api.post("/profile", {
+                creator: false,
+                user: response.data._id,
+                firstName: name,
+                lastName: sobrenome
+            })
+            console.log(responseUser.data)
+          } catch (error){
+
+          }
+        
         }
       } catch (error) {
         // Handle error here
       }
     }
+    
   };
   
   
