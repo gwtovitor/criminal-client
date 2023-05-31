@@ -2,16 +2,19 @@ import React from 'react';
 import './home.css'
 import { Image } from 'react-bootstrap';
 import logo from './images/logo.png'
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="container-sl-home">
 
       <div className="fa-home">
         <h1 style={{cursor:'default', userSelect:'none'}}>FÃ</h1>
         <div>
-          <button type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
-          <button type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>
+          <button onClick={()=>{navigate('/loginfa');}} type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
+          <button onClick={()=>{navigate('/signfa');}} type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>
         </div>
       </div>
 
@@ -24,8 +27,8 @@ function Home() {
       <div className="criador-home">
         <h1 style={{cursor:'default', userSelect:'none'}}>CRIADOR</h1>
         <div>
-          <button type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
-          <button type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>
+          <button onClick={()=>{navigate('/login');}} type="button" id='btn-home' class="btn btn-secondary">Entrar</button>
+          <button onClick={()=>{navigate('/signcriador');}} type="button" id='btn-home' class="btn btn-secondary">Cadastre-se</button>
         </div>
 
       </div>

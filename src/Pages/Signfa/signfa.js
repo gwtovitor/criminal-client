@@ -33,10 +33,27 @@ function Signfa() {
   const validarIdade = (dataNascimento) => {
     const dataAtual = new Date();
     const anoAtual = dataAtual.getFullYear();
+    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+  
+    if (!regex.test(dataNascimento)) {
+      toast.error('Formato de data inválido. Utilize o formato DD/MM/AAAA.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+  
+      setDataNascimento('');
+      return;
+    }
+  
     const anoNascimento = parseInt(dataNascimento.substr(6, 4), 10);
     const idade = anoAtual - anoNascimento;
-
-    
+  
     if (idade < 18) {
       toast.error('É necessário ter pelo menos 18 anos para prosseguir.', {
         position: "top-right",
@@ -48,7 +65,7 @@ function Signfa() {
         progress: undefined,
         theme: "light",
       });
-
+  
       setDataNascimento('');
     }
   };
@@ -115,23 +132,7 @@ function Signfa() {
         const mes = parseInt(partesDataNascimento[1], 10);
         const ano = parseInt(partesDataNascimento[2], 10);
   
-        // Verifica se as partes da data são válidas
-        if (isNaN(dia) || isNaN(mes) || isNaN(ano)) {
-          // Exibe uma mensagem de erro se a data de nascimento for inválida
-          toast.error("Data de nascimento inválida", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          return;
-        }
-  
-        // Cria a data de nascimento com as partes separadas
+       // Cria a data de nascimento com as partes separadas
         const dataNascimentoFormatada = new Date(ano, mes - 1, dia);
   
         const formattedDataNascimento = dataNascimentoFormatada.toISOString().slice(0, 10); // Formata a data como "aaaa-mm-dd"
@@ -142,7 +143,7 @@ function Signfa() {
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
         });
-
+        console.log(response.data);
       if (response.data.message === "Username or Password invalid.") {
           // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
           toast.error("Usuário ou senha inválido", {
@@ -156,7 +157,7 @@ function Signfa() {
             theme: "light",
           });
         } else {
-          console.log(response.data._id);
+          console.log(response.data);
           try{
             const responseUser = await api.post("/profile", {
                 creator: false,
@@ -212,10 +213,7 @@ function Signfa() {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome de Usuário</Form.Label>
             <Form.Control onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Digite um nome de usuário" />
-            <div className='col-12 d-grid'>
-              <a className='btn btn-info text-white' href="#">Verificar</a>
-            </div>
-          </Form.Group>
+            </Form.Group>
           <Form.Label style={{ fontWeight: 'bold' }}>Selecione seu país de residência</Form.Label>
           <GetPaises onSelectPais={handleSelectPais} />
           <Form.Label style={{ fontWeight: 'bold' }}></Form.Label>
