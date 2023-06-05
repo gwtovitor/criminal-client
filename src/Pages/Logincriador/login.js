@@ -34,6 +34,7 @@ function Login() {
               login: email,
               password: password,
             });
+            console.log(response.data)
            
             if(response.data.token){
               localStorage.setItem("token",response.data.token);
@@ -41,7 +42,7 @@ function Login() {
             }
             
           } catch (error) {
-            if (error.message == 'Request failed with status code 404'){
+            if (error.message === 'Request failed with status code 404'){
               toast.error("Usuário ou senha inválido", {
                 position: "top-right",
                 autoClose: 5000,
