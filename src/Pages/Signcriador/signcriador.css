@@ -4,6 +4,23 @@
 
 }
 
+*::-webkit-scrollbar {
+  width: 0.2em; /* Ajuste a largura da barra de rolagem conforme necessário */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent; /* Define a cor de fundo da barra de rolagem */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: gray; /* Define a cor do indicador da barra de rolagem */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: transparent; /* Define a cor do indicador da barra de rolagem ao passar o mouse */
+}
+
+
 .container-signcriador{
   overflow: auto;
   display: flex;

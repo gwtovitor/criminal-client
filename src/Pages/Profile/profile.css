@@ -53,6 +53,7 @@
     text-align: center;
     font-weight: bold;
     font-size: 13px;
+    background: none;
 }
 
 .social-networks {
@@ -62,6 +63,7 @@
     align-items: center;
     margin-top: 20px;
     width: 100%;
+    background: none;
 
 }
 
@@ -110,7 +112,7 @@
 
     .container-sobremim {
         width: 90%;
-        margin-top: 60px;
+        margin-top: 10px;
         text-align: justify;
         padding: 0px;
     }

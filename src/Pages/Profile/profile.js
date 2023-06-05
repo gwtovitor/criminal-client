@@ -340,26 +340,26 @@ function Profile() {
 
                     </div>
                     <div className="social-networks">
-                        <button style={{ border: 'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
-                        <button style={{ border: 'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
-                        <button style={{ border: 'none' }}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
+                        <button className="m-1" style={{ border: 'none', background:'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
+                        <button className="m-1" style={{ border: 'none',background:'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
+                        <button className="m-1"style={{ border: 'none', background:'none'}}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
                     </div>
 
                     <div className="social-networks">
                         {instagramLink !== '' && (
-                            <button style={{ border: 'none' }}>
+                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={instagramLink}>Instagram</a>
                                 <FontAwesomeIcon icon={faInstagram} />
                             </button>
                         )}
                         {tiktokLink !== '' && (
-                            <button style={{ border: 'none' }}>
+                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={tiktokLink}>TikTok</a>
                                 <FontAwesomeIcon icon={faTiktok} />
                             </button>
                         )}
                         {amazonLink !== '' && (
-                            <button style={{ border: 'none' }}>
+                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={amazonLink}>Amazon</a>
                                 <FontAwesomeIcon icon={faAmazon} />
                             </button>
