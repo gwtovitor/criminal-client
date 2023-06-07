@@ -68,7 +68,7 @@ function Login() {
             <div className='centralcontainer-logincriador'>
                 <Form id='form-logincriador'>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label style={{ fontWeight: 'bold' }} >Email</Form.Label>
+                        <Form.Label style={{ fontWeight: 'bold' }} >Email ou usuário</Form.Label>
                         <Form.Control onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Digite seu Email" />
                     </Form.Group>
 

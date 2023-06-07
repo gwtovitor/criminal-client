@@ -22,7 +22,7 @@ function Loginfa() {
             <div className='centralcontainer-loginfa'>
                 <Form id='form-loginfa'>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label style={{ fontWeight: 'bold' }} >Email</Form.Label>
+                        <Form.Label style={{ fontWeight: 'bold' }}>Email ou usuário</Form.Label>
                         <Form.Control type="email" placeholder="Digite seu Email" />
                     </Form.Group>
 

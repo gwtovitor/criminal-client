@@ -142,24 +142,9 @@ function Signfa() {
           password: password,
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
-          cpf: '000.000.000-00'
         });
         console.log(response.data);
-        if (response.data.message === "Username or Password invalid.") {
-          // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
-          toast.error("Usuário ou senha inválido", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } else {
-          console.log(response.data);
-          try {
+        try {
             const responseUser = await api.post("/profile", {
               creator: false,
               user: response.data._id,
@@ -171,7 +156,7 @@ function Signfa() {
 
           }
 
-        }
+        
       } catch (error) {
         // Handle error here
       }
