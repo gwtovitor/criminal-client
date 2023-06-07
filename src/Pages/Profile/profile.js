@@ -10,7 +10,8 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Modal from 'react-bootstrap/Modal';
 import api from "../../Services/api";
-
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 function Profile() {
     const [backgroundImage, setBackgroundImage] = useState(Background);
@@ -22,6 +23,7 @@ function Profile() {
     const [instagramLink, setInstagramLink] = useState('')
     const [tiktokLink, setTiktok] = useState('')
     const [amazonLink, setAmazon] = useState('')
+    const navigate = useNavigate();
     const radios = [
         { name: 'Feed', value: '1' },
         { name: 'Fotos', value: '2' },
@@ -45,12 +47,28 @@ function Profile() {
     async function getDados (){
         const id =  localStorage.getItem('cc_p')
         const token = localStorage.getItem('cc_t')
+        console.log(id)
+        try{
         const response =  await api.get(`/profile/${id}`)
         const responseUser =  await api.get(`/user/${response?.data.user}`)
-        console.log(response.data)
-        console.log(responseUser.data)
+        console.log('AQUIII' + response.data)
+        console.log('Aquii22' + responseUser.data)
         setProfile(response?.data)
         setUser(responseUser?.data)
+        }catch(error){
+            console.log(error)
+           if(error){
+            Swal.fire({
+                icon: 'error',
+                title: 'Favor logar novamente',
+                text: 'Ocorreu um erro.',
+                willClose:()=>{
+                    //navigate('/home')
+                }
+              });
+                
+           }
+        }
      }
 
     useEffect(() => {
@@ -247,7 +265,6 @@ function Profile() {
                 creator: true
             })
            window.location.reload();
-           //getDados()
         }
        
         setEditingProfile(false);
@@ -294,9 +311,9 @@ function Profile() {
             }}>
                 <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
-                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{profile?.followers.length}</span> </span>
+                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{/*profile?.followers.length*/}</span> </span>
                         <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
-                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{profile.posts.length}</span></span>
+                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{/*profile.posts.length*/}</span></span>
                     </div>
                     <div className="dados-profile">
 
@@ -305,39 +322,39 @@ function Profile() {
                         <h6 className="function-user">{profile.role}</h6>
                         {editingProfile ? (
                             <>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"  id="basic-addon1">Nome</span>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text"  id="basic-addon1">Nome</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Nome" onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" className="form-control" placeholder="Nome" onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                              <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Função</span>
+                              <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Função</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Biografia" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" className="form-control" placeholder="Biografia" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="input-group mb-3 d-flex justify-content-center text-center align-items-center">
-                                    <label style={{ marginRight: '5px' }} for="formFileSm" class="form-label">Foto de Perfil</label>
-                                    <input onChange={handleFileInputChange} class="form-control form-control-sm" id="formFileSm" type="file" />
+                                <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                    <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
+                                    <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
                                 </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" className="form-control" placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" className="form-control" placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Amazon List" onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" className="form-control" placeholder="Amazon List" onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
 
                                 <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
@@ -438,10 +455,10 @@ function Profile() {
                 <div className="row">
                     {images2.map((images, index) => {
                         return (
-                            <div class="col-lg-4 col-md-5">
+                            <div className="col-lg-4 col-md-5">
                                 <img
                                     src={images.src}
-                                    class="w-100 shadow-1-strong rounded mb-1"
+                                    className="w-100 shadow-1-strong rounded mb-1"
                                     alt="Boat on Calm Water"
                                     style={{ margin: '0', padding: '0', cursor: 'pointer' }}
                                     width={images.width}
@@ -470,9 +487,9 @@ function Profile() {
                         <Button variant="secondary">
                             Editar Legenda
                         </Button>
-                        <div class="form-check-reverse text-start form-switch">
-                            <input class="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                            <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Desativar Comentários</label>
+                        <div className="form-check-reverse text-start form-switch">
+                            <input className="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                            <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Desativar Comentários</label>
                         </div>
                         <Button variant="danger">
                             Excluir Foto

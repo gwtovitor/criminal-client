@@ -229,30 +229,31 @@ function Signfa() {
               placeholder="Digite sua data de nascimento (DD/MM/AAAA)"
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome de Usuário</Form.Label>
             <Form.Control onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Digite um nome de usuário" />
           </Form.Group>
           <Form.Label style={{ fontWeight: 'bold' }}>Selecione seu país de residência</Form.Label>
           <GetPaises onSelectPais={handleSelectPais} />
           <Form.Label style={{ fontWeight: 'bold' }}></Form.Label>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label style={{ fontWeight: 'bold' }}>Senha</Form.Label>
             <Form.Control onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Digite uma Senha" />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label style={{ fontWeight: 'bold' }}>Confirme a Senha</Form.Label>
             <Form.Control onChange={(e) => setConfirmaSenha(e.target.value)} type="password" placeholder="Digite a confirmação de senha" />
           </Form.Group>
-          <Form onSubmit={handleSubmit}>
+
             <Form.Check
+              onSubmit={handleSubmit}
               type="checkbox"
               label="Eu aceito os termos e condições de uso e declaro ser maior de 18 anos."
               checked={isChecked}
               onChange={handleCheckboxChange}
             />
 
-          </Form>
+
         </Form>
         <div className='d-grid'>
           <Button

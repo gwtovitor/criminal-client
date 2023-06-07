@@ -251,16 +251,16 @@ function Feed() {
                                 <input type="text" value={newComment} style={{ marginRight: '5px', flex: 1 }} onChange={handleCommentChange} />
                                 <button className="btn btn-primary" onClick={handleAddComment}>Comentar</button>
                             </div>
-                            <div class="modal fade" id={`exampleModalLong${post._id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle${post._id}`} aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <div className="modal fade" id={`exampleModalLong${post._id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle${post._id}`} aria-hidden="true">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body">
+                                        <div className="modal-body">
                                             <div className="comment-list">
                                                 {Object.entries(post.comentarios).map(([nome, comentario]) => (
                                                     <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center' }} key={comentario.id}>
@@ -275,7 +275,7 @@ function Feed() {
                                                 ))}
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
+                                        <div className="modal-footer">
                                             <div className="add-comment" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                                 <input type="text" value={newComment} style={{ marginRight: '5px', flex: 1 }} onChange={handleCommentChange} />
                                                 <button className="btn btn-primary" onClick={handleAddComment}>Comentar</button>
