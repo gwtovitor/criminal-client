@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import InputGroup from 'react-bootstrap/InputGroup';
 import InputMask from 'react-input-mask';
 
+
 function Signcriador() {
 
   const [paisSelecionado, setPaisSelecionado] = useState('');
@@ -32,10 +33,10 @@ function Signcriador() {
     const cpfWithoutFormatting = cpfValue.replace(/[^\d]/g, ""); // Remove todos os caracteres não numéricos
     setCPF(cpfWithoutFormatting);
     setIsCPFComplete(cpfWithoutFormatting.length === 11);
-    
+
     if (cpfWithoutFormatting.length === 11) {
       const isValidCPF = isCPFValid(cpfWithoutFormatting);
-  
+
       if (!isValidCPF) {
         toast.error("CPF inválido", {
           position: "top-right",
@@ -49,25 +50,25 @@ function Signcriador() {
         });
         setIsCPFComplete(false)
       }
-    }else{
+    } else {
       setIsCPFComplete(true)
     }
   };
-  
-  
-  
+
+
+
 
   function isCPFValid(cpf) {
     // Verifica se o CPF tem 11 dígitos
     if (cpf.length !== 11) {
       return false;
     }
-  
+
     // Verifica se todos os dígitos são iguais
     if (/^(\d)\1{10}$/.test(cpf)) {
       return false;
     }
-  
+
     // Calcula o primeiro dígito verificador
     let sum = 0;
     for (let i = 0; i < 9; i++) {
@@ -80,7 +81,7 @@ function Signcriador() {
     if (parseInt(cpf.charAt(9)) !== digit) {
       return false;
     }
-  
+
     // Calcula o segundo dígito verificador
     sum = 0;
     for (let i = 0; i < 10; i++) {
@@ -93,12 +94,12 @@ function Signcriador() {
     if (parseInt(cpf.charAt(10)) !== digit) {
       return false;
     }
-  
+
     return true;
   }
-  
-  
-  
+
+
+
   const chekboxassinatura = (f) => {
     setisActiveAssinaturaButton(f.target.checked);
     setischeckdAssinatura(f.target.checked);
@@ -154,7 +155,7 @@ function Signcriador() {
         progress: undefined,
         theme: "light",
       });
-    } else if(!isCPFComplete){
+    } else if (!isCPFComplete) {
       toast.error("Preencha o CPF corretamente", {
         position: "top-right",
         autoClose: 5000,
@@ -165,7 +166,7 @@ function Signcriador() {
         progress: undefined,
         theme: "light",
       });
-    }else {
+    } else {
       try {
         // Divide a string da data de nascimento em partes separadas (dia, mês, ano)
         const partesDataNascimento = dataNascimento.split("/");
@@ -185,37 +186,37 @@ function Signcriador() {
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
           cpf: cpf
         });
-        console.log(response.data);
-        if (response.data.message === "Username or Password invalid.") {
-          // Exibe uma mensagem de erro se o usuário ou senha forem inválidos
-          toast.error("Usuário ou senha inválido", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } else {
-          console.log(response.data);
-          try {
+        try {
             const responseUser = await api.post("/profile", {
               creator: true,
               user: response.data._id,
               firstName: name,
               lastName: sobrenome
             })
-            console.log(responseUser)
-            navigate('/signcriador/dados');
+          
           } catch (error) {
-
-          }
-
+            return
         }
+        console.log(response)
+        if(response.data.token){
+          console.log('asod')
+          localStorage.setItem('token',response.data.token)
+          navigate('/home')
+ }
+        
+
       } catch (error) {
-        // Handle error here
+        toast.error(error.response.data.message, {
+
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   }
@@ -347,7 +348,7 @@ function Signcriador() {
                   {...inputProps}
                   type="text"
                   placeholder="Digite seu CPF"
-                  
+
                 />
 
               )}

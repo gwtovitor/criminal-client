@@ -6,6 +6,7 @@ import GetPaises from './Services/getpais';
 import api from '../../Services/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 
 function Signfa() {
@@ -19,7 +20,7 @@ function Signfa() {
   const [userName, setUsername] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-
+  const navigate = useNavigate();
   const handleChangeDataNascimento = (e) => {
     const input = e.target.value;
 
@@ -142,25 +143,57 @@ function Signfa() {
           password: password,
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
+          cpf: ''
         });
-        console.log(response.data);
         try {
-            const responseUser = await api.post("/profile", {
-              creator: false,
-              user: response.data._id,
-              firstName: name,
-              lastName: sobrenome
-            })
-            console.log(responseUser.data)
-          } catch (error) {
-
+          const responseProfile = await api.post("/profile", {
+            creator: false,
+            user: response.data._id,
+            firstName: name,
+            lastName: sobrenome
+          })
+          if (responseProfile.data._id) {
+            localStorage.setItem('cc_p', responseProfile.data._id)
+            try {
+              const login = await api.post("/login", {
+                login: userName,
+                password: password
+              })
+              console.log(login.data.token)
+              if(login.data.token){
+                localStorage.setItem('cc_t', login.data.token)
+                navigate('/')
+              }
+              
+              
+            } catch (error) {
+              console.log(error)
+            }
           }
+        } catch (error) {
+          return
+        }
+       
 
-        
+
       } catch (error) {
-        // Handle error here
+
+        toast.error(error.response.data.message, {
+          // Exibe uma mensagem de erro
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
+
+
     }
+
 
   };
 

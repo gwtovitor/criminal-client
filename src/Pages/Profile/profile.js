@@ -9,8 +9,7 @@ import { Button } from "react-bootstrap";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Modal from 'react-bootstrap/Modal';
-
-
+import api from "../../Services/api";
 
 
 function Profile() {
@@ -30,6 +29,8 @@ function Profile() {
     ];
     const [selectedImage, setSelectedImage] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [profile, setProfile] = useState('');
+    const [user, setUser] = useState('');
 
     const openModal = (index) => {
         setSelectedImage(index);
@@ -39,6 +40,23 @@ function Profile() {
     const closeModal = () => {
         setShowModal(false);
     };
+
+
+    async function getDados (){
+        const id =  localStorage.getItem('cc_p')
+        const token = localStorage.getItem('cc_t')
+        const response =  await api.get(`/profile/${id}`)
+        const responseUser =  await api.get(`/user/${response?.data.user}`)
+        console.log(response.data)
+        console.log(responseUser.data)
+        setProfile(response?.data)
+        setUser(responseUser?.data)
+     }
+
+    useEffect(() => {
+        getDados ()
+      },[]);
+
 
     const images2 = [
         {
@@ -221,9 +239,20 @@ function Profile() {
     };
 
     const handleSaveProfileClick = () => {
+        const id =  localStorage.getItem('cc_p')
+        if(username != ''){
+            const attProfile = api.patch(`/profile/${id}`,{
+                role:editingFunction,
+                firstName: username,
+                creator: true
+            })
+           window.location.reload();
+           //getDados()
+        }
+       
         setEditingProfile(false);
     };
-    const handleFunctionChange = (event) => {
+    const handleRoleChange = (event) => {
         setEditingFunction(event.target.value);
     };
     const instagramChenge = (event) => {
@@ -265,34 +294,28 @@ function Profile() {
             }}>
                 <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
-                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>10k</span> </span>
+                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{profile?.followers.length}</span> </span>
                         <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
-                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>1k</span>   </span>
+                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{profile.posts.length}</span></span>
                     </div>
                     <div className="dados-profile">
 
-                        <h1 style={{ fontWeight: 'bold' }}>{username}</h1>
-                        <h6 style={{ marginTop: '10px' }}>@{userHandle}</h6>
-                        <h6 className="function-user">{editingFunction}</h6>
+                        <h1 style={{ fontWeight: 'bold' }}>{`${profile.firstName} ${profile.lastName}`}</h1>
+                        <h6 style={{ marginTop: '10px' }}>@{user?.username}</h6>
+                        <h6 className="function-user">{profile.role}</h6>
                         {editingProfile ? (
                             <>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Nome</span>
+                                        <span class="input-group-text"  id="basic-addon1">Nome</span>
                                     </div>
                                     <input type="text" class="form-control" placeholder="Nome" onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="input-group mb-3">
+                              <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
+                                        <span class="input-group-text" id="basic-addon1">Função</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Nome de Usuário" onChange={handleUserHandleChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Bio</span>
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Biografia" onChange={handleFunctionChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" class="form-control" placeholder="Biografia" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
                                 <div class="input-group mb-3 d-flex justify-content-center text-center align-items-center">
                                     <label style={{ marginRight: '5px' }} for="formFileSm" class="form-label">Foto de Perfil</label>
@@ -326,7 +349,9 @@ function Profile() {
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
                             </Button>
                         )}
-                        <div className="buttons-profile-wrapper">
+                    {profile?.creator ? (
+                         <>
+                       <div className="buttons-profile-wrapper">
                             <Button className="buttons-profile" variant="secondary" type="submit">
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
                             </Button>
@@ -337,6 +362,7 @@ function Profile() {
                                 <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
                             </Button>
                         </div>
+                        </>):(null)}
 
                     </div>
                     <div className="social-networks">
