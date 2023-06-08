@@ -7,6 +7,7 @@ import jr from './Images/junior.jpg'
 import { Image } from 'react-bootstrap';
 import IconButton from '@mui/material/IconButton';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import { useNavigate } from 'react-router-dom';
 
 
 const messages = [
@@ -47,6 +48,7 @@ function Mensagens() {
   const [lastMessages, setLastMessages] = useState({});
   const [messageHistory, setMessageHistory] = useState([]);
   const [messageList, setMessageList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const updatedLastMessages = {};
@@ -102,7 +104,7 @@ function Mensagens() {
         <h2 style={{ textAlign: 'center' }}>Mensagens</h2>
 
         <div className='btn-postar text-center mb-2'>
-          <a className='btn btn-info text-white' href="#">Postar Mensagem</a>
+          <a className='btn btn-info text-white' href="./postmsg">Postar Mensagem</a>
         </div>
         <ul className="message-list">
           {messages.map((message) => (

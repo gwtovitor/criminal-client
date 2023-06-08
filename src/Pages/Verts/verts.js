@@ -6,13 +6,10 @@ import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
 import Videos from "./components/Videos";
 import { useNavigate } from "react-router-dom";
-import { useSwipeable } from "react-swipeable";
-import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 function Verts() {
     const navigate = useNavigate();
-    const [muted, setMuted] = useState(false);
-
     const [video, setVideos] = useState([
       {
         id: '6480040fa6e855ec74c90ce0',
@@ -76,7 +73,7 @@ function Verts() {
     ]);
   
     const handleSwipe = (videoId) => {
-      navigate(`/profile/${videoId}`)
+      navigate(`/profile/${videoId}`);
     };
   
     const handleTouchStart = (id) => (event) => {
@@ -108,7 +105,6 @@ function Verts() {
             avatar={src.picture}
             date={src.date}
             itemId={src.profileID}
-            muted={true}
           />
           </div>
         ))}

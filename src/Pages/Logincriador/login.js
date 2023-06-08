@@ -17,9 +17,7 @@ function Login() {
         event.preventDefault();
         
         if (email === "" || password === "") {
-          // Verifica se algum campo está vazio
           toast.error("Preencha todos os campos", {
-            // Exibe uma mensagem de erro
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

@@ -16,12 +16,10 @@ function Video({
   like,
   avatar,
   date,
-  muted,
-  itemId
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  //const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(false);
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -74,39 +72,6 @@ function Video({
     };
   }, []);
   
-  useEffect(() => {
-    const handleSwipeLeft = () => {
-     // console.log(itemId);
-      // Aqui você pode fazer o que quiser quando houver um arrasto para a esquerda
-    };
-  
-    const handleTouchStart = (event) => {
-      const touchStartX = event.touches[0].clientX;
-  
-      const handleTouchMove = (event) => {
-        const touchEndX = event.touches[0].clientX;
-        const touchDeltaX = touchStartX - touchEndX;
-  
-        if (touchDeltaX > 200) {
-          handleSwipeLeft();
-        }
-      };
-  
-      const handleTouchEnd = () => {
-        window.removeEventListener('touchmove', handleTouchMove);
-        window.removeEventListener('touchend', handleTouchEnd);
-      };
-  
-      window.addEventListener('touchmove', handleTouchMove);
-      window.addEventListener('touchend', handleTouchEnd);
-    };
-  
-    window.addEventListener('touchstart', handleTouchStart);
-  
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-    };
-  }, [id]);
   
 
   useEffect(() => {
@@ -137,9 +102,9 @@ function Video({
       setPlaying(true);
     }
   };
-  /*const handleMuteClick = () => {
+  const handleMuteClick = () => {
     setMuted((prevMuted) => !prevMuted);
-  };*/
+  };
 
   const scrollUp = () => {
     window.scrollBy({
@@ -203,7 +168,7 @@ function Video({
             <p>{like}</p>
 
           </div>
-          <div /* onClick={handleMuteClick}*/>
+          <div  onClick={handleMuteClick}>
             {muted ? (
               <VolumeOff className="buttonsShortsSide" />
             ) : (
@@ -228,8 +193,8 @@ function Video({
                 <div className="comment-list d-flex flex-column">
                   <button type="button" class="btn btn-danger mt-2">Denunciar Video</button>
                   <button type="button" class="btn btn-primary mt-2">Denunciar Perfil</button>
-                  <button type="button" class="btn btn-primary mt-2 mt-2">Enviar Perfil</button>
-                  <button type="button" class="btn btn-primary mt-2">Enviar Video</button>
+                  <button type="button" class="btn btn-primary mt-2 mt-2">Copiar Link do Perfil</button>
+                  <button type="button" class="btn btn-primary mt-2">Copiar Link do Video</button>
                 </div>
 
               </div>

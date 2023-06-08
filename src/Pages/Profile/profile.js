@@ -13,7 +13,7 @@ import api from "../../Services/api";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom';
-import { ApiTwoTone } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 function Profile() {
     const { id } = useParams();
@@ -32,6 +32,9 @@ function Profile() {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [newfollowing, setNewFallowing] = useState([]);
+    const url = window.location.href;
+    const userId = url.split("/profile/")[1];
+    const idUser = localStorage.getItem('cc_p');
     const token = localStorage.getItem('cc_t')
     const radios = [
         { name: 'Feed', value: '1' },
@@ -45,6 +48,7 @@ function Profile() {
     const [isYou, setIsYou] = useState(false);
     const [sigo, setSigo] = useState(false);
 
+
     const openModal = (index) => {
         setSelectedImage(index);
         setShowModal(true);
@@ -56,14 +60,11 @@ function Profile() {
 
 
     async function getDados() {
-        const url = window.location.href;
-        const userId = url.split("/profile/")[1];
-        const idUser = localStorage.getItem('cc_p')
         if (idUser === userId) {
-            setIsYou(false)
+            setIsYou(true)
 
         } else {
-            setIsYou(true)
+            setIsYou(false)
         }
         try {
             const response = await api.get(`/profile/${id}`, {
@@ -110,10 +111,7 @@ function Profile() {
     }
 
     async function verificaseguidor() {
-        const idUser = localStorage.getItem('cc_p')
-        const url = window.location.href;
-        const userId = url.split("/profile/")[1];
-        console.log(userId)
+
         try {
 
             const verificaseg = await api.get(`/profile/${idUser}`, {
@@ -122,7 +120,6 @@ function Profile() {
                 }
             })
             const seguidoresUser = verificaseg.data.following
-            console.log(seguidoresUser)
             if (seguidoresUser.includes(userId)) {
                 setSigo(true)
                 console.log('sigos')
@@ -143,10 +140,6 @@ function Profile() {
     }, []);
 
     async function seguir() {
-        const url = window.location.href;
-        const userId = url.split("/profile/")[1];
-        const idUser = localStorage.getItem('cc_p');
-
         if (idUser !== userId && sigo != true) {
             newfollowing.push(userId); // Adiciona userId ao array newfollowing
 
@@ -194,8 +187,6 @@ function Profile() {
     };
 
     const handleSaveProfileClick = () => {
-
-
         const attProfile = api.patch(`/profile/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -246,6 +237,34 @@ function Profile() {
             };
         }
     };
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            toast.success("URL copiada para a área de transferência", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          })
+          .catch(() => {
+            toast.error("Falha ao copiar para a área de transferência", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+      }
+      
 
     function seguidores(seguidores) {
         if (seguidores
@@ -281,109 +300,121 @@ function Profile() {
                         <h1 style={{ fontWeight: 'bold', margin: 3 }}>{`${profile.firstName} ${profile.lastName}`}</h1>
                         <h6 style={{ marginTop: '10px' }}>@{user?.username}</h6>
                         <h6 className="function-user">{profile.role}</h6>
-                        {isYou ? (
-                            editingProfile ? (
-                                <>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Nome</span>
-                                        </div>
-                                        <input type="text" className="form-control" placeholder="Nome" value={username} onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Sobrenome</span>
-                                        </div>
-                                        <input type="text" className="form-control" value={sobrenome} placeholder="Sobrenome" onChange={sobrenomeChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Função</span>
-                                        </div>
-                                        <input type="text" className="form-control" value={editingFunction} placeholder="Função" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Biografia</span>
-                                        </div>
-                                        <input type="text" className="form-control" value={bio} placeholder="Biografia" onChange={bioChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
-                                        <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
-                                        <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
-                                        </div>
-                                        <input type="text" className="form-control" value={instagramLink} placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
-                                        </div>
-                                        <input type="text" className="form-control" value={tiktokLink} placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
-                                        </div>
-                                        <input type="text" className="form-control" placeholder="Amazon List" value={amazonLink} onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                    </div>
-
-                                    <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
-                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
-                                    </Button>
-                                </>
-                            ) : (
-                                null
-                            )
-                        ) : <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
+                        {isYou ? (<Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
                             <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
-                        </Button>}
+                        </Button>) : (null)}
+                        {editingProfile ? (
+                            <>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Nome</span>
+                                    </div>
+                                    <input type="text" className="form-control" placeholder="Nome" value={username} onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Sobrenome</span>
+                                    </div>
+                                    <input type="text" className="form-control" value={sobrenome} placeholder="Sobrenome" onChange={sobrenomeChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Função</span>
+                                    </div>
+                                    <input type="text" className="form-control" value={editingFunction} placeholder="Função" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Biografia</span>
+                                    </div>
+                                    <input type="text" className="form-control" value={bio} placeholder="Biografia" onChange={bioChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                    <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
+                                    <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                    </div>
+                                    <input type="text" className="form-control" value={instagramLink} placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                    </div>
+                                    <input type="text" className="form-control" value={tiktokLink} placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                    </div>
+                                    <input type="text" className="form-control" placeholder="Amazon List" value={amazonLink} onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                </div>
+
+                                <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
+                                    <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
+                                </Button>
+                            </>
+                        ) : (
+                            null
+                        )}
+
 
                         {profile?.creator ? (
                             <>
                                 <div className="buttons-profile-wrapper">
-                                    {isYou ? (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
-                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
+                                    {isYou ? (null)
+                                    : (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
+                                    <span className="buttons-name-profile" style={{ fontWeight: sigo? 'normal' : 'bold', fontSize: sigo? '12px': '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
+                                </Button>
+                                    <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
                                     </Button>
-                                        <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                            <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
-                                        </Button>
-                                        <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                            <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
-                                        </Button></>
-                                    ) : (null)}
+                                    <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
+                                    </Button></>)}
 
                                 </div>
                             </>) : (null)}
 
                     </div>
                     <div className="social-networks">
-                        {isYou ? (<><button className="m-1" style={{ border: 'none', background: 'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
-                            <button className="m-1" style={{ border: 'none', background: 'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
-                            <button className="m-1" style={{ border: 'none', background: 'none' }}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
-                        </>) : (null)}
+                        {isCreator ? (
+                            isYou ? null : (
+                                <>
+                                    <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        Tips <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faCoins} />
+                                    </button>
+                                    <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        Favoritar <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faStar} />
+                                    </button>
+                                    <button  className="m-1" onClick={()=>{copyToClipboard(url)}} style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        Copiar URL do Perfil <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faShareSquare} />
+                                    </button>
+                                </>
+                            )
+                        ) : null}
                     </div>
+
 
                     <div className="social-networks">
                         {instagramLink !== '' && (
-                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={instagramLink}>Instagram</a>
-                                <FontAwesomeIcon icon={faInstagram} />
+                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <a target="blank" style={{marginRight:'0.2rem', textDecoration: 'none', color: 'black', }} href={instagramLink}>Instagram</a>
+                                <FontAwesomeIcon style={{marginRight:'0.5rem'}} icon={faInstagram} />
                             </button>
                         )}
                         {tiktokLink !== '' && (
-                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={tiktokLink}>TikTok</a>
-                                <FontAwesomeIcon icon={faTiktok} />
+                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft:'0,5rem' }}>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black',marginRight:'0.2rem' }} href={tiktokLink}>TikTok</a>
+                                <FontAwesomeIcon style={{marginRight:'0.5rem'}} icon={faTiktok} />
                             </button>
                         )}
                         {amazonLink !== '' && (
-                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={amazonLink}>Amazon</a>
-                                <FontAwesomeIcon icon={faAmazon} />
+                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft:'0,5rem'  }}>
+                                <a target="blank" style={{marginRight:'0.2rem', textDecoration: 'none', color: 'black', }} href={amazonLink}>Amazon</a>
+                                <FontAwesomeIcon style={{marginRight:'0.5rem', marginTop:'3px'}} icon={faAmazon} />
                             </button>
                         )}
 
@@ -437,7 +468,7 @@ function Profile() {
                                 </div>
                             ))
                         ) : (
-                            <div className="col-lg-4 col-md-5 mb-5">
+                            <div className="mb-5">
                                 <p>Nenhuma postagem</p>
                             </div>
                         )}
@@ -473,7 +504,7 @@ function Profile() {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-
+            
             </div>
 
         </div>

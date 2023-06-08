@@ -27,27 +27,27 @@ function Main() {
                 <div className='navlateral'>
                     <Sidebar className='navbarside-feed'>
                         <Menu>
-                            <MenuItem as={Link} to="/verts" icon={<PersonalVideoIcon style={{ color: 'black' }} />}>Verts</MenuItem>
-                            <MenuItem as={Link} to="/" icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
-                            <MenuItem as={Link} to="/mensagens" icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
+                            <MenuItem href="/verts" icon={<PersonalVideoIcon style={{ color: 'black' }} />}>Verts</MenuItem>
+                            <MenuItem href="/" icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
+                            <MenuItem href="/mensagens" icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
                             <SubMenu icon={<AddBoxOutlined style={{ color: 'black' }} />} label="Publicar">
-                                <MenuItem as={Link} to="/postfeed">Feed</MenuItem>
-                                <MenuItem as={Link} to="/postverts">Verts</MenuItem>
-                                <MenuItem as={Link} to="/postmsg">Mensagens</MenuItem>
+                                <MenuItem href="/postfeed">Feed</MenuItem>
+                                <MenuItem href="/postverts">Verts</MenuItem>
+                                <MenuItem href="/postmsg">Mensagens</MenuItem>
                             </SubMenu>
                             <SubMenu icon={<AttachMoneyIcon style={{ color: 'black' }} />} label="Finanças">
-                                <MenuItem as={Link} to="/balanco">Balanço</MenuItem>
-                                <MenuItem as={Link} to="/compras">Compras</MenuItem>
-                                <MenuItem as={Link} to="/banco">Banco</MenuItem>
+                                <MenuItem href="/balanco">Balanço</MenuItem>
+                                <MenuItem href="/compras">Compras</MenuItem>
+                                <MenuItem href="/banco">Banco</MenuItem>
                             </SubMenu>
                             <SubMenu icon={<ClosedCaptionOff style={{ color: 'black' }} />} label="My Criminal" className="scrollable-submenu">
-                                <MenuItem as={Link} to="/seguidores">Seguidores</MenuItem>
-                                <MenuItem as={Link} to="/seguindo">Seguindo</MenuItem>
-                                <MenuItem as={Link} to="/assinantes">Assinantes</MenuItem>
-                                <MenuItem as={Link} to="/assinando">Assinando</MenuItem>
-                                <MenuItem as={Link} to="/favoritos">Galeria</MenuItem>
-                                <MenuItem as={Link} to={`/profile/${id}`}>Perfil</MenuItem>
-                                <MenuItem as={Link} to="/suporte">Suporte CC</MenuItem>
+                                <MenuItem href="/seguidores">Seguidores</MenuItem>
+                                <MenuItem href="/seguindo">Seguindo</MenuItem>
+                                <MenuItem href="/assinantes">Assinantes</MenuItem>
+                                <MenuItem href="/assinando">Assinando</MenuItem>
+                                <MenuItem href="/favoritos">Galeria</MenuItem>
+                                <MenuItem href={`/profile/${id}`}>Perfil</MenuItem>
+                                <MenuItem href="/suporte">Suporte CC</MenuItem>
                             </SubMenu>
 
 

@@ -30,6 +30,7 @@ section#post-list article {
 .user-info {
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .user-info-column {
