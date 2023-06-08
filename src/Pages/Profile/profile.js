@@ -76,10 +76,13 @@ function Profile() {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
+                
             })
-            console.log(response.data)
-            console.log(responseUser.data)
-
+            const respondeUserFollowers = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             setUser(responseUser?.data)
 
             if (response.data) {
@@ -90,12 +93,11 @@ function Profile() {
                 setNetworks(response.data.networks)
                 setBio(response.data.bio)
                 setEditingFunction(response.data.role)
-                setNewFallowing(response.data.following)
                 setIscCreator(response?.data.creator)
+                setNewFallowing(respondeUserFollowers.data.following)
             }
 
         } catch (error) {
-            console.log(error)
             if (error) {
                 Swal.fire({
                     icon: 'error',
@@ -122,10 +124,8 @@ function Profile() {
             const seguidoresUser = verificaseg.data.following
             if (seguidoresUser.includes(userId)) {
                 setSigo(true)
-                console.log('sigos')
             } else {
                 setSigo(false)
-                console.log('n sigo')
             }
 
         } catch (error) {
@@ -140,22 +140,36 @@ function Profile() {
     }, []);
 
     async function seguir() {
-        if (idUser !== userId && sigo != true) {
-            newfollowing.push(userId); // Adiciona userId ao array newfollowing
+        try {
 
-            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
-                following: newfollowing
-            });
-
-            window.location.reload();
-        } else {
-            newfollowing.pop(userId);
-            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
-                following: newfollowing
-            });
-            window.location.reload();
+            const verificaseg = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const seguidoresUser = verificaseg.data.following
+            if (idUser !== userId && sigo != true) {
+                if (seguidoresUser.includes(userId)) {
+                    return
+                } else {
+                    newfollowing.push(userId);
+                    const _enviarseguir =  await api.patch(`/profile/${idUser}`, {
+                        following: newfollowing
+                    });
+                    setSigo(true)
+                }
+             
+            } else {
+                newfollowing.pop(userId);
+                const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                    following: newfollowing
+                });
+                setSigo(false)
+            }
+        }catch(error){
 
         }
+      
     }
 
 
