@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import './login.css'
 import api from '../../Services/api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function enviarLogin(event) {
 
@@ -34,11 +36,11 @@ function Login() {
               login: email,
               password: password,
             });
-            console.log(response.data)
            
             if(response.data.token){
-              localStorage.setItem("token",response.data.token);
-              console.log(response.data.token)
+              localStorage.setItem("cc_t",response.data.token);
+              localStorage.setItem("cc_p", '647d330acbd28f4089461af2')
+              navigate('../')
             }
             
           } catch (error) {

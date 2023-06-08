@@ -36,13 +36,11 @@ function RoutesApp() {
 
                 <Route path='/' element={<Main />}>
                     <Route index element={<Feed />} />
-                    <Route path='/profile' element={<Profile />} />
-                    <Route path='/profilefa' element={<Profilefa />} />
-                    <Route path='/compras' element={<Compras />} />
+                   <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/nivel' element={<NivelConta />} />
                     <Route path='/banco' element={<Banco />} />
-                    <Route path='/verts' element={<Verts />} />
+                    <Route path='/verts' element={<Verts />}    />
                     <Route path='/mensagens' element={<Mensagens />} />
                     <Route path='/assinando' element={<MyCriminal page='Assinando' />} />
                     <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
@@ -55,6 +53,8 @@ function RoutesApp() {
                     <Route path='/suporte' element={<Suporte />} />
                     <Route path='/arquivados' element={<Arquivados />} />
                     <Route path='/favoritos' element={<MyGallery />} />
+                    <Route path='/profile/:id' element={<Profile />} />
+                    <Route path='/profilefa' element={<Profilefa />} />
                 </Route>
             </Routes>
         </BrowserRouter>

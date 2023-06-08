@@ -12,18 +12,27 @@ import Modal from 'react-bootstrap/Modal';
 import api from "../../Services/api";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { useParams } from 'react-router-dom';
+import { ApiTwoTone } from "@mui/icons-material";
 
 function Profile() {
+    const { id } = useParams();
     const [backgroundImage, setBackgroundImage] = useState(Background);
     const [radioValue, setRadioValue] = useState('1');
-    const [username, setUsername] = useState('Lidia Beatriz');
-    const [userHandle, setUserHandle] = useState('lidiabzz');
-    const [editingFunction, setEditingFunction] = useState('B L O G U E I R A');
+    const [username, setUsername] = useState('');
+    const [sobrenome, setSobrenome] = useState('');
+    const [editingFunction, setEditingFunction] = useState('');
     const [editingProfile, setEditingProfile] = useState(false);
+    const [isCreator, setIscCreator] = useState(false);
     const [instagramLink, setInstagramLink] = useState('')
     const [tiktokLink, setTiktok] = useState('')
     const [amazonLink, setAmazon] = useState('')
+    const [bio, setBio] = useState('')
+    const [networks, setNetworks] = useState('')
     const navigate = useNavigate();
+    const [posts, setPosts] = useState([]);
+    const [newfollowing, setNewFallowing] = useState([]);
+    const token = localStorage.getItem('cc_t')
     const radios = [
         { name: 'Feed', value: '1' },
         { name: 'Fotos', value: '2' },
@@ -33,6 +42,8 @@ function Profile() {
     const [showModal, setShowModal] = useState(false);
     const [profile, setProfile] = useState('');
     const [user, setUser] = useState('');
+    const [isYou, setIsYou] = useState(false);
+    const [sigo, setSigo] = useState(false);
 
     const openModal = (index) => {
         setSelectedImage(index);
@@ -44,36 +55,115 @@ function Profile() {
     };
 
 
-    async function getDados (){
-        const id =  localStorage.getItem('cc_p')
-        const token = localStorage.getItem('cc_t')
-        console.log(id)
-        try{
-        const response =  await api.get(`/profile/${id}`)
-        const responseUser =  await api.get(`/user/${response?.data.user}`)
-        console.log('AQUIII' + response.data)
-        console.log('Aquii22' + responseUser.data)
-        setProfile(response?.data)
-        setUser(responseUser?.data)
-        }catch(error){
-            console.log(error)
-           if(error){
-           /* Swal.fire({
-                icon: 'error',
-                title: 'Favor logar novamente',
-                text: 'Ocorreu um erro.',
-                willClose:()=>{
-                    //navigate('/home')
-                }
-              });*/
-                
-           }
+    async function getDados() {
+        const url = window.location.href;
+        const userId = url.split("/profile/")[1];
+        const idUser = localStorage.getItem('cc_p')
+        if (idUser === userId) {
+            setIsYou(false)
+
+        } else {
+            setIsYou(true)
         }
-     }
+        try {
+            const response = await api.get(`/profile/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const responseUser = await api.get(`/user/${response?.data.user}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            console.log(response.data)
+            console.log(responseUser.data)
+
+            setUser(responseUser?.data)
+
+            if (response.data) {
+                setProfile(response?.data)
+                setPosts(response?.data.posts)
+                setUsername(response.data.firstName)
+                setSobrenome(response.data.lastName)
+                setNetworks(response.data.networks)
+                setBio(response.data.bio)
+                setEditingFunction(response.data.role)
+                setNewFallowing(response.data.following)
+                setIscCreator(response?.data.creator)
+            }
+
+        } catch (error) {
+            console.log(error)
+            if (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Favor logar novamente',
+                    text: 'Ocorreu um erro.',
+                    willClose: () => {
+                        //navigate('/home')
+                    }
+                });
+
+            }
+        }
+    }
+
+    async function verificaseguidor() {
+        const idUser = localStorage.getItem('cc_p')
+        const url = window.location.href;
+        const userId = url.split("/profile/")[1];
+        console.log(userId)
+        try {
+
+            const verificaseg = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const seguidoresUser = verificaseg.data.following
+            console.log(seguidoresUser)
+            if (seguidoresUser.includes(userId)) {
+                setSigo(true)
+                console.log('sigos')
+            } else {
+                setSigo(false)
+                console.log('n sigo')
+            }
+
+        } catch (error) {
+
+        }
+
+    }
 
     useEffect(() => {
-        getDados ()
-      },[]);
+        getDados()
+        verificaseguidor()
+    }, []);
+
+    async function seguir() {
+        const url = window.location.href;
+        const userId = url.split("/profile/")[1];
+        const idUser = localStorage.getItem('cc_p');
+
+        if (idUser !== userId && sigo != true) {
+            newfollowing.push(userId); // Adiciona userId ao array newfollowing
+
+            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                following: newfollowing
+            });
+
+            window.location.reload();
+        } else {
+            newfollowing.pop(userId);
+            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                following: newfollowing
+            });
+            window.location.reload();
+
+        }
+    }
 
 
     const images2 = [
@@ -92,156 +182,6 @@ function Profile() {
             ],
             caption: "After Rain (Jeshu John - designerspics.com)",
         },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Luiz',
-            date: '01/01/2020',
-            price: 'R$ 50,00',
-            legenda: 'Legenda da Foto',
-            hora: '18:10',
-            tags: [
-
-                { value: "Mensagem", title: "Mensagem" },
-            ],
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-        {
-            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Junior Martins',
-            date: '05/05/2022',
-            price: 'R$ 7,00',
-            legenda: 'Legenda da Foto',
-            hora: '15:30',
-            tags: [
-
-                { value: "Feed", title: "Feed" },
-            ],
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Vitor Augusto',
-            date: '10/05/2022',
-            price: 'R$ 30,00',
-            legenda: 'Legenda da Foto',
-            hora: '15:22',
-            tags: [
-                { value: "Verts", title: "Verts" },
-
-            ],
-            caption: "After Rain (Jeshu John - designerspics.com)",
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Vitor Augusto',
-            date: '10/05/2022',
-            price: 'R$ 30,00',
-            legenda: 'Legenda da Foto',
-            hora: '15:22',
-            tags: [
-
-                { value: "Mensagem", title: "Mensagem" },
-            ],
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-        {
-            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Vitor Augusto',
-            date: '10/05/2022',
-            legenda: 'Legenda da Foto',
-            price: 'R$ 30,00',
-            hora: '15:22',
-            tags: [
-
-                { value: "Feed", title: "Feed" },
-            ],
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Jose',
-            date: '09/04/2023',
-            legenda: 'Legenda da Foto',
-            price: 'R$ 50,00',
-            hora: '16:40',
-            tags: [
-                { value: "Verts", title: "Verts" },
-
-            ],
-            caption: "After Rain (Jeshu John - designerspics.com)",
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Vinicius',
-            date: '07/11/2023',
-            legenda: 'Legenda da Foto',
-            price: 'R$ 15,00',
-            hora: '19:58',
-            tags: [
-
-                { value: "Mensagem", title: "Mensagem" },
-            ],
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-        {
-            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Lucas',
-            date: '04/08/2023',
-            legenda: 'Legenda da Foto',
-            price: 'R$ 10,00',
-            hora: '14:10',
-            tags: [
-
-                { value: "Feed", title: "Feed" },
-            ],
-        },
-        {
-            src: "https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Carlos',
-            date: '15/05/2023',
-            price: 'R$ 5,00',
-            legenda: 'Legenda da Foto',
-            hora: '16:30',
-            tags: [
-
-                { value: "Mensagem", title: "Mensagem" },
-            ],
-            alt: "Boats (Jeshu John - designerspics.com)",
-        },
-
-        {
-            src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Joao',
-            date: '05/12/2022',
-            price: 'R$ 10,00',
-            legenda: 'Legenda da Foto',
-            hora: '00:22',
-            tags: [
-
-                { value: "Feed", title: "Feed" },
-            ],
-        },
     ];
 
 
@@ -249,28 +189,39 @@ function Profile() {
         setUsername(event.target.value);
     };
 
-    const handleUserHandleChange = (event) => {
-        setUserHandle(event.target.value);
-    };
     const handleEditProfileClick = () => {
         setEditingProfile(true);
     };
 
     const handleSaveProfileClick = () => {
-        const id =  localStorage.getItem('cc_p')
-        if(username != ''){
-            const attProfile = api.patch(`/profile/${id}`,{
-                role:editingFunction,
-                firstName: username,
-                creator: true
-            })
-           window.location.reload();
-        }
-       
+
+
+        const attProfile = api.patch(`/profile/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            role: editingFunction,
+            firstName: username,
+            bio: bio,
+            lastName: sobrenome,
+            creator: true
+
+        })
+        window.location.reload();
+
+
         setEditingProfile(false);
     };
+
+
     const handleRoleChange = (event) => {
         setEditingFunction(event.target.value);
+    };
+    const sobrenomeChange = (event) => {
+        setSobrenome(event.target.value);
+    };
+    const bioChange = (event) => {
+        setBio(event.target.value);
     };
     const instagramChenge = (event) => {
         setInstagramLink(event.target.value);
@@ -296,6 +247,16 @@ function Profile() {
         }
     };
 
+    function seguidores(seguidores) {
+        if (seguidores
+            == undefined) {
+            return '0'
+
+        } else {
+            const value = seguidores.length
+            return value
+        }
+    }
 
     return (
         <div className="profile-container">
@@ -311,98 +272,116 @@ function Profile() {
             }}>
                 <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
-                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{/*profile?.followers.length*/}</span> </span>
+                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile?.followers)}</span> </span>
                         <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
-                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{/*profile.posts.length*/}</span></span>
+                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile.posts)}</span></span>
                     </div>
                     <div className="dados-profile">
 
-                        <h1 style={{ fontWeight: 'bold' }}>{`${profile.firstName} ${profile.lastName}`}</h1>
+                        <h1 style={{ fontWeight: 'bold', margin: 3 }}>{`${profile.firstName} ${profile.lastName}`}</h1>
                         <h6 style={{ marginTop: '10px' }}>@{user?.username}</h6>
                         <h6 className="function-user">{profile.role}</h6>
-                        {editingProfile ? (
-                            <>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text"  id="basic-addon1">Nome</span>
+                        {isYou ? (
+                            editingProfile ? (
+                                <>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Nome</span>
+                                        </div>
+                                        <input type="text" className="form-control" placeholder="Nome" value={username} onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Nome" onChange={handleUsernameChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                              <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Função</span>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Sobrenome</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={sobrenome} placeholder="Sobrenome" onChange={sobrenomeChange} aria-label="Username" aria-describedby="basic-addon1" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Biografia" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
-                                    <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
-                                    <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Função</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={editingFunction} placeholder="Função" onChange={handleRoleChange} aria-label="Username" aria-describedby="basic-addon1" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Biografia</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={bio} placeholder="Biografia" onChange={bioChange} aria-label="Username" aria-describedby="basic-addon1" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                    <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                        <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
+                                        <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Amazon List" onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={instagramLink} placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={tiktokLink} placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                        </div>
+                                        <input type="text" className="form-control" placeholder="Amazon List" value={amazonLink} onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    </div>
 
-                                <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
-                                    <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
-                                </Button>
-                            </>
-                        ) : (
-                            <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
-                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
-                            </Button>
-                        )}
-                    {profile?.creator ? (
-                         <>
-                       <div className="buttons-profile-wrapper">
-                            <Button className="buttons-profile" variant="secondary" type="submit">
-                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Seguir</span>
-                            </Button>
-                            <Button className="buttons-profile" variant="secondary" type="submit">
-                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
-                            </Button>
-                            <Button className="buttons-profile" variant="secondary" type="submit">
-                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
-                            </Button>
-                        </div>
-                        </>):(null)}
+                                    <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
+                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
+                                    </Button>
+                                </>
+                            ) : (
+                                null
+                            )
+                        ) : <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
+                            <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
+                        </Button>}
+
+                        {profile?.creator ? (
+                            <>
+                                <div className="buttons-profile-wrapper">
+                                    {isYou ? (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
+                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
+                                    </Button>
+                                        <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                            <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
+                                        </Button>
+                                        <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                            <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
+                                        </Button></>
+                                    ) : (null)}
+
+                                </div>
+                            </>) : (null)}
 
                     </div>
                     <div className="social-networks">
-                        <button className="m-1" style={{ border: 'none', background:'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
-                        <button className="m-1" style={{ border: 'none',background:'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
-                        <button className="m-1"style={{ border: 'none', background:'none'}}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
+                        {isYou ? (<><button className="m-1" style={{ border: 'none', background: 'none' }}>Tips <FontAwesomeIcon icon={faCoins} /></button>
+                            <button className="m-1" style={{ border: 'none', background: 'none' }}>Favoritar <FontAwesomeIcon icon={faStar} /></button>
+                            <button className="m-1" style={{ border: 'none', background: 'none' }}>Compartilhar <FontAwesomeIcon icon={faShareSquare} /></button>
+                        </>) : (null)}
                     </div>
 
                     <div className="social-networks">
                         {instagramLink !== '' && (
-                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
+                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={instagramLink}>Instagram</a>
                                 <FontAwesomeIcon icon={faInstagram} />
                             </button>
                         )}
                         {tiktokLink !== '' && (
-                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
+                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={tiktokLink}>TikTok</a>
                                 <FontAwesomeIcon icon={faTiktok} />
                             </button>
                         )}
                         {amazonLink !== '' && (
-                            <button className="m-1" style={{ border: 'none' , background:'none'}}>
+                            <button className="m-1" style={{ border: 'none', background: 'none' }}>
                                 <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '3px' }} href={amazonLink}>Amazon</a>
                                 <FontAwesomeIcon icon={faAmazon} />
                             </button>
@@ -413,25 +392,14 @@ function Profile() {
 
 
                 </div>
-                <div className="container-sobremim" >
+                {profile.bio ? (<div className="container-sobremim" >
                     <span style={{ fontWeight: 'bold' }}>
-                        Sobre mim <br />
+                        Biografia<br />
                         <span style={{ fontWeight: 'normal' }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Maecenas eu justo ultrices, consectetur felis a, sollicitudin lectus.
-                            Pellentesque sed purus ut nisl accumsan efficitur. Vivamus
-                            posuere euismod ex, at convallis libero hendrerit nec. Fusce
-                            pulvinar eros eget convallis consequat. Etiam ornare, justo
-                            sit amet tristique venenatis, lacus orci elementum ipsum, si
-                            t amet rhoncus mauris lectus in lorem. Sed mollis sapien sed
-                            odio posuere maximus. Proin elementum ex ut felis iaculis,
-                            vel lacinia mauris tempor. Sed ut libero nunc. In mollis,
-                            metus ut convallis tincidunt, sapien nunc venenatis metus,
-                            nec tincidunt orci eros ut tortor. Sed tincidunt vel ipsum
-                            ac cursus.
+                            {profile?.bio}
                         </span>
                     </span>
-                </div>
+                </div>) : (null)}
                 <div className="radio-buttons">
                     <ButtonGroup>
                         {radios.map((radio, idx) => (
@@ -452,25 +420,30 @@ function Profile() {
 
 
                 </div>
-                <div className="row">
-                    {images2.map((images, index) => {
-                        return (
-                            <div className="col-lg-4 col-md-5">
-                                <img
-                                    src={images.src}
-                                    className="w-100 shadow-1-strong rounded mb-1"
-                                    alt="Boat on Calm Water"
-                                    style={{ margin: '0', padding: '0', cursor: 'pointer' }}
-                                    width={images.width}
-                                    height={images.height}
-                                    onClick={() => { openModal(index) }}
-
-                                />
-
+                {profile?.creator && (
+                    <div className="row">
+                        {posts.length > 0 ? (
+                            posts.map((images, index) => (
+                                <div className="col-lg-4 col-md-5">
+                                    <img
+                                        src={images.src}
+                                        className="w-100 shadow-1-strong rounded mb-1"
+                                        alt="Boat on Calm Water"
+                                        style={{ margin: '0', padding: '0', cursor: 'pointer' }}
+                                        width={images.width}
+                                        height={images.height}
+                                        onClick={() => { openModal(index) }}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-lg-4 col-md-5 mb-5">
+                                <p>Nenhuma postagem</p>
                             </div>
-                        );
-                    })}
-                </div>
+                        )}
+                    </div>
+                )}
+
                 <Modal show={showModal} onHide={closeModal} centered>
                     <Modal.Header closeButton>
 
@@ -480,7 +453,7 @@ function Profile() {
                         <span>{images2[selectedImage].legenda}</span>
                     </Modal.Body>
                     <Modal.Footer>
-                       
+
                         <Button variant="secondary">
                             Arquivar
                         </Button>
@@ -494,7 +467,7 @@ function Profile() {
                         <Button variant="danger">
                             Excluir Foto
                         </Button>
-              
+
                         <Button variant="secondary" onClick={closeModal}>
                             Fechar
                         </Button>

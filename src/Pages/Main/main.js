@@ -6,60 +6,48 @@ import CottageIcon from '@mui/icons-material/Cottage';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconButton } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
 import { ArrowBack } from '@mui/icons-material';
 import { Send } from '@mui/icons-material';
 import { SendOutlined } from '@mui/icons-material';
 import HomeIcon from '@mui/icons-material/Home';
+import { useNavigate } from 'react-router-dom';
 
 function Main() {
-
+    const navigate = useNavigate();
+    const id = localStorage.getItem('cc_p');
+    function logoff() {
+        localStorage.removeItem('cc_p')
+        localStorage.removeItem('cc_t')
+    }
     return (
         <div className='row'>
             <div className='col col-lg-3'>
                 <div className='navlateral'>
                     <Sidebar className='navbarside-feed'>
                         <Menu>
-                            <MenuItem onClick={() => {
-                                window.location.href = './verts'
-                            }} icon={<PersonalVideoIcon style={{ color: 'black' }} />}> Verts</MenuItem>
-                            <MenuItem onClick={() => {
-                                window.location.href = '../'
-                            }} icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
-                            <MenuItem onClick={() => {
-                                window.location.href = './mensagens'
-                            }} icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
+                            <MenuItem as={Link} to="/verts" icon={<PersonalVideoIcon style={{ color: 'black' }} />}>Verts</MenuItem>
+                            <MenuItem as={Link} to="/" icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
+                            <MenuItem as={Link} to="/mensagens" icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
                             <SubMenu icon={<AddBoxOutlined style={{ color: 'black' }} />} label="Publicar">
-                                <MenuItem onClick={() => {
-                                    window.location.href = './postfeed'
-                                }}> Feed </MenuItem>
-                                <MenuItem onClick={() => {
-                                    window.location.href = './postverts'
-                                }}> Verts</MenuItem>
-                                <MenuItem onClick={() => {
-                                    window.location.href = './postmsg'
-                                }}>Mensagens</MenuItem>
+                                <MenuItem as={Link} to="/postfeed">Feed</MenuItem>
+                                <MenuItem as={Link} to="/postverts">Verts</MenuItem>
+                                <MenuItem as={Link} to="/postmsg">Mensagens</MenuItem>
                             </SubMenu>
                             <SubMenu icon={<AttachMoneyIcon style={{ color: 'black' }} />} label="Finanças">
-                                <MenuItem onClick={() => {
-                                    window.location.href = './balanco'
-                                }}> Balanço </MenuItem>
-                                <MenuItem onClick={() => {
-                                    window.location.href = './compras'
-                                }}> Compras</MenuItem>
-                                <MenuItem onClick={() => {
-                                    window.location.href = './banco'
-                                }}> Banco</MenuItem>
+                                <MenuItem as={Link} to="/balanco">Balanço</MenuItem>
+                                <MenuItem as={Link} to="/compras">Compras</MenuItem>
+                                <MenuItem as={Link} to="/banco">Banco</MenuItem>
                             </SubMenu>
                             <SubMenu icon={<ClosedCaptionOff style={{ color: 'black' }} />} label="My Criminal" className="scrollable-submenu">
-                                <MenuItem onClick={() => { window.location.href = './seguidores'; }}>Seguidores</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './seguindo'; }}>Seguindo</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './assinantes'; }}>Assinantes</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './assinando'; }}>Assinando</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './favoritos'; }}>Galeria</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './profile'; }}>Perfil</MenuItem>
-                                <MenuItem onClick={() => { window.location.href = './suporte'; }}>Suporte CC</MenuItem>
+                                <MenuItem as={Link} to="/seguidores">Seguidores</MenuItem>
+                                <MenuItem as={Link} to="/seguindo">Seguindo</MenuItem>
+                                <MenuItem as={Link} to="/assinantes">Assinantes</MenuItem>
+                                <MenuItem as={Link} to="/assinando">Assinando</MenuItem>
+                                <MenuItem as={Link} to="/favoritos">Galeria</MenuItem>
+                                <MenuItem as={Link} to={`/profile/${id}`}>Perfil</MenuItem>
+                                <MenuItem as={Link} to="/suporte">Suporte CC</MenuItem>
                             </SubMenu>
 
 
@@ -73,10 +61,10 @@ function Main() {
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
-                <IconButton onClick={() => { window.location.href = './verts' }}><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
-                <IconButton onClick={() => { window.location.href = '../' }}><CottageIcon style={{ color: 'black' }} /></IconButton>
+                <IconButton component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
+                <IconButton component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton>
-                <IconButton onClick={() => { window.location.href = '../' }}><SendOutlined style={{ color: 'black' }} /></IconButton>
+                <IconButton component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{ color: 'black' }} /></IconButton>
 
 
@@ -90,9 +78,9 @@ function Main() {
                 </div>
                 <div class="offcanvas-body small">
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <a className='btn btn-info text-white m-1' onClick={() => { window.location.href = './postverts' }}>Verts</a>
-                        <a className='btn btn-info text-white  m-1' onClick={() => { window.location.href = './postfeed' }}>Feed</a>
-                        <a className='btn btn-info text-white  m-1' onClick={() => { window.location.href = './verts' }}>Mensagens</a>
+                        <Link className='btn btn-info text-white m-1' component={Link} to="/postverts">Verts</Link>
+                        <Link className='btn btn-info text-white  m-1' component={Link} to="/postfeed">Feed</Link>
+                        <Link className='btn btn-info text-white  m-1' component={Link} to="/verts">Mensagens</Link>
                     </div>
                 </div>
             </div>
@@ -113,10 +101,10 @@ function Main() {
                             <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{ color: 'black' }} className='me-2' />My Criminal</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./profile"><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" component={Link} to={`/profile/${id}`}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./home"><Logout style={{ color: 'black' }} className='me-2' />Sair</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" onClick={() => {logoff()}} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>
                         </li>
                     </ul>
                 </div>
@@ -130,22 +118,22 @@ function Main() {
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./seguidores">Seguidores</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./seguidores"}>Seguidores</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./seguindo">Seguindo</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./seguindo"}>Seguindo</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./assinantes">Assinantes</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./assinantes"}>Assinantes</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./assinando">Assinando</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./assinando"}>Assinando</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./favoritos">Galeria</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./favoritos"}>Galeria</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="./suporte">Suporte CC</a></h5>
+                            <h5><Link class="nav-link active" aria-current="page" to={"./suporte"}>Suporte CC</Link></h5>
                         </li>
                     </ul>
                 </div>
@@ -161,17 +149,17 @@ function Main() {
                     <ul class="navbar-nav flex-grow-1 pe-3">
                         <li class="nav-item">
                             <h5>
-                                <a class="nav-link active" aria-current="page" href="./balanco">Balanço</a>
+                                <Link class="nav-link active" aria-current="page" to={"./balanco"}>Balanço</Link>
                             </h5>
                         </li>
                         <li class="nav-item">
                             <h5>
-                                <a class="nav-link active" aria-current="page" href="./compras">Compras</a>
+                                <Link class="nav-link active" aria-current="page" to={"./compras"}>Compras</Link>
                             </h5>
                         </li>
                         <li class="nav-item">
                             <h5>
-                                <a class="nav-link active" aria-current="page" href="./banco">Banco</a>
+                                <Link class="nav-link active" aria-current="page" to={"./banco"}>Banco</Link>
                             </h5>
                         </li>
                     </ul>

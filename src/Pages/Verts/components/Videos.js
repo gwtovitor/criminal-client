@@ -6,6 +6,7 @@ import { Avatar } from "@mui/material";
 import { VolumeOff, VolumeUp } from "@mui/icons-material";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useNavigate } from "react-router-dom";
 
 function Video({
   id,
@@ -16,6 +17,7 @@ function Video({
   avatar,
   date,
   muted,
+  itemId
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -24,6 +26,7 @@ function Video({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const navigate = useNavigate();
 
 
 
@@ -47,21 +50,64 @@ function Video({
 
   useEffect(() => {
     const handleTimeUpdate = () => {
-      setCurrentTime(videoRef.current.currentTime);
+      if (videoRef.current) {
+        setCurrentTime(videoRef.current.currentTime);
+      }
     };
-
+  
     const handleLoadedMetadata = () => {
-      setDuration(videoRef.current.duration);
+      if (videoRef.current) {
+        setDuration(videoRef.current.duration);
+      }
     };
-
-    videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
-    videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
-
+  
+    if (videoRef.current) {
+      videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
+      videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+    }
+  
     return () => {
-      videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
-      videoRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      if (videoRef.current) {
+        videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+        videoRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      }
     };
   }, []);
+  
+  useEffect(() => {
+    const handleSwipeLeft = () => {
+     // console.log(itemId);
+      // Aqui você pode fazer o que quiser quando houver um arrasto para a esquerda
+    };
+  
+    const handleTouchStart = (event) => {
+      const touchStartX = event.touches[0].clientX;
+  
+      const handleTouchMove = (event) => {
+        const touchEndX = event.touches[0].clientX;
+        const touchDeltaX = touchStartX - touchEndX;
+  
+        if (touchDeltaX > 200) {
+          handleSwipeLeft();
+        }
+      };
+  
+      const handleTouchEnd = () => {
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', handleTouchEnd);
+      };
+  
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleTouchEnd);
+    };
+  
+    window.addEventListener('touchstart', handleTouchStart);
+  
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, [id]);
+  
 
   useEffect(() => {
     const handleScroll = () => {

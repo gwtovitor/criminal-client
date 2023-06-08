@@ -10,12 +10,14 @@ import vitor from './Images/profile.png'
 import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
 import { Avatar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 function Feed() {
     const [feed, setFeed] = useState([]);
     const [position, setPosition] = useState(0);
     const [newComment, setNewComment] = useState('');
+    const navigate = useNavigate();
 
     const handleCommentChange = (event) => {
         setNewComment(event.target.value);
@@ -30,7 +32,7 @@ function Feed() {
     const json =
         [
             {
-                "_id": "1",
+                "_id": "647ff60aa6e855ec74c90c44",
                 "profile": vitor,
                 "author": "Vitor Augusto",
                 "user": "gwtovitor_",
@@ -50,7 +52,7 @@ function Feed() {
                 }
             },
             {
-                "_id": "2",
+                "_id": "6480040fa6e855ec74c90ce0",
                 "author": "Joseraldo Martins",
                 "profile": jr,
                 "user": "joseraldo_martins",
@@ -68,7 +70,7 @@ function Feed() {
                 }
             },
             {
-                "_id": "3",
+                "_id": "64757956d757583d23697953",
                 "author": "Luiz",
                 "profile": luiz,
                 "user": "luiz_",
@@ -173,7 +175,7 @@ function Feed() {
                 {feed.map((post) => (
                     <article key={post._id}>
                         <header>
-                            <div className="user-info">
+                            <div className="user-info" onClick={()=>{navigate(`profile/${post._id}`)}}>
                                 <div className="user-info-row">
                                     <img
                                         src={post.profile}

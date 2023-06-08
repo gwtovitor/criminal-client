@@ -15,7 +15,7 @@ function Verts() {
 
     const [video, setVideos] = useState([
       {
-        id: 1,
+        id: '6480040fa6e855ec74c90ce0',
         user: 'gwtovitor_',
         name: 'Vitor Augusto',
         src: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
@@ -26,10 +26,11 @@ function Verts() {
         likes: 45,
         picture: vitor,
         legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
-        date: '18/05'
+        date: '18/05',
+        profileID: '6480040fa6e855ec74c90ce0',
       },
       {
-        id: 2,
+        id: '647ff3f6a6e855ec74c90c2a',
         user: 'lidiabzz_',
         name: 'Lidia Beatriz',
         src: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
@@ -39,12 +40,14 @@ function Verts() {
         likes: 10,
         picture: lidia,
         legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
-        date: '05/04'
+        date: '05/04',
+        profileID: '647ff3f6a6e855ec74c90c2a',
+        
       },
       {
-        id: 3,
+        id: '647f62feae63101807e85518',
         user: 'user123_',
-        name: 'User Name',
+        name: 'Luizs',  
         src: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
         isMuted: false,
         showControls: true,
@@ -52,13 +55,15 @@ function Verts() {
         likes: 15,
         picture: luiz,
         legenda: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
-        date: '06/03'
+        date: '06/03',
+        profileID: '647f62feae63101807e85518',
 
       },
       {
-        id: 4,
+        id: '64800051a6e855ec74c90c9f',
         user: 'user123_',
-        name: 'User Name',
+        profileID: '64800051a6e855ec74c90c9f',
+        name: 'Junior Martins',
         src: 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
         isMuted: false,
         showControls: true,
@@ -69,30 +74,43 @@ function Verts() {
         date: '01/02'
       },
     ]);
-    const handleMute = () => {
-      setMuted((prevMuted) => !prevMuted);
+  
+    const handleSwipe = (videoId) => {
+      navigate(`/profile/${videoId}`)
     };
-    
-    
-    const handlers = useSwipeable({
-      onSwipedLeft: async () => navigate('/home'),   
-    });
-
+  
+    const handleTouchStart = (id) => (event) => {
+      const startX = event.touches[0].clientX;
+      const handleTouchEnd = (event) => {
+        const endX = event.changedTouches[0].clientX;
+        const deltaX = startX - endX;
+        if (deltaX > 100) {
+          handleSwipe(id);
+        }
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+      document.addEventListener("touchend", handleTouchEnd);
+    };
+  
     return (
-      <div onClick={()=>{handleMute()}}>
+      <div>
         {video.map((src, index) => (
-        
-            <Videos
-              src={src.src}
-              description={src.legenda}
-              like={src.likes}
-              id={src.id}
-              channel={src.name}
-              avatar={src.picture}
-              date={src.date}
-              key={src.id}
-              muted={true}
-            />
+          <div
+          key={video.id}
+          onTouchStart={handleTouchStart(src.profileID)}
+        >
+          <Videos
+            src={src.src}
+            description={src.legenda}
+            like={src.likes}
+            id={index}
+            channel={src.name}
+            avatar={src.picture}
+            date={src.date}
+            itemId={src.profileID}
+            muted={true}
+          />
+          </div>
         ))}
       </div>
     );
