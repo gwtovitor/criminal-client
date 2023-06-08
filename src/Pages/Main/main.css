@@ -1,4 +1,6 @@
 
+   
+
 .row{
     max-width: 100%;
 }
@@ -15,10 +17,12 @@
 .navbarside-feed {
     padding-left: 60px;
     padding-top: 30px;
+    z-index: 99999;
 
 }
 .navlateral {
     position: fixed;
+    z-index: 99999;
 }
 .scrollable-submenu {
     max-height: 300px; /* Defina a altura máxima desejada para o submenu */
@@ -58,14 +62,17 @@
 @media (min-width: 320px) and (max-width:480px) {
     .navbarside-feed {
         display: none;
+        z-index: 99999;
     }
 
     .footer {
         display: flex;
+        z-index: 99999;
     }
 
     .container-feed {
         padding-bottom: 50px;
+        
     }
 
 }

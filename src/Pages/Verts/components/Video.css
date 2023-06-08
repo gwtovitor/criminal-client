@@ -30,7 +30,7 @@
   border-radius: 5px;
   display: flex;
   flex-direction: row;
-  z-index: 99999;
+
   justify-content: center;
   padding: 8px;
 }

@@ -58,14 +58,14 @@ function Profile() {
         }catch(error){
             console.log(error)
            if(error){
-            Swal.fire({
+           /* Swal.fire({
                 icon: 'error',
                 title: 'Favor logar novamente',
                 text: 'Ocorreu um erro.',
                 willClose:()=>{
                     //navigate('/home')
                 }
-              });
+              });*/
                 
            }
         }

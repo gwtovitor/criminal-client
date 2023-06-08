@@ -14,11 +14,12 @@ function Video({
   description,
   like,
   avatar,
-  date
+  date,
+  muted,
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [muted, setMuted] = useState(false);
+  //const [muted, setMuted] = useState(false);
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -90,10 +91,9 @@ function Video({
       setPlaying(true);
     }
   };
-  const handleMute = () => {
-    videoRef.current.muted = !muted;
-    setMuted((m) => !m);
-  };
+  /*const handleMuteClick = () => {
+    setMuted((prevMuted) => !prevMuted);
+  };*/
 
   const scrollUp = () => {
     window.scrollBy({
@@ -128,6 +128,7 @@ function Video({
         loop
         ref={videoRef}
         src={src}
+        muted={muted}
       />
       <div className="video__controls">
 
@@ -156,8 +157,12 @@ function Video({
             <p>{like}</p>
 
           </div>
-          <div onClick={handleMute}>
-            {muted ? <VolumeOff className="buttonsShortsSide" /> : <VolumeUp className="buttonsShortsSide" />}
+          <div /* onClick={handleMuteClick}*/>
+            {muted ? (
+              <VolumeOff className="buttonsShortsSide" />
+            ) : (
+              <VolumeUp className="buttonsShortsSide" />
+            )}
           </div>
           <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong`}>
             <MoreVert style={{ marginTop: '15px' }} className="buttonsShortsSide" />
