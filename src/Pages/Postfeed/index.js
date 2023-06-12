@@ -1,20 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateField } from '@mui/x-date-pickers/DateField';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
+import api from "../../Services/api";
+import { toast } from "react-toastify";
 
 function Postfeed() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [legenda, setLegenda] = useState('')
+  const idUser = localStorage.getItem('cc_p');
+  const token = localStorage.getItem('cc_t')
+  const [videoURL, setVideoURL] = useState('');
+  const [newPosts, setNewPosts] = useState([])
+
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        const response = await api.get(`/profile/${idUser}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        });
+        console.log(response.data.posts);
+        setNewPosts(response.data.posts);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    loadPosts();
+  }, []);
+
+
+  const changeLegenda = (event) => {
+    setLegenda(event.target.value);
+  };
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
+
 
   const calcularAcrescimo = () => {
     const valor = parseFloat(inputValue);
@@ -58,6 +90,77 @@ function Postfeed() {
     }
   };
 
+  async function postarVerts() {
+    if (selectedFile != null) {
+      const formData = new FormData();
+
+
+      formData.append("file", selectedFile);
+
+      try {
+        const response = await api.post("/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        })
+        console.log(response.data)
+        const videoPath = response.data.file.location
+
+        try {
+          const postandoVerts = await api.post(`/post/`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            user: idUser,
+            content: videoPath,
+            legenda: legenda
+          })
+          console.log(postandoVerts)
+          const idPost = postandoVerts.data._id
+
+          const newPostsWithId = [...newPosts, idPost];
+          try {
+            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              },
+              posts: newPostsWithId
+            });
+            console.log(enviandoVerts);
+          } catch (error) {
+            console.log(error);
+          }
+
+        } catch (error) {
+          console.log(error)
+        }
+        window.location.reload()
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      toast.error("Selecione um Video para postar", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
+
+  const handleFileSelect = (event) => {
+    // we only get the selected file from input element's event
+    setSelectedFile(event.target.files[0])
+    const file = event.target.files[0];
+    const videoURL = URL.createObjectURL(file);
+    setVideoURL(videoURL);
+
+  }
+
+
+
   return (
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
@@ -66,15 +169,22 @@ function Postfeed() {
       <div className='row'>
         <div className='row'>
           <div className='col-12'>
-            <textarea class="form-control" placeholder="Legenda" aria-label="With textarea"></textarea>
+            <textarea class="form-control" onChange={changeLegenda} placeholder="Legenda" aria-label="With textarea"></textarea>
           </div>
         </div>
         <div className='row mt-3'>
-          <div className='col-6 d-grid'>
-            <a className='btn btn-info text-white' href="#">Mídia</a>
-          </div>
-          <div className='col-6 d-grid'>
-            <a className='btn btn-info text-white' href="#">Áudio</a>
+          <div className='d-grid'>
+            <label className='btn btn-info text-white' htmlFor='video-upload'>
+              Arquivos
+              <input
+                id='video-upload'
+                type='file'
+                accept="audio/*, video/*, image/*"
+                style={{ display: 'none' }}
+                onChange={handleFileSelect}
+              />
+
+            </label>
           </div>
         </div>
         <div className='row mt-3'>

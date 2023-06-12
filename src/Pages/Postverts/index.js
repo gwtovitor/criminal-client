@@ -1,17 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './vertsvideo.css'
 import "react-datepicker/dist/react-datepicker.css";
 import { DateField } from '@mui/x-date-pickers/DateField';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
+import api from '../../Services/api';
+import { toast } from "react-toastify";
 
 function Postverts() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [legenda, setLegenda] = useState('')
+  const idUser = localStorage.getItem('cc_p');
+  const token = localStorage.getItem('cc_t')
+  const [videoURL, setVideoURL] = useState('');
+  const [newPosts, setNewPosts] = useState([])
+ 
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        const response = await api.get(`/profile/${idUser}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        });
+        console.log(response.data.posts);
+        setNewPosts(response.data.posts);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
+    loadPosts();
+  }, []);
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
@@ -44,17 +69,80 @@ function Postverts() {
     }
   };
 
-  const [videoURL, setVideoURL] = useState('');
 
-  const handleVideoUpload = (event) => {
+  const handleFileSelect = (event) => {
+    // we only get the selected file from input element's event
+    setSelectedFile(event.target.files[0])
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      setVideoURL(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
+    const videoURL = URL.createObjectURL(file);
+    setVideoURL(videoURL);
+    
+}
 
+  async function postarVerts() {
+  if(selectedFile != null){
+    const formData = new FormData();
+
+    
+    formData.append("file", selectedFile);
+
+    try {
+        const response = await api.post("/upload", formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        })
+        console.log(response.data)
+        const videoPath = response.data.file.location
+
+        try{
+            const postandoVerts = await api.post(`/post/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                user: idUser,
+                content: videoPath,
+                legenda: legenda
+            })
+            console.log(postandoVerts)
+            const idPost = postandoVerts.data._id
+
+              const newPostsWithId = [...newPosts, idPost];
+              try {
+                const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  },
+                  posts: newPostsWithId
+                });
+                console.log(enviandoVerts);
+              } catch (error) {
+                console.log(error);
+              }
+
+        }catch(error){
+            console.log(error)
+        }
+        window.location.reload()
+    } catch (error) {
+        console.log(error)
+    }
+  }else{
+    toast.error("Selecione um Video para postar", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+  });
+  }
+      
+      
+};
+const changeLegenda = (event) => {
+  setLegenda(event.target.value);
+};
   return (
 
 
@@ -75,19 +163,20 @@ function Postverts() {
                 type='file'
                 accept='video/*'
                 style={{ display: 'none' }}
-                onChange={handleVideoUpload}
+                onChange={handleFileSelect}
               />
+
             </label>
           </div>
         </div>
         <div className='row mt-2'>
           <div className='col-12'>
-            <textarea className='form-control' placeholder='Legenda' aria-label='With textarea'></textarea>
+            <textarea className='form-control' placeholder='Legenda' onChange={changeLegenda} aria-label='With textarea'></textarea>
           </div>
         </div>
 
         {videoURL && (
-          <div className='fullscreen-video-container' style={{ alignSelf: 'center', margin: '0 auto' }}>
+          <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
             <video
               controls
               src={videoURL} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
@@ -95,17 +184,17 @@ function Postverts() {
         )}
         <div className='row mt-4'>
           <div className='col-12'>
-            <div class="input-group">
-              <div class="form-check-reverse text-start form-switch">
+            <div className="input-group">
+              <div className="form-check-reverse text-start form-switch">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   style={{ width: '2.5rem', height: '1.5rem' }}
                   onChange={(e) => setDataDisable(e.target.checked)}
                   type="checkbox"
                   role="switch"
                   id="flexSwitchCheckDefault"
                 />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
+                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
               </div>
             </div>
           </div>
@@ -138,7 +227,7 @@ function Postverts() {
         </div>
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
-            <button className='btn btn-info text-white'>Publicar</button>
+            <button className='btn btn-info text-white' onClick={postarVerts}>Publicar</button>
           </div>
         </div>
 

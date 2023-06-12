@@ -76,7 +76,16 @@
     border: none;
     width: 130px;
 }
-
+.fullscreen-video-container {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    border-radius: 10px;
+    align-self: center;
+    aspect-ratio: 1/1.5;
+  }
 .grid-profile {
     width: 70%;
     align-items: center;
@@ -108,6 +117,9 @@
         margin: 0 auto;
         padding-bottom: 15%;
 
+    }
+    .fullscreen-video-container{
+        width: 100%;
     }
 
     .container-sobremim {

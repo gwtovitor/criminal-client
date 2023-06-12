@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './profile.css'
-import Background from './Images/creator.jpg'
+//import Background from './Images/creator.jpg'
 import { faInstagram, faTiktok, faAmazon } from "@fortawesome/free-brands-svg-icons";
 import { faStar, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
@@ -14,10 +14,10 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
+import imageCompression from 'browser-image-compression';
 
 function Profile() {
     const { id } = useParams();
-    const [backgroundImage, setBackgroundImage] = useState(Background);
     const [radioValue, setRadioValue] = useState('1');
     const [username, setUsername] = useState('');
     const [sobrenome, setSobrenome] = useState('');
@@ -47,6 +47,15 @@ function Profile() {
     const [user, setUser] = useState('');
     const [isYou, setIsYou] = useState(false);
     const [sigo, setSigo] = useState(false);
+    const formData = new FormData();
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [dadosPosts, setDadosPosts] = useState([]);
+
+
+
+    const handleFileSelect = (event) => {
+        setSelectedFile(event.target.files[0])
+    }
 
 
     const openModal = (index) => {
@@ -72,11 +81,12 @@ function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             })
+            console.log(response.data)
             const responseUser = await api.get(`/user/${response?.data.user}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-                
+
             })
             const respondeUserFollowers = await api.get(`/profile/${idUser}`, {
                 headers: {
@@ -110,6 +120,26 @@ function Profile() {
             }
         }
     }
+    useEffect(() => {
+        const obterDados = async () => {
+            const dados = await Promise.all(
+                posts.map(async (id) => {
+                    try {
+                        const response = await api.get(`/post/${id}`);
+                        const { content, legenda, likes, comments, createdAt } = response.data;
+                        return { id, content, legenda, likes, comments, createdAt };
+                    } catch (error) {
+                        console.log(`Erro ao obter dados do post ${id}:`, error);
+                        return null;
+                    }
+                })
+            );
+
+            setDadosPosts(dados.filter((dado) => dado !== null));
+        };
+
+        obterDados();
+    }, [posts]);
 
     async function verificaseguidor() {
 
@@ -140,35 +170,35 @@ function Profile() {
 
     async function seguir() {
         try {
-          const verificaseg = await api.get(`/profile/${idUser}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          const seguidoresUser = verificaseg.data.following;
-      
-          if (idUser !== userId && sigo !== true) {
-            if (seguidoresUser.includes(userId)) {
-              return;
-            } else {
-              const newfollowingUpdated = [...newfollowing, userId];
-              const _enviarseguir = await api.patch(`/profile/${idUser}`, {
-                following: newfollowingUpdated
-              });
-              setSigo(true);
-            }
-          } else {
-            const newfollowingUpdated = newfollowing.filter(id => id !== userId);
-            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
-              following: newfollowingUpdated
+            const verificaseg = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
-            setSigo(false);
-          }
+            const seguidoresUser = verificaseg.data.following;
+
+            if (idUser !== userId && sigo !== true) {
+                if (seguidoresUser.includes(userId)) {
+                    return;
+                } else {
+                    const newfollowingUpdated = [...newfollowing, userId];
+                    const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                        following: newfollowingUpdated
+                    });
+                    setSigo(true);
+                }
+            } else {
+                const newfollowingUpdated = newfollowing.filter(id => id !== userId);
+                const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                    following: newfollowingUpdated
+                });
+                setSigo(false);
+            }
         } catch (error) {
-          // Trate o erro adequadamente
+            // Trate o erro adequadamente
         }
-      }
-      
+    }
+
 
 
     const images2 = [
@@ -198,20 +228,51 @@ function Profile() {
         setEditingProfile(true);
     };
 
-    const handleSaveProfileClick = () => {
-        const attProfile = api.patch(`/profile/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            role: editingFunction,
-            firstName: username,
-            bio: bio,
-            lastName: sobrenome,
-            creator: true
+    async function handleSaveProfileClick() {
+        try {
+            const attProfile = await api.patch(`/profile/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                role: editingFunction,
+                firstName: username,
+                bio: bio,
+                lastName: sobrenome,
+                creator: true,
 
-        })
-        window.location.reload();
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+        const formData = new FormData();
+
+
+        formData.append("file", selectedFile);
+
+        try {
+            const response = await api.post("/upload", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            })
+            console.log(response.data)
+            const imgPath = response.data.file.location
+            try {
+                const attProfile = await api.patch(`/profile/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    img: imgPath
+                })
+
+            } catch (error) {
+                console.log(error)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
         setEditingProfile(false);
+        window.location.reload()
     };
 
 
@@ -234,47 +295,36 @@ function Profile() {
         setAmazon(event.target.value);
     };
 
-    const handleFileInputChange = (e) => {
-        const files = e.target.files;
 
-        for (let i = 0; i < files.length; i++) {
-            const reader = new FileReader();
-            reader.readAsDataURL(files[i]);
 
-            reader.onload = (e) => {
-                const newImages = e.target.result;
-                setBackgroundImage(newImages);
-            };
-        }
-    };
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
-          .then(() => {
-            toast.success("URL copiada para a área de transferência", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
+            .then(() => {
+                toast.success("URL copiada para a área de transferência", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            })
+            .catch(() => {
+                toast.error("Falha ao copiar para a área de transferência", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
-          })
-          .catch(() => {
-            toast.error("Falha ao copiar para a área de transferência", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          });
-      }
-      
+    }
+
 
     function seguidores(seguidores) {
         if (seguidores
@@ -290,7 +340,7 @@ function Profile() {
     return (
         <div className="profile-container">
             <div className="background-profile" style={{
-                backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255,0), rgba(255, 255, 255,1)), url(${backgroundImage})`,
+                backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255,0), rgba(255, 255, 255,1)), url(${profile?.img})`,
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
@@ -298,7 +348,7 @@ function Profile() {
                 flexDirection: 'column',
                 display: 'flex',
                 border: 'solid white',
-                
+
             }}>
                 <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
@@ -342,7 +392,7 @@ function Profile() {
                                 </div>
                                 <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
                                     <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
-                                    <input onChange={handleFileInputChange} className="form-control form-control-sm" id="formFileSm" type="file" />
+                                    <input onChange={handleFileSelect} className="form-control form-control-sm" id="formFileSm" type="file" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
@@ -376,15 +426,15 @@ function Profile() {
                             <>
                                 <div className="buttons-profile-wrapper">
                                     {isYou ? (null)
-                                    : (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
-                                    <span className="buttons-name-profile" style={{ fontWeight: sigo? 'normal' : 'bold', fontSize: sigo? '0.6rem': '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
-                                </Button>
-                                    <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
-                                    </Button>
-                                    <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                        <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
-                                    </Button></>)}
+                                        : (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
+                                            <span className="buttons-name-profile" style={{ fontWeight: sigo ? 'normal' : 'bold', fontSize: sigo ? '0.6rem' : '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
+                                        </Button>
+                                            <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
+                                            </Button>
+                                            <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
+                                            </Button></>)}
 
                                 </div>
                             </>) : (null)}
@@ -400,7 +450,7 @@ function Profile() {
                                     <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                         Favoritar <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faStar} />
                                     </button>
-                                    <button  className="m-1" onClick={()=>{copyToClipboard(url)}} style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <button className="m-1" onClick={() => { copyToClipboard(url) }} style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                         Copiar URL do Perfil <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faShareSquare} />
                                     </button>
                                 </>
@@ -412,20 +462,20 @@ function Profile() {
                     <div className="social-networks">
                         {instagramLink !== '' && (
                             <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <a target="blank" style={{marginRight:'0.2rem', textDecoration: 'none', color: 'black', }} href={instagramLink}>Instagram</a>
-                                <FontAwesomeIcon style={{marginRight:'0.5rem'}} icon={faInstagram} />
+                                <a target="blank" style={{ marginRight: '0.2rem', textDecoration: 'none', color: 'black', }} href={instagramLink}>Instagram</a>
+                                <FontAwesomeIcon style={{ marginRight: '0.5rem' }} icon={faInstagram} />
                             </button>
                         )}
                         {tiktokLink !== '' && (
-                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft:'0,5rem' }}>
-                                <a target="blank" style={{ textDecoration: 'none', color: 'black',marginRight:'0.2rem' }} href={tiktokLink}>TikTok</a>
-                                <FontAwesomeIcon style={{marginRight:'0.5rem'}} icon={faTiktok} />
+                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: '0,5rem' }}>
+                                <a target="blank" style={{ textDecoration: 'none', color: 'black', marginRight: '0.2rem' }} href={tiktokLink}>TikTok</a>
+                                <FontAwesomeIcon style={{ marginRight: '0.5rem' }} icon={faTiktok} />
                             </button>
                         )}
                         {amazonLink !== '' && (
-                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft:'0,5rem'  }}>
-                                <a target="blank" style={{marginRight:'0.2rem', textDecoration: 'none', color: 'black', }} href={amazonLink}>Amazon</a>
-                                <FontAwesomeIcon style={{marginRight:'0.5rem', marginTop:'3px'}} icon={faAmazon} />
+                            <button className="m-1" style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: '0,5rem' }}>
+                                <a target="blank" style={{ marginRight: '0.2rem', textDecoration: 'none', color: 'black', }} href={amazonLink}>Amazon</a>
+                                <FontAwesomeIcon style={{ marginRight: '0.5rem', marginTop: '3px' }} icon={faAmazon} />
                             </button>
                         )}
 
@@ -463,26 +513,40 @@ function Profile() {
 
                 </div>
                 {profile?.creator && (
+                    /* <div className="row">
+                         {posts.length > 0 ? (
+                             posts.map((images, index) => (
+                                 <div className="col-lg-4 col-md-5">
+                                     <video
+                                         src={images.src}
+                                         className="w-100 shadow-1-strong rounded mb-1"
+                                         style={{ margin: '0', padding: '0', cursor: 'pointer' }}
+                                         width={images.width}
+                                         height={images.height}
+                                         onClick={() => { openModal(index) }}
+                                     />
+                                 </div>
+                             ))
+                         ) : (
+                             <div className="mb-5">
+                                 <p>Nenhuma postagem</p>
+                             </div>
+                         )}
+                     </div>*/
                     <div className="row">
-                        {posts.length > 0 ? (
-                            posts.map((images, index) => (
-                                <div className="col-lg-4 col-md-5">
-                                    <img
-                                        src={images.src}
-                                        className="w-100 shadow-1-strong rounded mb-1"
-                                        alt="Boat on Calm Water"
-                                        style={{ margin: '0', padding: '0', cursor: 'pointer' }}
-                                        width={images.width}
-                                        height={images.height}
-                                        onClick={() => { openModal(index) }}
-                                    />
+                        {dadosPosts.map((dados) => (
+                            <div key={dados.id}>
+                                <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
+                                    <video
+                                    className=""
+                                        controls
+                                        src={dados.content} width='100%' height='auto' style={{ width: '100%'}} />
+                                     
                                 </div>
-                            ))
-                        ) : (
-                            <div className="mb-5">
-                                <p>Nenhuma postagem</p>
+                                <p className="mb-5" style={{color:"black"}}>Legenda: {dados.legenda}</p>
                             </div>
-                        )}
+                        ))}
+
                     </div>
                 )}
 
@@ -515,7 +579,7 @@ function Profile() {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            
+
             </div>
 
         </div>
