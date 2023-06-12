@@ -66,6 +66,35 @@
     background: none;
 
 }
+.row-teste {
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+  
+  .gallery-item {
+    width: calc(33.33% - 10px); /* Largura de cada item (33.33% - margem) */
+    margin-bottom: 20px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: black;
+    height: 50%;
+  }
+  
+  .thumbnail-video,
+  .thumbnail-image {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  
 
 .buttons-profile {
     height: 30px;

@@ -50,19 +50,20 @@ function Profile() {
     const formData = new FormData();
     const [selectedFile, setSelectedFile] = useState(null);
     const [dadosPosts, setDadosPosts] = useState([]);
+    const [selectedContent, setSelectedContent] = useState(null); 
+    const [selectedLegenda, setSelectedLegenda] = useState(null)
 
+    // Função para abrir o modal e definir o conteúdo selecionado
+    const openModal = (content, legenda) => {
+        setSelectedContent(content);
+        setSelectedLegenda(legenda)
+        setShowModal(true);
+    };
 
 
     const handleFileSelect = (event) => {
         setSelectedFile(event.target.files[0])
     }
-
-
-    const openModal = (index) => {
-        setSelectedImage(index);
-        setShowModal(true);
-    };
-
     const closeModal = () => {
         setShowModal(false);
     };
@@ -513,70 +514,44 @@ function Profile() {
 
                 </div>
                 {profile?.creator && (
-                    /* <div className="row">
-                         {posts.length > 0 ? (
-                             posts.map((images, index) => (
-                                 <div className="col-lg-4 col-md-5">
-                                     <video
-                                         src={images.src}
-                                         className="w-100 shadow-1-strong rounded mb-1"
-                                         style={{ margin: '0', padding: '0', cursor: 'pointer' }}
-                                         width={images.width}
-                                         height={images.height}
-                                         onClick={() => { openModal(index) }}
-                                     />
-                                 </div>
-                             ))
-                         ) : (
-                             <div className="mb-5">
-                                 <p>Nenhuma postagem</p>
-                             </div>
-                         )}
-                     </div>*/
-                    <div className="row">
-                        {dadosPosts.map((dados) => (
-                            <div key={dados.id}>
-                                <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
-                                    <video
-                                    className=""
-                                        controls
-                                        src={dados.content} width='100%' height='auto' style={{ width: '100%'}} />
-                                     
+                    <div className="row-teste">
+                        {dadosPosts.length <= 0 ? (
+                            <p>Sem posts</p>
+                        ) : (
+                            dadosPosts.map((dados) => (
+                                <div key={dados.id} className="gallery-item">
+                                    {dados.content.endsWith('.mp4') ? (
+                                        <video className="thumbnail-video" poster={dados.thumbnail} onClick={() => openModal(dados.content, dados.legenda)}>
+                                            <source src={dados.content} type="video/mp4" />
+                                        </video>
+                                    ) : (
+                                        <img className="thumbnail-image" src={dados.content} alt="Imagem do post" onClick={() => openModal(dados.content, dados.legenda)} />
+                                    )}
                                 </div>
-                                <p className="mb-5" style={{color:"black"}}>Legenda: {dados.legenda}</p>
-                            </div>
-                        ))}
-
+                            ))
+                        )}
                     </div>
+
+
+
+
+
                 )}
 
                 <Modal show={showModal} onHide={closeModal} centered>
-                    <Modal.Header closeButton>
-
-                    </Modal.Header>
-                    <Modal.Body style={{ flexDirection: 'column' }} className="d-flex justify-content-center align-items-center">
-                        <img src={images2[selectedImage].src} className="img-fluid" alt="Imagem Modal" />
-                        <span>{images2[selectedImage].legenda}</span>
+                    <Modal.Body style={{ flexDirection: 'column', maxHeight: '100vh', width: '100%' }} className="d-flex justify-content-center align-items-center">
+                        {selectedContent && selectedContent.endsWith('.mp4') ? (
+                            <video src={selectedContent} controls className="img-fluid" style={{maxHeight: '50vh'}} alt="Vídeo Modal" />
+                        ) : (
+                            <img src={selectedContent} style={{maxHeight: '90vh'}} className="img-fluid" alt="Imagem Modal" />
+                        )}
+                       {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
                     </Modal.Body>
                     <Modal.Footer>
-
-                        <Button variant="secondary">
-                            Arquivar
-                        </Button>
-                        <Button variant="secondary">
-                            Editar Legenda
-                        </Button>
-                        <div className="form-check-reverse text-start form-switch">
-                            <input className="form-check-input" style={{ width: '2.5rem', height: '1.5rem' }} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                            <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Desativar Comentários</label>
-                        </div>
-                        <Button variant="danger">
-                            Excluir Foto
-                        </Button>
-
-                        <Button variant="secondary" onClick={closeModal}>
-                            Fechar
-                        </Button>
+                        <Button onClick={closeModal} variant="danger">Deletar</Button>
+                        <Button onClick={closeModal} variant="primary">Arquivar</Button>
+                        <Button onClick={closeModal} variant="primary">Fechar</Button>
+                   
                     </Modal.Footer>
                 </Modal>
 

@@ -37,6 +37,7 @@ function Postverts() {
 
     loadPosts();
   }, []);
+
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
@@ -143,10 +144,8 @@ function Postverts() {
 const changeLegenda = (event) => {
   setLegenda(event.target.value);
 };
+
   return (
-
-
-
 
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
