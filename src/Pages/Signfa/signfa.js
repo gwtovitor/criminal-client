@@ -213,11 +213,11 @@ function Signfa() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome</Form.Label>
-            <Form.Control onChange={(e) => setName(e.target.value)} type="text" placeholder="Digite seu nome" />
+            <Form.Control  maxLength={10} onChange={(e) => setName(e.target.value)} type="text" placeholder="Digite seu nome" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Sobrenome</Form.Label>
-            <Form.Control onChange={(e) => setSobrenome(e.target.value)} type="text" placeholder="Digite seu sobrenome" />
+            <Form.Control maxLength={10} onChange={(e) => setSobrenome(e.target.value)} type="text" placeholder="Digite seu sobrenome" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Data de nascimento</Form.Label>
@@ -231,7 +231,7 @@ function Signfa() {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome de Usuário</Form.Label>
-            <Form.Control onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Digite um nome de usuário" />
+            <Form.Control  maxLength={13}onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Digite um nome de usuário" />
           </Form.Group>
           <Form.Label style={{ fontWeight: 'bold' }}>Selecione seu país de residência</Form.Label>
           <GetPaises onSelectPais={handleSelectPais} />

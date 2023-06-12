@@ -84,7 +84,6 @@ function Profile() {
                 }
             })
             setUser(responseUser?.data)
-
             if (response.data) {
                 setProfile(response?.data)
                 setPosts(response?.data.posts)
@@ -141,36 +140,35 @@ function Profile() {
 
     async function seguir() {
         try {
-
-            const verificaseg = await api.get(`/profile/${idUser}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            const seguidoresUser = verificaseg.data.following
-            if (idUser !== userId && sigo != true) {
-                if (seguidoresUser.includes(userId)) {
-                    return
-                } else {
-                    newfollowing.push(userId);
-                    const _enviarseguir =  await api.patch(`/profile/${idUser}`, {
-                        following: newfollowing
-                    });
-                    setSigo(true)
-                }
-             
-            } else {
-                newfollowing.pop(userId);
-                const _enviarseguir = await api.patch(`/profile/${idUser}`, {
-                    following: newfollowing
-                });
-                setSigo(false)
+          const verificaseg = await api.get(`/profile/${idUser}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
             }
-        }catch(error){
-
-        }
+          });
+          const seguidoresUser = verificaseg.data.following;
       
-    }
+          if (idUser !== userId && sigo !== true) {
+            if (seguidoresUser.includes(userId)) {
+              return;
+            } else {
+              const newfollowingUpdated = [...newfollowing, userId];
+              const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                following: newfollowingUpdated
+              });
+              setSigo(true);
+            }
+          } else {
+            const newfollowingUpdated = newfollowing.filter(id => id !== userId);
+            const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+              following: newfollowingUpdated
+            });
+            setSigo(false);
+          }
+        } catch (error) {
+          // Trate o erro adequadamente
+        }
+      }
+      
 
 
     const images2 = [
@@ -213,8 +211,6 @@ function Profile() {
 
         })
         window.location.reload();
-
-
         setEditingProfile(false);
     };
 
@@ -301,12 +297,13 @@ function Profile() {
                 alignItems: 'center',
                 flexDirection: 'column',
                 display: 'flex',
-                border: 'none'
+                border: 'solid white',
+                
             }}>
                 <div className="div-central-profile">
                     <div className="seguidores-posts-likes">
                         <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile?.followers)}</span> </span>
-                        <span>Likes <br /> <span style={{ fontWeight: 'normal' }}>100k</span>   </span>
+                        <span>Seguindo <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile?.following)}</span>   </span>
                         <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile.posts)}</span></span>
                     </div>
                     <div className="dados-profile">
@@ -380,7 +377,7 @@ function Profile() {
                                 <div className="buttons-profile-wrapper">
                                     {isYou ? (null)
                                     : (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
-                                    <span className="buttons-name-profile" style={{ fontWeight: sigo? 'normal' : 'bold', fontSize: sigo? '12px': '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
+                                    <span className="buttons-name-profile" style={{ fontWeight: sigo? 'normal' : 'bold', fontSize: sigo? '0.6rem': '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
                                 </Button>
                                     <Button className="buttons-profile m-2" variant="secondary" type="submit">
                                         <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>

@@ -21,6 +21,11 @@ function Main() {
         localStorage.removeItem('cc_p')
         localStorage.removeItem('cc_t')
     }
+    const updateUrlAndReload = (url) => {
+        navigate(url);
+        window.location.reload();
+      };
+      
     return (
         <div className='row'>
             <div className='col col-lg-3'>
@@ -46,7 +51,7 @@ function Main() {
                                 <MenuItem href="/assinantes">Assinantes</MenuItem>
                                 <MenuItem href="/assinando">Assinando</MenuItem>
                                 <MenuItem href="/favoritos">Galeria</MenuItem>
-                                <MenuItem href={`/profile/${id}`}>Perfil</MenuItem>
+                                <MenuItem onClick={() => updateUrlAndReload(`/profile/${id}`)}>Perfil</MenuItem>
                                 <MenuItem href="/suporte">Suporte CC</MenuItem>
                             </SubMenu>
 
@@ -101,7 +106,7 @@ function Main() {
                             <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{ color: 'black' }} className='me-2' />My Criminal</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" component={Link} to={`/profile/${id}`}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
+                            <h5><Link class="nav-link active" aria-current="page" component={Link}  onClick={() => updateUrlAndReload(`/profile/${id}`)}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
                         </li>
                         <li class="nav-item">
                             <h5><Link class="nav-link active" aria-current="page" onClick={() => {logoff()}} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>

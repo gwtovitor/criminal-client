@@ -4,59 +4,59 @@ import React, { useState } from "react";
 import './loginfa.css'
 import api from '../../Services/api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Loginfa() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function enviarLogin(event) {
 
-        event.preventDefault();
-        
-        if (email === "" || password === "") {
-          // Verifica se algum campo está vazio
-          toast.error("Preencha todos os campos", {
-            // Exibe uma mensagem de erro
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
+      event.preventDefault();
+      
+      if (email === "" || password === "") {
+        toast.error("Preencha todos os campos", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      } else {
+        try {
+          const response = await api.post("/login", {
+            login: email,
+            password: password,
           });
-          return;
-        } else {
-          try {
-            const response = await api.post("/login", {
-              login: email,
-              password: password,
+         
+          if(response.data.token){
+            localStorage.setItem("cc_t",response.data.token);
+            localStorage.setItem("cc_p", '647d330acbd28f4089461af2')
+            navigate('../')
+          }
+          
+        } catch (error) {
+          if (error.message === 'Request failed with status code 404'){
+            toast.error("Usuário ou senha inválido", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
             });
-            console.log(response.data)
-           
-            if(response.data.token){
-              localStorage.setItem("token",response.data.token);
-              console.log(response.data.token)
-            }
-            
-          } catch (error) {
-            if (error.message === 'Request failed with status code 404'){
-              toast.error("Usuário ou senha inválido", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              });
-            }
           }
         }
       }
+    }
       
 
     return (
