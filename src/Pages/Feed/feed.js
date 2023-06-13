@@ -11,6 +11,7 @@ import lidia from './Images/lidia.jpg'
 import jr from './Images/junior.jpg'
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import api from '../../Services/api';
 
 
 function Feed() {
@@ -124,30 +125,41 @@ function Feed() {
                     Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
                 }
             },
-            {
-                "_id": "6",
-                "author": "Voce Sabia?",
-                "profile": vocesabia,
-                "user": "vc_sabia",
-                "place": "",
-                "video": "https://assets.mixkit.co/videos/preview/mixkit-winter-fashion-cold-looking-woman-concept-video-39874-large.mp4",
-                "description": "Descrição do post 3",
-                "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30,
-                "comentarios": {
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "SADASDASD", "picture": vocesabia },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "ASDSADASDASD demais", "picture": luiz },
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
 
-                }
-            }
         ]
 
+    const montaFeed = async (id) => {
+        const posts = await api.get(`feed/${id}`);
+
+        posts.data?.forEach(p => {
+            const post = montaPost(p);
+        })
+    }
+
+    const montaPost = async (post) => {
+        const postData = await api.get(`/post/${post}`);
+        const profileData = await api.get(`profile/${postData.data.user}`)
+
+        const postObj = {
+            "_id": postData.data._id,
+            "profileId": profileData.data._id,
+            "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
+            "profile": vocesabia,
+            "user": "vc_sabia",
+            "place": "",
+            "content": postData.data.content,
+            "description": postData.data.legenda,
+            "hashtags": "#hashtag5 #hashtag6",
+            "likes": postData.data.likes.length,
+            "comentarios": postData.data.comments
+        }
+
+        setFeed(feed => [...feed, postObj]);
+    }
 
     useEffect(() => {
-        setFeed(json);
+        montaFeed(localStorage.cc_p);
+
         function handleScroll() {
             setPosition(window.pageYOffset);
         }
@@ -156,6 +168,7 @@ function Feed() {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
+
     }, []);
 
     function handleLike(id) {
@@ -175,7 +188,7 @@ function Feed() {
                 {feed.map((post) => (
                     <article key={post._id}>
                         <header>
-                            <div className="user-info" onClick={()=>{navigate(`profile/${post._id}`)}}>
+                            <div className="user-info" onClick={() => { navigate(`profile/${post.profileId}`) }}>
                                 <div className="user-info-row">
                                     <img
                                         src={post.profile}
@@ -195,9 +208,9 @@ function Feed() {
                         </header>
 
                         {post.image && (
-                             <div style={{ position: "relative" }}>
+                            <div style={{ position: "relative" }}>
                                 <div style={{ position: "absolute", top: '60%', left: "3%" }}>
-                                    <h6 style={{color:'rgba(255, 255, 255, 0.6)', opacity:'0.8', cursor:'default', userSelect:'none'}}>CC@{post.user}</h6>
+                                    <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
                                 </div>
                                 <img style={{ width: '100%' }} src={post.image} alt="A imagem do Post" />
                             </div>
@@ -209,10 +222,10 @@ function Feed() {
                             </p>
                         )}
 
-                        {post.video && (
+                        {post.content && (
                             <div style={{ position: "relative" }}>
-                                  <div style={{ position: "absolute", top: '60%', left: "3%" }}>
-                                    <h6 style={{color:'rgba(255, 255, 255, 0.6)', opacity:'0.8', cursor:'default', userSelect:'none'}}>CC@{post.user}</h6>
+                                <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                    <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
                                 </div>
                                 <video className='videoplayer-feed' controls>
                                     <source src={post.video} type="video/mp4" />
