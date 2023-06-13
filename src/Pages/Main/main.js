@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './main.css';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
@@ -13,19 +13,45 @@ import { Send } from '@mui/icons-material';
 import { SendOutlined } from '@mui/icons-material';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
+import api from '../../Services/api';
+import Swal from 'sweetalert2';
+
 
 function Main() {
     const navigate = useNavigate();
     const id = localStorage.getItem('cc_p');
+    const [isCreator, setIscCreator] = useState(false)
+    const token = localStorage.getItem('cc_t')
+
+
     function logoff() {
         localStorage.removeItem('cc_p')
         localStorage.removeItem('cc_t')
+        navigate('../home')
     }
+
     const updateUrlAndReload = (url) => {
         navigate(url);
         window.location.reload();
-      };
-      
+    };
+
+    async function getDados() {
+        try {
+            const response = await api.get(`/profile/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            setIscCreator(response?.data.creator)
+
+        } catch (error) {
+            return
+        }
+    }
+    useEffect(() => {
+        getDados()
+    }, []);
+
     return (
         <div className='row'>
             <div className='col col-lg-3'>
@@ -35,11 +61,14 @@ function Main() {
                             <MenuItem href="/verts" icon={<PersonalVideoIcon style={{ color: 'black' }} />}>Verts</MenuItem>
                             <MenuItem href="/" icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
                             <MenuItem href="/mensagens" icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
-                            <SubMenu icon={<AddBoxOutlined style={{ color: 'black' }} />} label="Publicar">
-                                <MenuItem href="/postfeed">Feed</MenuItem>
-                                <MenuItem href="/postverts">Verts</MenuItem>
-                                <MenuItem href="/postmsg">Mensagens</MenuItem>
-                            </SubMenu>
+                            {isCreator ? (
+                                <SubMenu icon={<AddBoxOutlined style={{ color: 'black' }} />} label="Publicar">
+                                    <MenuItem href="/postfeed">Feed</MenuItem>
+                                    <MenuItem href="/postverts">Verts</MenuItem>
+                                    <MenuItem href="/postmsg">Mensagens</MenuItem>
+
+                                </SubMenu>
+                            ) : (null)}
                             <SubMenu icon={<AttachMoneyIcon style={{ color: 'black' }} />} label="Finanças">
                                 <MenuItem href="/balanco">Balanço</MenuItem>
                                 <MenuItem href="/compras">Compras</MenuItem>
@@ -53,6 +82,8 @@ function Main() {
                                 <MenuItem href="/favoritos">Galeria</MenuItem>
                                 <MenuItem onClick={() => updateUrlAndReload(`/profile/${id}`)}>Perfil</MenuItem>
                                 <MenuItem href="/suporte">Suporte CC</MenuItem>
+                                <MenuItem onClick={() => { logoff() }}>Sair</MenuItem>
+
                             </SubMenu>
 
 
@@ -68,7 +99,7 @@ function Main() {
             <footer className="footer border-top border-dark-subtle border-2">
                 <IconButton component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
                 <IconButton component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
-                <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton>
+                {isCreator ? (<> <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton></>) : (null)}
                 <IconButton component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{ color: 'black' }} /></IconButton>
 
@@ -88,6 +119,7 @@ function Main() {
                         <Link className='btn btn-info text-white  m-1' component={Link} to="/verts">Mensagens</Link>
                     </div>
                 </div>
+
             </div>
             <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
                 <div class="offcanvas-header">
@@ -106,10 +138,10 @@ function Main() {
                             <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{ color: 'black' }} className='me-2' />My Criminal</a></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" component={Link}  onClick={() => updateUrlAndReload(`/profile/${id}`)}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
+                            <h5><Link class="nav-link active" aria-current="page" component={Link} onClick={() => updateUrlAndReload(`/profile/${id}`)}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
                         </li>
                         <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" onClick={() => {logoff()}} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>
+                            <h5><Link class="nav-link active" aria-current="page" onClick={() => { logoff() }} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>
                         </li>
                     </ul>
                 </div>

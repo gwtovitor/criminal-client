@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
-import imageCompression from 'browser-image-compression';
+
 
 function Profile() {
     const { id } = useParams();
@@ -105,7 +105,7 @@ function Profile() {
                 setEditingFunction(response.data.role)
                 setIscCreator(response?.data.creator)
                 setNewFallowing(respondeUserFollowers.data.following)
-                
+
             }
 
         } catch (error) {
@@ -128,8 +128,8 @@ function Profile() {
                 posts.map(async (id) => {
                     try {
                         const response = await api.get(`/post/${id}`);
-                        const { content, legenda, likes, comments, createdAt } = response.data;
-                        return { id, content, legenda, likes, comments, createdAt };
+                        const { content, legenda, likes, comments, createdAt, price } = response.data;
+                        return { id, content, legenda, likes, comments, createdAt, price };
                     } catch (error) {
                         console.log(`Erro ao obter dados do post ${id}:`, error);
                         return null;
@@ -207,17 +207,17 @@ function Profile() {
                 });
                 const verificaseg = await api.get(`/profile/${userId}`, {
                     headers: {
-                      'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`
                     }
-                  });
-                  
-                  const listaSeguidores = verificaseg.data.followers;
-                  const newSeguidores = listaSeguidores.filter(id => id !== userId);
-                  
-                  const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
+                });
+
+                const listaSeguidores = verificaseg.data.followers;
+                const newSeguidores = listaSeguidores.filter(id => id !== userId);
+
+                const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
                     followers: newSeguidores
-                  });
-                  
+                });
+
                 setSigo(false);
             }
         } catch (error) {
@@ -546,19 +546,43 @@ function Profile() {
                             ) : (
                                 dadosPosts.map((dados) => (
                                     <div key={dados.id} className="col-md-4 mb-4">
+                                      <div className="square-thumbnail">
                                         {dados.content.endsWith('.mp4') ? (
-                                            <div className="square-thumbnail">
-                                                <video className="thumbnail-video" poster={dados.thumbnail} onClick={() => openModal(dados.content, dados.legenda)}>
-                                                    <source src={dados.content} type="video/mp4" />
-                                                </video>
-                                            </div>
+                                          <div className="thumbnail-wrapper">
+                                            <video
+                                              className={dados.price !== '0,00' ? 'thumbnail-video blurred' : 'thumbnail-video'}
+                                              poster={dados.thumbnail}
+                                              onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
+                                            >
+                                              <source src={dados.content} type="video/mp4" />
+                                            </video>
+                                            {dados.price !== '0,00' && (
+                                              <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                Para visualizar, você precisa pagar o valor de {dados.price}
+                                              </div>
+                                            )}
+                                          </div>
                                         ) : (
-                                            <div className="square-thumbnail">
-                                                <img className="thumbnail-image" src={dados.content} alt="Imagem do post" onClick={() => openModal(dados.content, dados.legenda)} />
-                                            </div>
+                                          <div className="thumbnail-wrapper">
+                                            <img
+                                              className={dados.price !== '0,00' ? 'thumbnail-image blurred' : 'thumbnail-image'}
+                                              src={dados.content}
+                                              alt="Imagem do post"
+                                              onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
+                                            />
+                                            {dados.price !== '0,00' && (
+                                              <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                Para visualizar, você precisa pagar o valor de {dados.price}
+                                              </div>
+                                            )}
+                                          </div>
                                         )}
+                                      </div>
                                     </div>
-                                ))
+                                  ))
+                                  
+                                  
+
                             )}
                         </div>
                     </div>
