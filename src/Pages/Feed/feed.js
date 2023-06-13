@@ -19,145 +19,59 @@ function Feed() {
     const [position, setPosition] = useState(0);
     const [newComment, setNewComment] = useState('');
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const handleCommentChange = (event) => {
         setNewComment(event.target.value);
     };
-
 
     const handleAddComment = (comment) => {
         // Logic to add the comment
     };
 
 
-    const json =
-        [
-            {
-                "_id": "647ff60aa6e855ec74c90c44",
-                "profile": vitor,
-                "author": "Vitor Augusto",
-                "user": "gwtovitor_",
-                "place": "Pernambuco, Brasil",
-                "image": "https://picsum.photos/200",
-                "description": "Descrição do post 1",
-                "hashtags": "#hashtag1 #hashtag2",
-                "likes": 10,
-                "comentarios": {
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
 
-
-                }
-            },
-            {
-                "_id": "6480040fa6e855ec74c90ce0",
-                "author": "Joseraldo Martins",
-                "profile": jr,
-                "user": "joseraldo_martins",
-                "place": "Massachusetts, Estados Unidos",
-                "image": "https://picsum.photos/300",
-                "description": "Descrição do post 2",
-                "hashtags": "#hashtag3 #hashtag4",
-                "likes": 20,
-                "comentarios": {
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
-                }
-            },
-            {
-                "_id": "64757956d757583d23697953",
-                "author": "Luiz",
-                "profile": luiz,
-                "user": "luiz_",
-                "place": "Washington, D.C, Estados Unidos",
-                "image": "https://picsum.photos/700",
-                "description": "Descrição do post 3",
-                "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30,
-                "comentarios": {
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
-                }
-            },
-            {
-                "_id": "4",
-                "author": "Lidia Beatriz",
-                "profile": lidia,
-                "user": "lidiabzz",
-                "place": "Pernambuco, Brasil",
-                "post": "Ola tudo bem? boa tarde",
-                "description": "",
-                "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30,
-                "comentarios": {
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
-                }
-            }
-            ,
-            {
-                "_id": "5",
-                "author": "Voce Sabia?",
-                "profile": vocesabia,
-                "user": "vc_sabia",
-                "place": "",
-                "video": "https://edisciplinas.usp.br/pluginfile.php/5196097/mod_resource/content/1/Teste.mp4",
-                "description": "Descrição do post 3",
-                "hashtags": "#hashtag5 #hashtag6",
-                "likes": 30,
-                "comentarios": {
-                    Junior: { "id": 4, "curtidas": 1, "comentario": "Isso ai", "picture": jr },
-                    Lidia: { "id": 2, "curtidas": 5, "comentario": ":D", "picture": lidia },
-                    Luiz: { "id": 3, "curtidas": 22, "comentario": "Top demais", "picture": luiz },
-                    Vitor: { "id": 1, "curtidas": 12, "comentario": "que bom", "picture": vitor },
-                    Lucas: { "id": 5, "curtidas": 3, "comentario": "kkkkkkkkkk", "picture": vocesabia },
-                }
-            },
-
-        ]
-
-    const montaFeed = async (id) => {
+    async function montaFeed(id) {
         const posts = await api.get(`feed/${id}`);
+        const newFeed = [...feed]; // Cria uma cópia do array feed
 
-        posts.data?.forEach(p => {
-            const post = montaPost(p);
-        })
-    }
+        for (const p of posts.data) {
+            try {
+                const postData = await api.get(`/post/${p}`);
+                const profileData = await api.get(`profile/${postData.data.user}`);
 
-    const montaPost = async (post) => {
-        const postData = await api.get(`/post/${post}`);
-        const profileData = await api.get(`profile/${postData.data.user}`)
+                const postObj = {
+                    "_id": postData.data._id,
+                    "price": postData.data.price,
+                    "profileId": profileData.data._id,
+                    "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
+                    "profilePicture": profileData.data.img,
+                    "user": "vc_sabia",
+                    "place": "",
+                    "content": postData.data.content,
+                    "description": postData.data.legenda,
+                    "hashtags": "#hashtag5 #hashtag6",
+                    "likes": postData.data.likes.length,
+                    "comentarios": postData.data.comments,
+                    "createdAt": postData.data.createdAt // Adicione a propriedade createdAt ao objeto postObj
+                };
 
-        const postObj = {
-            "_id": postData.data._id,
-            "profileId": profileData.data._id,
-            "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
-            "profile": vocesabia,
-            "user": "vc_sabia",
-            "place": "",
-            "content": postData.data.content,
-            "description": postData.data.legenda,
-            "hashtags": "#hashtag5 #hashtag6",
-            "likes": postData.data.likes.length,
-            "comentarios": postData.data.comments
+                newFeed.push(postObj); // Adiciona o novo objeto ao array newFeed
+            } catch (error) {
+            }
         }
 
-        setFeed(feed => [...feed, postObj]);
+        // Ordena o array newFeed com base na propriedade createdAt, dos mais novos para os mais antigos
+        newFeed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        setFeed(newFeed); // Atualiza o estado do array feed com o novoFeed
     }
 
+
+
+
     useEffect(() => {
+
         montaFeed(localStorage.cc_p);
 
         function handleScroll() {
@@ -175,7 +89,7 @@ function Feed() {
         // implementation
     }
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    ;
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -185,13 +99,13 @@ function Feed() {
 
         <div className="container-feed">
             <section id="post-list">
-                {feed.map((post) => (
-                    <article key={post._id}>
+                {feed.map((post, index) => (
+                    <article key={index}>
                         <header>
                             <div className="user-info" onClick={() => { navigate(`profile/${post.profileId}`) }}>
                                 <div className="user-info-row">
                                     <img
-                                        src={post.profile}
+                                        src={post.profilePicture}
                                         alt="Foto do usuário"
                                         className="user-avatar"
                                     />
@@ -200,6 +114,12 @@ function Feed() {
                                     <div className="user-info-column">
                                         <span>{post.author}</span>
                                         <span style={{ fontWeight: "normal" }}>{post.place}</span>
+                                        <span>
+                                            {post.createdAt}
+                                            {new Date(post.createdAt).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                            {' '}
+                                            {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
 
                                     </div>
                                 </div>
@@ -207,31 +127,38 @@ function Feed() {
                             <img src={more} alt="Mais" />
                         </header>
 
-                        {post.image && (
+                        {post.content.endsWith('.mp4') ? (
+
+
                             <div style={{ position: "relative" }}>
+                                {post.price !== '0,00' && (
+                                    <div className="price-overlay">
+                                        Você precisa pagar R${post.price} para liberar o conteúdo
+                                    </div>
+                                )}
                                 <div style={{ position: "absolute", top: '60%', left: "3%" }}>
                                     <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
                                 </div>
-                                <img style={{ width: '100%' }} src={post.image} alt="A imagem do Post" />
-                            </div>
-                        )}
-
-                        {post.post && (
-                            <p style={{ paddingLeft: "20px", paddingTop: "20px" }}>
-                                {post.post}
-                            </p>
-                        )}
-
-                        {post.content && (
-                            <div style={{ position: "relative" }}>
-                                <div style={{ position: "absolute", top: '60%', left: "3%" }}>
-                                    <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
-                                </div>
-                                <video className='videoplayer-feed' controls>
-                                    <source src={post.video} type="video/mp4" />
+                                <video className={`${post.price !== '0,00' ? 'blur-effect' : ''
+                                    } videoplayer-feed`} controls>
+                                    <source src={post.content} type="video/mp4" />
                                 </video>
                             </div>
-                        )}
+                        ) :
+                            (
+                                <div style={{ position: "relative" }}>
+                                    {post.price !== '0,00' && (
+                                        <div className="price-overlay">
+                                            Você precisa pagar R${post.price} para liberar o conteúdo
+                                        </div>
+                                    )}
+                                    <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                        <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
+                                    </div>
+                                    <img style={{ width: '100%' }} className={`${post.price !== '0,00' ? 'blur-effect' : ''
+                                        }`} src={post.content} alt="A imagem do Post" />
+                                </div>
+                            )}
 
                         <footer>
                             <div className="actions">

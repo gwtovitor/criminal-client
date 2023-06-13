@@ -193,16 +193,11 @@ function Signcriador() {
               firstName: name,
               lastName: sobrenome
             })
-          
           } catch (error) {
-            return
+            console.log(error)
         }
-        console.log(response)
-        if(response.data.token){
-          console.log('asod')
-          localStorage.setItem('token',response.data.token)
           navigate('/home')
- }
+
         
 
       } catch (error) {

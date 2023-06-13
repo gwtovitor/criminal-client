@@ -35,9 +35,12 @@ function Loginfa() {
             password: password,
           });
          
-          if(response.data.token){
-            localStorage.setItem("cc_t",response.data.token);
-            localStorage.setItem("cc_p", '647d330acbd28f4089461af2')
+          if (response.data.token) {
+            const user = await api.get(`user/username/${email}`);
+            const profile = await api.get(`profile/user/${user.data._id}`);
+  
+            localStorage.setItem("cc_t", response.data.token);
+            localStorage.setItem("cc_p", profile.data._id)
             navigate('../')
           }
           

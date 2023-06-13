@@ -102,6 +102,7 @@ function Postverts() {
                 user: idUser,
                 content: videoPath,
                 legenda: legenda
+
             })
             console.log(postandoVerts)
             const idPost = postandoVerts.data._id
@@ -160,7 +161,7 @@ const changeLegenda = (event) => {
               <input
                 id='video-upload'
                 type='file'
-                accept='video/*'
+                accept='video/*, image/*'
                 style={{ display: 'none' }}
                 onChange={handleFileSelect}
               />

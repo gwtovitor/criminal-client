@@ -50,7 +50,7 @@ function Profile() {
     const formData = new FormData();
     const [selectedFile, setSelectedFile] = useState(null);
     const [dadosPosts, setDadosPosts] = useState([]);
-    const [selectedContent, setSelectedContent] = useState(null); 
+    const [selectedContent, setSelectedContent] = useState(null);
     const [selectedLegenda, setSelectedLegenda] = useState(null)
 
     // Função para abrir o modal e definir o conteúdo selecionado
@@ -105,6 +105,7 @@ function Profile() {
                 setEditingFunction(response.data.role)
                 setIscCreator(response?.data.creator)
                 setNewFallowing(respondeUserFollowers.data.following)
+                
             }
 
         } catch (error) {
@@ -186,13 +187,37 @@ function Profile() {
                     const _enviarseguir = await api.patch(`/profile/${idUser}`, {
                         following: newfollowingUpdated
                     });
+                    const verificaseg = await api.get(`/profile/${userId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const listaSeguidores = verificaseg.data.followers
+                    const newSeguidores = [...listaSeguidores, userId]
+                    const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
+                        followers: newSeguidores
+                    });
                     setSigo(true);
+
                 }
             } else {
                 const newfollowingUpdated = newfollowing.filter(id => id !== userId);
                 const _enviarseguir = await api.patch(`/profile/${idUser}`, {
                     following: newfollowingUpdated
                 });
+                const verificaseg = await api.get(`/profile/${userId}`, {
+                    headers: {
+                      'Authorization': `Bearer ${token}`
+                    }
+                  });
+                  
+                  const listaSeguidores = verificaseg.data.followers;
+                  const newSeguidores = listaSeguidores.filter(id => id !== userId);
+                  
+                  const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
+                    followers: newSeguidores
+                  });
+                  
                 setSigo(false);
             }
         } catch (error) {
@@ -514,44 +539,47 @@ function Profile() {
 
                 </div>
                 {profile?.creator && (
-                    <div className="row-teste">
-                        {dadosPosts.length <= 0 ? (
-                            <p>Sem posts</p>
-                        ) : (
-                            dadosPosts.map((dados) => (
-                                <div key={dados.id} className="gallery-item">
-                                    {dados.content.endsWith('.mp4') ? (
-                                        <video className="thumbnail-video" poster={dados.thumbnail} onClick={() => openModal(dados.content, dados.legenda)}>
-                                            <source src={dados.content} type="video/mp4" />
-                                        </video>
-                                    ) : (
-                                        <img className="thumbnail-image" src={dados.content} alt="Imagem do post" onClick={() => openModal(dados.content, dados.legenda)} />
-                                    )}
-                                </div>
-                            ))
-                        )}
+                    <div className="container ">
+                        <div className="row mb-5">
+                            {dadosPosts.length <= 0 ? (
+                                <p>Sem posts</p>
+                            ) : (
+                                dadosPosts.map((dados) => (
+                                    <div key={dados.id} className="col-md-4 mb-4">
+                                        {dados.content.endsWith('.mp4') ? (
+                                            <div className="square-thumbnail">
+                                                <video className="thumbnail-video" poster={dados.thumbnail} onClick={() => openModal(dados.content, dados.legenda)}>
+                                                    <source src={dados.content} type="video/mp4" />
+                                                </video>
+                                            </div>
+                                        ) : (
+                                            <div className="square-thumbnail">
+                                                <img className="thumbnail-image" src={dados.content} alt="Imagem do post" onClick={() => openModal(dados.content, dados.legenda)} />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
-
-
-
-
-
                 )}
+
+
 
                 <Modal show={showModal} onHide={closeModal} centered>
                     <Modal.Body style={{ flexDirection: 'column', maxHeight: '100vh', width: '100%' }} className="d-flex justify-content-center align-items-center">
                         {selectedContent && selectedContent.endsWith('.mp4') ? (
-                            <video src={selectedContent} controls className="img-fluid" style={{maxHeight: '50vh'}} alt="Vídeo Modal" />
+                            <video src={selectedContent} controls className="img-fluid" style={{ maxHeight: '50vh' }} alt="Vídeo Modal" />
                         ) : (
-                            <img src={selectedContent} style={{maxHeight: '90vh'}} className="img-fluid" alt="Imagem Modal" />
+                            <img src={selectedContent} style={{ maxHeight: '90vh' }} className="img-fluid" alt="Imagem Modal" />
                         )}
-                       {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
+                        {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={closeModal} variant="danger">Deletar</Button>
                         <Button onClick={closeModal} variant="primary">Arquivar</Button>
                         <Button onClick={closeModal} variant="primary">Fechar</Button>
-                   
+
                     </Modal.Footer>
                 </Modal>
 

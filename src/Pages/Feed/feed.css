@@ -19,7 +19,21 @@ section#post-list article {
     border-bottom: 1px solid #ddd;
     margin-top: 30px;
 }
-
+.blur-effect {
+    filter: blur(20px); /* Exemplo de efeito de embaçamento */
+    
+  }
+.price-overlay {
+    
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  
 .user-avatar {
     border-radius: 50%;
     width: 40px;

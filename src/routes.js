@@ -6,7 +6,11 @@ import Signfa from './Pages/Signfa/signfa'
 import Signcriador from './Pages/Signcriador/signcriador'
 import Feed from './Pages/Feed/feed'
 import Financas from './Pages/Financas';
-import MyCriminal from './Pages/MyCriminal';
+import Seguindo from './Pages/MyCriminal/Seguindo'
+import Seguidores from './Pages/MyCriminal/Seguidores'
+import Bloqueados from './Pages/MyCriminal/Bloqueados'
+import Assinado from './Pages/MyCriminal/Assinado'
+import Assinantes from './Pages/MyCriminal/Assinantes'
 import Compras from './Pages/Financas/Compras';
 import Balanco from './Pages/Financas/Balanco';
 import Banco from './Pages/Financas/Banco'
@@ -42,11 +46,11 @@ function RoutesApp() {
                     <Route path='/banco' element={<Banco />} />
                     <Route path='/verts' element={<Verts />}    />
                     <Route path='/mensagens' element={<Mensagens />} />
-                    <Route path='/assinando' element={<MyCriminal page='Assinando' />} />
-                    <Route path='/assinantes' element={<MyCriminal page='Assinantes' />} />
-                    <Route path='/seguindo' element={<MyCriminal page='Seguindo' />} />
-                    <Route path='/seguidores' element={<MyCriminal page='Seguidores' />} />
-                    <Route path='/bloqueados' element={<MyCriminal page='Bloqueados' />} />
+                    <Route path='/assinando' element={<Assinado/>} />
+                    <Route path='/assinantes' element={<Assinantes/>} />
+                    <Route path='/seguindo' element={<Seguindo/>} />
+                    <Route path='/seguidores' element={<Seguidores/>} />
+                    <Route path='/bloqueados' element={<Bloqueados/>} />
                     <Route path='/postfeed' element={<Postfeed />} />
                     <Route path='/postverts' element={<Postverts />} />
                     <Route path='/postmsg' element={<PostMsg />} />
