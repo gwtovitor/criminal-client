@@ -28,7 +28,6 @@ function Postverts() {
             'Authorization': `Bearer ${token}`
           },
         });
-        console.log(response.data.posts);
         setNewPosts(response.data.posts);
       } catch (error) {
         console.log(error);
@@ -91,7 +90,6 @@ function Postverts() {
         const response = await api.post("/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
-        console.log(response.data)
         const videoPath = response.data.file.location
 
         try {
@@ -104,7 +102,6 @@ function Postverts() {
             legenda: legenda
 
           })
-          console.log(postandoVerts)
           const idPost = postandoVerts.data._id
 
           const newPostsWithId = [...newPosts, idPost];
@@ -115,7 +112,6 @@ function Postverts() {
               },
               posts: newPostsWithId
             });
-            console.log(enviandoVerts);
           } catch (error) {
             console.log(error);
           }
@@ -152,16 +148,23 @@ function Postverts() {
       <div className='row mb-4'>
         <strong>Publicar no Verts</strong>
       </div>
-
+    
       <div className='row'>
+      <div className='row mt-2'>
+          <div className='col-12'>
+            <textarea className='form-control' placeholder='Legenda' onChange={changeLegenda} aria-label='With textarea'></textarea>
+          </div>
+        </div>
         <div className='row mt-3'>
+          
           <div className='col-12 d-grid'>
+            
             <label className='btn btn-info text-white' htmlFor='video-upload'>
               Video
               <input
                 id='video-upload'
                 type='file'
-                accept='video/*, image/*'
+                accept='video/*'
                 style={{ display: 'none' }}
                 onChange={handleFileSelect}
               />
@@ -169,11 +172,7 @@ function Postverts() {
             </label>
           </div>
         </div>
-        <div className='row mt-2'>
-          <div className='col-12'>
-            <textarea className='form-control' placeholder='Legenda' onChange={changeLegenda} aria-label='With textarea'></textarea>
-          </div>
-        </div>
+        
 
         {videoURL && (
           <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>

@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import './vertsvideo.css'
 import "react-datepicker/dist/react-datepicker.css";
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
-import api from "../../Services/api";
+import api from '../../Services/api';
 import { toast } from "react-toastify";
 
 function Postfeed() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [legenda, setLegenda] = useState('')
   const idUser = localStorage.getItem('cc_p');
   const token = localStorage.getItem('cc_t')
-  const [videoURL, setVideoURL] = useState('');
+  const [fileUrl, setfileUrl] = useState('');
   const [newPosts, setNewPosts] = useState([])
+  const [price, setPrice] = useState('0,00')
 
   useEffect(() => {
     async function loadPosts() {
@@ -28,7 +29,6 @@ function Postfeed() {
             'Authorization': `Bearer ${token}`
           },
         });
-        console.log(response.data.posts);
         setNewPosts(response.data.posts);
       } catch (error) {
         console.log(error);
@@ -37,26 +37,6 @@ function Postfeed() {
 
     loadPosts();
   }, []);
-
-
-  const changeLegenda = (event) => {
-    setLegenda(event.target.value);
-  };
-
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-
-  const calcularAcrescimo = () => {
-    const valor = parseFloat(inputValue);
-    if (!isNaN(valor)) {
-      const acrescimo = valor * 0.05;
-      const resultado = valor + acrescimo;
-      return resultado.toFixed(2);
-    }
-    return '';
-  };
 
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
@@ -90,6 +70,21 @@ function Postfeed() {
     }
   };
 
+
+  const handleFileSelect = (event) => {
+    // we only get the selected file from input element's event
+    try {
+      setSelectedFile(event.target.files[0])
+      const file = event.target.files[0];
+      const fileUrl = URL.createObjectURL(file);
+      setfileUrl(fileUrl);
+    }
+    catch {
+
+    }
+
+  }
+
   async function postarVerts() {
     if (selectedFile != null) {
       const formData = new FormData();
@@ -101,19 +96,19 @@ function Postfeed() {
         const response = await api.post("/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
-        console.log(response.data)
         const videoPath = response.data.file.location
 
         try {
-          const postandoVerts = await api.post(`/post/`, {
+          const postandoVerts = await api.post(`/post`, {
             headers: {
               'Authorization': `Bearer ${token}`
             },
             user: idUser,
             content: videoPath,
-            legenda: legenda
+            legenda: legenda,
+            price: price
+
           })
-          console.log(postandoVerts)
           const idPost = postandoVerts.data._id
 
           const newPostsWithId = [...newPosts, idPost];
@@ -124,7 +119,6 @@ function Postfeed() {
               },
               posts: newPostsWithId
             });
-            console.log(enviandoVerts);
           } catch (error) {
             console.log(error);
           }
@@ -148,38 +142,64 @@ function Postfeed() {
         theme: "light",
       });
     }
+
+
+  };
+  const changeLegenda = (event) => {
+    setLegenda(event.target.value);
+  };
+
+  const changePrice = (event) => {
+    setPrice(event.target.value)
+  }
+  function mascaraMoeda(event) {
+    const onlyDigits = event.target.value
+      .split("")
+      .filter(s => /\d/.test(s))
+      .join("")
+      .padStart(3, "0")
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
+    event.target.value = maskCurrency(digitsFloat)
   }
 
-  const handleFileSelect = (event) => {
-    // we only get the selected file from input element's event
-    setSelectedFile(event.target.files[0])
-    const file = event.target.files[0];
-    const videoURL = URL.createObjectURL(file);
-    setVideoURL(videoURL);
-
+  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+    const valorNew = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency
+    }).format(valor)
+    setPrice(valorNew)
+    return valorNew
   }
 
 
+ 
+  const getFileType = (file) => {
+    console.log(file.type)
+  };
 
   return (
+
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
       <div className='row mb-4'>
         <strong>Publicar no Feed</strong>
       </div>
+
       <div className='row'>
-        <div className='row'>
+        <div className='row mt-2'>
           <div className='col-12'>
-            <textarea class="form-control" onChange={changeLegenda} placeholder="Legenda" aria-label="With textarea"></textarea>
+            <textarea className='form-control' placeholder='Legenda' onChange={changeLegenda} aria-label='With textarea'></textarea>
           </div>
         </div>
         <div className='row mt-3'>
-          <div className='d-grid'>
+
+          <div className='col-12 d-grid'>
+
             <label className='btn btn-info text-white' htmlFor='video-upload'>
-              Arquivos
+              Midia
               <input
                 id='video-upload'
                 type='file'
-                accept="audio/*, video/*, image/*"
+                accept='video/mp4, image/*'
                 style={{ display: 'none' }}
                 onChange={handleFileSelect}
               />
@@ -187,42 +207,49 @@ function Postfeed() {
             </label>
           </div>
         </div>
+
+
+        {fileUrl && (
+          <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
+            {getFileType(fileUrl) === 'image' ? (
+            <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+          ) : (
+            <video controls src={fileUrl} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+          )}
+          </div>
+        )}
+
         <div className='row mt-3'>
           <div className='col-12'>
-            <div className="input-group">
-              <span className="input-group-text">Preço</span>
+            <div className="input-group  mb-3 mt-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text">R$</span>
+              </div>
               <input
-                placeholder="Em branco para R$ 0,00"
                 type="text"
                 className="form-control"
-                value={inputValue}
-                onChange={handleInputChange}
+                placeholder="Em branco para R$ 0,00"
+                aria-label="Amount (to the nearest dollar)"
+                onInput={mascaraMoeda}
               />
+
             </div>
           </div>
         </div>
-        <div className='row mt-3'>
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'start' }}>
-            <div className="form-check-reverse text-start form-switch">
-              <label className="form-check-label mt-1" style={{ marginRight: '8px' }} htmlFor="flexSwitchCheckDefault">
-                {inputValue ? `O valor a ser cobrado será de R$ ${calcularAcrescimo()} após o acréscimo da Taxa CC` : ''}
-              </label>
-            </div>
-          </div>
-        </div>
+
         <div className='row mt-4'>
           <div className='col-12'>
-            <div class="input-group">
-              <div class="form-check-reverse text-start form-switch">
+            <div className="input-group">
+              <div className="form-check-reverse text-start form-switch">
                 <input
-                  class="form-check-input"
+                  className="form-check-input"
                   style={{ width: '2.5rem', height: '1.5rem' }}
                   onChange={(e) => setDataDisable(e.target.checked)}
                   type="checkbox"
                   role="switch"
                   id="flexSwitchCheckDefault"
                 />
-                <label class="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
+                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
               </div>
             </div>
           </div>
@@ -253,16 +280,16 @@ function Postfeed() {
             </div>)}
           </div>
         </div>
-
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
-            <a className='btn btn-info text-white' href="#">Publicar</a>
-
+            <button className='btn btn-info text-white' onClick={postarVerts}>Publicar</button>
           </div>
         </div>
+
       </div>
     </div>
-  )
+
+  );
 }
 
 export default Postfeed;

@@ -4,11 +4,6 @@ import more from './Images/more.svg';
 import like from './Images/like.svg';
 import comment from './Images/comment.svg';
 import tips from './Images/dollar.svg';
-import vocesabia from './Images/vocesabia.jpg'
-import luiz from './Images/luiz.jpg'
-import vitor from './Images/profile.png'
-import lidia from './Images/lidia.jpg'
-import jr from './Images/junior.jpg'
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../Services/api';
@@ -33,11 +28,14 @@ function Feed() {
 
     async function montaFeed(id) {
         const posts = await api.get(`feed/${id}`);
-        const newFeed = [...feed]; // Cria uma cópia do array feed
+        console.log(posts)
+        const newFeed = [...feed];
 
         for (const p of posts.data) {
-            try {
+
+            if (p != null) {
                 const postData = await api.get(`/post/${p}`);
+
                 const profileData = await api.get(`profile/${postData.data.user}`);
 
                 const postObj = {
@@ -47,18 +45,19 @@ function Feed() {
                     "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
                     "profilePicture": profileData.data.img,
                     "user": "vc_sabia",
-                    "place": "",
                     "content": postData.data.content,
                     "description": postData.data.legenda,
-                    "hashtags": "#hashtag5 #hashtag6",
                     "likes": postData.data.likes.length,
                     "comentarios": postData.data.comments,
                     "createdAt": postData.data.createdAt // Adicione a propriedade createdAt ao objeto postObj
                 };
 
                 newFeed.push(postObj); // Adiciona o novo objeto ao array newFeed
-            } catch (error) {
+            } else {
+                console.log('null')
             }
+
+
         }
 
         // Ordena o array newFeed com base na propriedade createdAt, dos mais novos para os mais antigos
@@ -113,9 +112,8 @@ function Feed() {
 
                                     <div className="user-info-column">
                                         <span>{post.author}</span>
-                                        <span style={{ fontWeight: "normal" }}>{post.place}</span>
+                        
                                         <span>
-                                            {post.createdAt}
                                             {new Date(post.createdAt).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
                                             {' '}
                                             {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

@@ -16,6 +16,7 @@ function Video({
   like,
   avatar,
   date,
+  userName
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -123,7 +124,7 @@ function Video({
 
   return (
     <div className="video">
-      <div className="video__cc"><h3>CC</h3></div>
+      <div className="video__cc"><h3>{`CC ${userName}`}</h3></div>
       <div className="video__buttons">
         <button type="button" onClick={scrollUp} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowUpIcon />
         </button>

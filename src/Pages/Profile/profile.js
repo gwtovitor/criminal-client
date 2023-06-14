@@ -127,9 +127,14 @@ function Profile() {
             const dados = await Promise.all(
                 posts.map(async (id) => {
                     try {
+                        if(id){
                         const response = await api.get(`/post/${id}`);
                         const { content, legenda, likes, comments, createdAt, price } = response.data;
                         return { id, content, legenda, likes, comments, createdAt, price };
+                        }else{
+                            return
+                        }
+                        
                     } catch (error) {
                         console.log(`Erro ao obter dados do post ${id}:`, error);
                         return null;
