@@ -19,7 +19,7 @@ function Postverts() {
   const token = localStorage.getItem('cc_t')
   const [videoURL, setVideoURL] = useState('');
   const [newPosts, setNewPosts] = useState([])
- 
+
   useEffect(() => {
     async function loadPosts() {
       try {
@@ -77,74 +77,74 @@ function Postverts() {
     const file = event.target.files[0];
     const videoURL = URL.createObjectURL(file);
     setVideoURL(videoURL);
-    
-}
+
+  }
 
   async function postarVerts() {
-  if(selectedFile != null){
-    const formData = new FormData();
+    if (selectedFile != null) {
+      const formData = new FormData();
 
-    
-    formData.append("file", selectedFile);
 
-    try {
+      formData.append("file", selectedFile);
+
+      try {
         const response = await api.post("/upload", formData, {
-            headers: {"Content-Type": "multipart/form-data"}
+          headers: { "Content-Type": "multipart/form-data" }
         })
         console.log(response.data)
         const videoPath = response.data.file.location
 
-        try{
-            const postandoVerts = await api.post(`/post/`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                user: idUser,
-                content: videoPath,
-                legenda: legenda
+        try {
+          const postandoVerts = await api.post(`/vert`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            user: idUser,
+            content: videoPath,
+            legenda: legenda
 
-            })
-            console.log(postandoVerts)
-            const idPost = postandoVerts.data._id
+          })
+          console.log(postandoVerts)
+          const idPost = postandoVerts.data._id
 
-              const newPostsWithId = [...newPosts, idPost];
-              try {
-                const enviandoVerts = await api.patch(`/profile/${idUser}`, {
-                  headers: {
-                    'Authorization': `Bearer ${token}`
-                  },
-                  posts: newPostsWithId
-                });
-                console.log(enviandoVerts);
-              } catch (error) {
-                console.log(error);
-              }
+          const newPostsWithId = [...newPosts, idPost];
+          try {
+            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              },
+              posts: newPostsWithId
+            });
+            console.log(enviandoVerts);
+          } catch (error) {
+            console.log(error);
+          }
 
-        }catch(error){
-            console.log(error)
+        } catch (error) {
+          console.log(error)
         }
         window.location.reload()
-    } catch (error) {
+      } catch (error) {
         console.log(error)
+      }
+    } else {
+      toast.error("Selecione um Video para postar", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
-  }else{
-    toast.error("Selecione um Video para postar", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-  });
-  }
-      
-      
-};
-const changeLegenda = (event) => {
-  setLegenda(event.target.value);
-};
+
+
+  };
+  const changeLegenda = (event) => {
+    setLegenda(event.target.value);
+  };
 
   return (
 
