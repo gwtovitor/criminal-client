@@ -27,7 +27,6 @@ import MyGallery from './Pages/Galeria'
 import NivelConta from './Pages/Financas/Nivelconta'
 import Arquivados from './Pages/Arquivados'
 
-
 function RoutesApp() {
     return (
         <BrowserRouter>
@@ -40,17 +39,17 @@ function RoutesApp() {
 
                 <Route path='/' element={<Main />}>
                     <Route index element={<Feed />} />
-                   <Route path='/compras' element={<Compras />} />
+                    <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
                     <Route path='/nivel' element={<NivelConta />} />
                     <Route path='/banco' element={<Banco />} />
-                    <Route path='/verts' element={<Verts />}    />
+                    <Route path='/verts' element={<Verts />} />
                     <Route path='/mensagens' element={<Mensagens />} />
-                    <Route path='/assinando' element={<Assinado/>} />
-                    <Route path='/assinantes' element={<Assinantes/>} />
-                    <Route path='/seguindo' element={<Seguindo/>} />
-                    <Route path='/seguidores' element={<Seguidores/>} />
-                    <Route path='/bloqueados' element={<Bloqueados/>} />
+                    <Route path='/assinando' element={<Assinado />} />
+                    <Route path='/assinantes' element={<Assinantes />} />
+                    <Route path='/seguindo' element={<Seguindo />} />
+                    <Route path='/seguidores' element={<Seguidores />} />
+                    <Route path='/bloqueados' element={<Bloqueados />} />
                     <Route path='/postfeed' element={<Postfeed />} />
                     <Route path='/postverts' element={<Postverts />} />
                     <Route path='/postmsg' element={<PostMsg />} />

@@ -7,6 +7,7 @@ import { VolumeOff, VolumeUp } from "@mui/icons-material";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate } from "react-router-dom";
+import api from '../../../Services/api';
 
 function Video({
   id,
@@ -16,18 +17,19 @@ function Video({
   like,
   avatar,
   date,
-  userName
+  userName,
+  itemId,
+  profileId
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [muted, setMuted] = useState(false);
+  const [liked, setLiked] = useState(false);
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
-
-
 
   function toggleShowFullDescription() {
     setShowFullDescription(!showFullDescription);
@@ -48,23 +50,25 @@ function Video({
   };
 
   useEffect(() => {
+    verificaLike();
+
     const handleTimeUpdate = () => {
       if (videoRef.current) {
         setCurrentTime(videoRef.current.currentTime);
       }
     };
-  
+
     const handleLoadedMetadata = () => {
       if (videoRef.current) {
         setDuration(videoRef.current.duration);
       }
     };
-  
+
     if (videoRef.current) {
       videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
       videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
     }
-  
+
     return () => {
       if (videoRef.current) {
         videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
@@ -72,8 +76,6 @@ function Video({
       }
     };
   }, []);
-  
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,6 +96,10 @@ function Video({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const verificaLike = () => {
+    like.includes(localStorage.cc_p) ? setLiked(true) : setLiked(false);
+  }
+
   const handleVideoPress = () => {
     if (playing) {
       setPlaying(false);
@@ -103,8 +109,24 @@ function Video({
       setPlaying(true);
     }
   };
+
   const handleMuteClick = () => {
     setMuted((prevMuted) => !prevMuted);
+  };
+
+  const handleLikeClick = async () => {
+    const profile = localStorage.cc_p;
+
+    if (!liked) {
+      like.push(profile);
+    } else {
+      const index = like.indexOf(profile);
+      like.splice(index, 1);
+    }
+
+    const response = await api.patch(`vert/${itemId}`, { likes: like });
+
+    verificaLike();
   };
 
   const scrollUp = () => {
@@ -120,7 +142,6 @@ function Video({
       behavior: "smooth"
     });
   };
-
 
   return (
     <div className="video">
@@ -164,12 +185,16 @@ function Video({
         <div className="shortsVideoSideIcons">
           <div className="shortsVideoSideIcon">
             <Avatar className="buttonsShortsSide" src={avatar} />
-            <ThumbUp className="buttonsShortsSide" />
+            {liked ? (
+              <ThumbUp className="buttonsShortsSide text-info" onClick={handleLikeClick} />
+            ) : (
+              <ThumbUp className="buttonsShortsSide" onClick={handleLikeClick} />
+            )}
 
-            <p>{like}</p>
+            <p>{like.length}</p>
 
           </div>
-          <div  onClick={handleMuteClick}>
+          <div onClick={handleMuteClick}>
             {muted ? (
               <VolumeOff className="buttonsShortsSide" />
             ) : (

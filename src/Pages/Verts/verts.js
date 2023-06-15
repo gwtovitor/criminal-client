@@ -16,7 +16,6 @@ function Verts() {
     if (data.length > 0) {
       data?.forEach(async (vert) => {
         const profile = await api.get(`/profile/${vert.user}`);
-        console.log(profile);
         const getUserName = await api.get(`/user/${profile.data.user}`);
 
         const date = new Date(vert.createdAt);
@@ -32,7 +31,7 @@ function Verts() {
           isMuted: false,
           showControls: true,
           isLiked: false,
-          likes: vert.likes.length,
+          likes: vert.likes,
           picture: profile.data.img,
           legenda: vert.legenda,
           date: formattedDate, // Data formatada no padrão "dia/mm"
@@ -49,8 +48,6 @@ function Verts() {
   };
 
   useEffect(() => {
-
-
     montaVerts();
   }, []);
 
@@ -87,7 +84,8 @@ function Verts() {
             userName={src.userName}
             avatar={src.picture}
             date={src.date}
-            itemId={src.profileID}
+            itemId={src.id}
+            profileId={src.profileID}
           />
         </div>
       ))}

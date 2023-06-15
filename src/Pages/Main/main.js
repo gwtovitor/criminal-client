@@ -20,9 +20,8 @@ import Swal from 'sweetalert2';
 function Main() {
     const navigate = useNavigate();
     const id = localStorage.getItem('cc_p');
-    const [isCreator, setIscCreator] = useState(false)
-    const token = localStorage.getItem('cc_t')
-
+    const [isCreator, setIscCreator] = useState(false);
+    const token = localStorage.getItem('cc_t');
 
     function logoff() {
         localStorage.removeItem('cc_p')
@@ -37,19 +36,26 @@ function Main() {
 
     async function getDados() {
         try {
+            // if (!localStorage.cc_p || !localStorage.cc_t) {
+            //     navigate('/home');
+            // }
+            console.log(id, token);
+
             const response = await api.get(`/profile/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })
+
             setIscCreator(response?.data.creator)
 
         } catch (error) {
             return
         }
     }
+
     useEffect(() => {
-        getDados()
+        getDados();
     }, []);
 
     return (

@@ -102,19 +102,19 @@ function Postverts() {
             legenda: legenda
 
           })
-          const idPost = postandoVerts.data._id
+          // const idPost = postandoVerts.data._id
 
-          const newPostsWithId = [...newPosts, idPost];
-          try {
-            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              },
-              posts: newPostsWithId
-            });
-          } catch (error) {
-            console.log(error);
-          }
+          // const newPostsWithId = [...newPosts, idPost];
+          // try {
+          //   const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+          //     headers: {
+          //       'Authorization': `Bearer ${token}`
+          //     },
+          //     posts: newPostsWithId
+          //   });
+          // } catch (error) {
+          //   console.log(error);
+          // }
 
         } catch (error) {
           console.log(error)
@@ -148,17 +148,17 @@ function Postverts() {
       <div className='row mb-4'>
         <strong>Publicar no Verts</strong>
       </div>
-    
+
       <div className='row'>
-      <div className='row mt-2'>
+        <div className='row mt-2'>
           <div className='col-12'>
             <textarea className='form-control' placeholder='Legenda' onChange={changeLegenda} aria-label='With textarea'></textarea>
           </div>
         </div>
         <div className='row mt-3'>
-          
+
           <div className='col-12 d-grid'>
-            
+
             <label className='btn btn-info text-white' htmlFor='video-upload'>
               Video
               <input
@@ -172,7 +172,7 @@ function Postverts() {
             </label>
           </div>
         </div>
-        
+
 
         {videoURL && (
           <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>

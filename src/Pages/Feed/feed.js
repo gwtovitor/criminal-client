@@ -27,8 +27,9 @@ function Feed() {
 
 
     async function montaFeed(id) {
+        if (!localStorage.cc_p || !localStorage.cc_t) return navigate('/home');
+
         const posts = await api.get(`feed/${id}`);
-        console.log(posts)
         const newFeed = [...feed];
 
         for (const p of posts.data) {
@@ -65,9 +66,6 @@ function Feed() {
 
         setFeed(newFeed); // Atualiza o estado do array feed com o novoFeed
     }
-
-
-
 
     useEffect(() => {
 
@@ -112,7 +110,7 @@ function Feed() {
 
                                     <div className="user-info-column">
                                         <span>{post.author}</span>
-                        
+
                                         <span>
                                             {new Date(post.createdAt).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
                                             {' '}
