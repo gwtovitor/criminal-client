@@ -187,47 +187,34 @@ function Signcriador() {
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
           cpf: cpf
         });
-        if(price != ''){
-          try {
-            const responseUser = await api.post("/profile", {
-              creator: true,
-              user: response.data._id,
-              firstName: name,
-              lastName: sobrenome,
-              valorAssinatura: price
-            })
-          } catch (error) {
-            console.log(error)
-          }}else{
-            try {
-              const responseUser = await api.post("/profile", {
-                creator: true,
-                user: response.data._id,
-                firstName: name,
-                lastName: sobrenome,
-              })
-            } catch (error) {
-              console.log(error)
-            }
-          }
-          navigate('/home')
 
-
-
+        try {
+          const responseUser = await api.post("/profile", {
+            creator: true,
+            user: response.data._id,
+            firstName: name,
+            lastName: sobrenome,
+          })
         } catch (error) {
-          toast.error(error.response.data.message, {
-
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          console.log(error)
         }
+
+        navigate('/home')
+
+      } catch (error) {
+        toast.error(error.response.data.message, {
+
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
+    }
   }
   const handleSelectPais = (paisSelecionado) => {
     setPaisSelecionado(paisSelecionado);
@@ -344,26 +331,6 @@ function Signcriador() {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Confirme a Senha</Form.Label>
             <Form.Control onChange={(e) => setConfirmaSenha(e.target.value)} type="password" placeholder="Digite a confirmação de senha" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label style={{ fontWeight: 'bold' }}>Assinatura Mensal</Form.Label>
-
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text">R$</span>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Em branco para R$ 0,00"
-                aria-label="Amount (to the nearest dollar)"
-                onInput={mascaraMoeda}
-              />
-
-            </div>
-
-
           </Form.Group>
           <Form.Group className='mb-3' controlId="formCpf">
             <Form.Label style={{ fontWeight: 'bold' }}>CPF</Form.Label>

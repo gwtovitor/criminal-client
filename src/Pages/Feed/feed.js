@@ -7,6 +7,7 @@ import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../Services/api';
 import { ThumbUp } from "@mui/icons-material";
+var idsPassados = [];
 
 function Feed() {
     const [feed, setFeed] = useState([]);
@@ -16,7 +17,10 @@ function Feed() {
     const [likedPosts, setLikedPosts] = useState([]);
     const [commentInputs, setCommentInputs] = useState({});
     const [newComentarios, setComentarios] = useState({})
-    
+    const [newFeed, setNewFeed] = useState([])
+    const [feedGet, setFeedGet] = useState([])
+    const [carregando, setCarregando] = useState(false)
+
 
     const handleCommentChange = (event, postId) => {
         setCommentInputs((prevInputs) => ({
@@ -27,65 +31,80 @@ function Feed() {
 
     async function handleAddComment(postId) {
         const comment = commentInputs[postId];
-        console.log(comment);
+
         const postComentarios = await api.post('/comentario', {
             perfil: idUser,
             post: postId,
             content: comment,
         })
-        console.log(postId)
+
         const getComentarios = await api.get(`/post/${postId}`)
         const newComentarios = getComentarios.data.comments
-        const comentariosOK = [...newComentarios,postComentarios.data._id ]
-        const postComentarioPost = await api.patch(`/post/${postId}`,{
+        const comentariosOK = [...newComentarios, postComentarios.data._id]
+        const postComentarioPost = await api.patch(`/post/${postId}`, {
             comments: comentariosOK
         })
-        console.log(postComentarios)
+
     }
 
     async function montaFeed(id) {
         if (!localStorage.cc_p || !localStorage.cc_t) return navigate('/home');
-
         const posts = await api.get(`feed/${id}`);
-        const newFeed = [...feed];
-        
-        let flag = 0
-        while (flag < posts.data.length) {
-            flag ++
-            console.log(flag)
-            if (posts.data[flag] != null) {
-                const postData = await api.get(`/post/${posts.data[flag]}`);
+        montaPosts(posts.data)
+    }
 
-                const profileData = await api.get(`profile/${postData.data.user}`);
-                const postObj = {
-                    "_id": postData.data._id,
-                    "price": postData.data.price,
-                    "profileId": profileData.data._id,
-                    "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
-                    "profilePicture": profileData.data.img,
-                    "user": "vc_sabia",
-                    "content": postData.data.content,
-                    "description": postData.data.legenda,
-                    "likes": postData.data.likes.length,
-                    "comentarios": '',
-                    "createdAt": postData.data.createdAt,
-                    "liked": postData.data.likes.includes(idUser) ? true : false,
-                    "agendamentoPost": postData.data.agendamentoPost
-                };
-                if (postObj.agendamentoPost && new Date(postObj.agendamentoPost) > new Date()) {
-                   
-                } else {
-                    newFeed.push(postObj);
-                    console.log(postObj.comentarios)
-                }
+
+
+    async function montaPosts(feedProps) {
+        const newFeed = [...feed];
+        const postDates = {};
+
+        for (const postId of feedProps) {
+            if (postId != null) {
+                const postData = await api.get(`/post/${postId}`);
+
+                postDates[postData.data._id] = new Date(postData.data.createdAt);
+            }
+
+        }
+
+        let sortedPostIds = Object.keys(postDates).sort((a, b) => postDates[b] - postDates[a]);
+        sortedPostIds = sortedPostIds.filter((postId) => !idsPassados.includes(postId));
+        for (let i = 0; i < sortedPostIds.length && i < 5; i++) {
+            const postId = sortedPostIds[i];
+            idsPassados.push(postId);
+            if (postId == undefined) {
+                break;
+            }
+
+            const postData = await api.get(`/post/${postId}`);
+            const profileData = await api.get(`profile/${postData.data.user}`);
+            const postObj = {
+                "_id": postData.data._id,
+                "price": postData.data.price,
+                "profileId": profileData.data._id,
+                "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
+                "profilePicture": profileData.data.img,
+                "user": "vc_sabia",
+                "content": postData.data.content,
+                "description": postData.data.legenda,
+                "likes": postData.data.likes.length,
+                "comentarios": "",
+                "createdAt": postData.data.createdAt,
+                "liked": postData.data.likes.includes(idUser) ? true : false,
+                "agendamentoPost": postData.data.agendamentoPost
+            };
+
+            if (postObj.agendamentoPost && new Date(postObj.agendamentoPost) > new Date()) {
             } else {
-                console.log('null')
+                newFeed.push(postObj);
             }
         }
-        newFeed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setFeed(newFeed); 
-        console.log(feed)
+        setFeed(newFeed);
+        setCarregando(false)
     }
+
+    /*
 
     async function getComentarios(comentarioID) {
         try {
@@ -115,17 +134,31 @@ function Feed() {
           throw error; // Você pode escolher lançar o erro novamente ou retornar um objeto vazio, se preferir.
         }
       }
-      
-    
+      */
+
     useEffect(() => {
         montaFeed(localStorage.cc_p);
 
     }, []);
 
+    useEffect(() => {
+        function handleScroll() {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight) {
+                montaFeed(localStorage.cc_p);
+                setCarregando(true)
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [feed]);
 
 
     async function handleLike(post) {
-        console.log(post._id)
         try {
             const postLike = await api.get(`post/${post._id}`);
             const oldLikes = postLike.data.likes;
@@ -142,7 +175,7 @@ function Feed() {
                 post.likes++;
                 post.liked = true
                 setLikedPosts([...likedPosts, post._id]);
-                console.log(post._id)
+
             }
         } catch (error) {
             console.log(error);
@@ -156,140 +189,150 @@ function Feed() {
     return (
         <div className="container-feed">
             <section id="post-list">
-                {feed.map((post, index) => (
-                    <article key={index}>
-                        <header>
-                            <div className="user-info" onClick={() => { navigate(`profile/${post.profileId}`) }}>
-                                <div className="user-info-row">
-                                    <img
-                                        src={post.profilePicture}
-                                        alt="Foto do usuário"
-                                        className="user-avatar"
-                                    />
-                                    <div className="user-info-column">
-                                        <span>{post.author}</span>
-                                        <span>
-                                            {new Date(post.createdAt).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                                            {' '}
-                                            {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            {"   "}
-                                          </span>
+                {feed.length !== 0 ? (
+                    feed.map((post, index) => (
+                            <article key={index}>
+                                <header>
+                                    <div className="user-info" onClick={() => { navigate(`profile/${post.profileId}`) }}>
+                                        <div className="user-info-row">
+                                            <img
+                                                src={post.profilePicture}
+                                                alt="Foto do usuário"
+                                                className="user-avatar"
+                                            />
+                                            <div className="user-info-column">
+                                                <span>{post.author}</span>
+                                                <span>
+                                                    {new Date(post.createdAt).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                                    {' '}
+                                                    {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {"   "}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <img src={more} alt="Mais" />
-                        </header>
-                        {post.content.endsWith('.mp4') ? (
-                            <div style={{ position: "relative" }}>
-                                {post.price !== '0,00' && (
-                                    <div className="price-overlay">
-                                        Você precisa pagar R${post.price} para liberar o conteúdo
+                                    <img src={more} alt="Mais" />
+                                </header>
+                                {post.content.endsWith('.mp4') ? (
+                                    <div style={{ position: "relative" }}>
+                                        {post.price !== '0,00' && (
+                                            <div className="price-overlay">
+                                                Você precisa pagar R${post.price} para liberar o conteúdo
+                                            </div>
+                                        )}
+                                        <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                            <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
+                                        </div>
+                                        <video className={`${post.price !== '0,00' ? 'blur-effect' : ''
+                                            } videoplayer-feed`} controls>
+                                            <source src={post.content} type="video/mp4" />
+                                        </video>
                                     </div>
-                                )}
-                                <div style={{ position: "absolute", top: '60%', left: "3%" }}>
-                                    <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
-                                </div>
-                                <video className={`${post.price !== '0,00' ? 'blur-effect' : ''
-                                    } videoplayer-feed`} controls>
-                                    <source src={post.content} type="video/mp4" />
-                                </video>
-                            </div>
-                        ) :
-                            (
-                                <div style={{ position: "relative" }}>
-                                    {post.price !== '0,00' && (
-                                        <div className="price-overlay">
-                                            Você precisa pagar R${post.price} para liberar o conteúdo
+                                ) :
+                                    (
+                                        <div style={{ position: "relative" }}>
+                                            {post.price !== '0,00' && (
+                                                <div className="price-overlay">
+                                                    Você precisa pagar R${post.price} para liberar o conteúdo
+                                                </div>
+                                            )}
+                                            <div style={{ position: "absolute", top: '60%', left: "3%" }}>
+                                                <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
+                                            </div>
+                                            <img style={{ width: '100%' }} className={`${post.price !== '0,00' ? 'blur-effect' : ''
+                                                }`} src={post.content} alt="A imagem do Post" />
                                         </div>
                                     )}
-                                    <div style={{ position: "absolute", top: '60%', left: "3%" }}>
-                                        <h6 style={{ color: 'rgba(255, 255, 255, 0.6)', opacity: '0.8', cursor: 'default', userSelect: 'none' }}>CC@{post.user}</h6>
+                                <footer>
+                                    <div className="actions">
+                                        {post.liked ? (
+                                            <ThumbUp style={{ color: 'blue', marginRight: '0.5rem' }} onClick={() => handleLike(post)} />
+                                        ) : (
+                                            <ThumbUp style={{ color: 'black', marginRight: '0.5rem' }} className="buttonsShortsSide" onClick={() => handleLike(post)} />
+                                        )}
+                                        <img src={comment} alt="comment" />
+                                        <img src={tips} alt="tips" />
                                     </div>
-                                    <img style={{ width: '100%' }} className={`${post.price !== '0,00' ? 'blur-effect' : ''
-                                        }`} src={post.content} alt="A imagem do Post" />
-                                </div>
-                            )}
-                        <footer>
-                            <div className="actions">
-                                {post.liked ? (
-                                    <ThumbUp style={{ color: 'blue', marginRight: '0.5rem' }} onClick={() => handleLike(post)} />
-                                ) : (
-                                    <ThumbUp style={{ color: 'black', marginRight: '0.5rem' }} className="buttonsShortsSide" onClick={() => handleLike(post)} />
-                                )}
-                                <img src={comment} alt="comment" />
-                                <img src={tips} alt="tips" />
-                            </div>
-                            <strong>{post.likes} curtidas</strong>
-                            <p>{post.description}</p>
-                            {Object.entries(post.comentarios).slice(0, 2).map(([comentarios]) => (
-                                <div>
-                                    <div style={{ display: 'flex', flexDirection: 'row', marginTop: '6px', alignItems: 'center' }} key={index}>
-                                        <Avatar style={{ marginRight: '5px' }} src={comentarios.profilePicture}></Avatar>
-                                        <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row' }}>
-                                            <p style={{ fontWeight: 'bold' }}>{comentarios.name}</p>
-                                            <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong${post._id}`}>
-                                                <p>: {comentarios.content}</p>
-                                            </span>
+                                    <strong>{post.likes} curtidas</strong>
+                                    <p>{post.description}</p>
+                                    {Object.entries(post.comentarios).slice(0, 2).map(([comentarios]) => (
+                                        <div>
+                                            <div style={{ display: 'flex', flexDirection: 'row', marginTop: '6px', alignItems: 'center' }} key={index}>
+                                                <Avatar style={{ marginRight: '5px' }} src={comentarios.profilePicture}></Avatar>
+                                                <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row' }}>
+                                                    <p style={{ fontWeight: 'bold' }}>{comentarios.name}</p>
+                                                    <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong${post._id}`}>
+                                                        <p>: {comentarios.content}</p>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
+                                    ))}
+                                    <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <input
+                                            type="text"
+                                            value={commentInputs[post._id] || ''}
+                                            style={{ marginRight: '5px', flex: 1 }}
+                                            onChange={(event) => handleCommentChange(event, post._id)}
+                                        />
+                                        <button className="btn btn-primary" onClick={() => handleAddComment(post._id)}>
+                                            Comentar
+                                        </button>
                                     </div>
-                                </div>
-                            ))}
-                            <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
-                                <input
-                                    type="text"
-                                    value={commentInputs[post._id] || ''}
-                                    style={{ marginRight: '5px', flex: 1 }}
-                                    onChange={(event) => handleCommentChange(event, post._id)}
-                                />
-                                <button className="btn btn-primary" onClick={() => handleAddComment(post._id)}>
-                                    Comentar
-                                </button>
-                            </div>
-                            <div className="modal fade" id={`exampleModalLong${post._id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle${post._id}`} aria-hidden="true">
-                                <div className="modal-dialog" role="document">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div className="modal-body">
-                                            <div className="comment-list">
-                                                {Object.entries(post.comentarios).map(([nome, comentario]) => (
-                                                    <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center' }} key={comentario.id}>
-                                                        <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <Avatar style={{ marginRight: '6px' }} src={comentario.picture} />
-                                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                                <p style={{ fontWeight: 'bold' }}>{nome}</p>
-                                                                <p>: {comentario.comentario}</p>
+                                    <div className="modal fade" id={`exampleModalLong${post._id}`} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle${post._id}`} aria-hidden="true">
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h5 className="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <div className="comment-list">
+                                                        {Object.entries(post.comentarios).map(([nome, comentario]) => (
+                                                            <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center' }} key={comentario.id}>
+                                                                <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                                    <Avatar style={{ marginRight: '6px' }} src={comentario.picture} />
+                                                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                                        <p style={{ fontWeight: 'bold' }}>{nome}</p>
+                                                                        <p>: {comentario.comentario}</p>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        ))}
                                                     </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
-                                                <input
-                                                    type="text"
-                                                    value={commentInputs[post._id] || ''}
-                                                    style={{ marginRight: '5px', flex: 1 }}
-                                                    onChange={(event) => handleCommentChange(event, post._id)}
-                                                />
-                                                <button className="btn btn-primary" onClick={() => handleAddComment(post._id)}>
-                                                    Comentar
-                                                </button>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <input
+                                                            type="text"
+                                                            value={commentInputs[post._id] || ''}
+                                                            style={{ marginRight: '5px', flex: 1 }}
+                                                            onChange={(event) => handleCommentChange(event, post._id)}
+                                                        />
+                                                        <button className="btn btn-primary" onClick={() => handleAddComment(post._id)}>
+                                                            Comentar
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </footer>
+                                </footer>
 
-                    </article>
-                ))}
+                            </article>
+                        ))
+                    ) : (
+                    <p style={{ textAlign: 'center' }}>Carregando...</p>
+                )}
+                {carregando ? (
+                    <p style={{ textAlign: 'center' }}>Carregando...</p>
+                ) : (
+                    null
+                )}
             </section>
+
         </div >
     );
 }

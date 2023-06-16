@@ -56,6 +56,9 @@ function Profile() {
     const [selectedLegenda, setSelectedLegenda] = useState(null)
     const [postModal, setPostModal] = useState('')
     const [price, setPrice] = useState('')
+    const [priceAssinatura, setPriceAssinatura] = useState('')
+    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedPhoto, setSelectedPhoto] = useState('opcao1')
 
     const openModal = (content, legenda, post) => {
         setSelectedContent(content);
@@ -63,6 +66,30 @@ function Profile() {
         setShowModal(true);
         setPostModal(post)
     };
+    const handleImageSelection = (event) => {
+        const option = event.target.value;
+        setSelectedOption(option);
+        console.log(option)
+      
+        switch (option) {
+          case 'opcao1':
+            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg');
+            break;
+          case 'opcao2':
+            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif');
+       
+            break;
+          case 'opcao3':
+            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg');
+            break;
+          default:
+            setSelectedPhoto('');
+            break;
+        }
+      
+        console.log(selectedPhoto);
+      };
+      
 
     async function deletePost() {
         const deletando = await api.delete(`./post/${postModal}`)
@@ -148,12 +175,11 @@ function Profile() {
                     try {
                         if (id) {
                             const response = await api.get(`/post/${id}`);
-                            const { content, legenda, likes, comments, createdAt, price } = response.data;
-                            return { id, content, legenda, likes, comments, createdAt, price };
+                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost } = response.data;
+                            return { id, content, legenda, likes, comments, createdAt, price, agendamentoPost };
                         } else {
-                            return
+                            return null;
                         }
-
                     } catch (error) {
                         console.log(`Erro ao obter dados do post ${id}:`, error);
                         return null;
@@ -161,12 +187,14 @@ function Profile() {
                 })
             );
 
-            setDadosPosts(dados.filter((dado) => dado != null));
-            console.log(dadosPosts)
+            const sortedDados = dados.filter((dado) => dado != null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setDadosPosts(sortedDados);
+            console.log(sortedDados);
         };
 
         obterDados();
     }, [posts]);
+
 
     async function verificaseguidor() {
 
@@ -308,7 +336,32 @@ function Profile() {
                         subscribing: newAssinantes
                     });
                     setAssino(true);
-                    seguir()
+                    const verificaseg = await api.get(`/profile/${idUser}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const seguidoresUser = verificaseg.data.following;
+                    if (seguidoresUser.includes(userId)) {
+                        return;
+                    } else {
+                        const newfollowingUpdated = [...newfollowing, userId];
+                        const _enviarseguir = await api.patch(`/profile/${idUser}`, {
+                            following: newfollowingUpdated
+                        });
+                        const verificaseg = await api.get(`/profile/${userId}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        const listaSeguidores = verificaseg.data.followers
+                        const newSeguidores = [...listaSeguidores, userId]
+                        const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
+                            followers: newSeguidores
+                        });
+                        setSigo(true);
+
+                    }
                 }
             } else {
                 const newAssinantesUpdate = newSubscribing.filter(id => id !== userId);
@@ -329,7 +382,7 @@ function Profile() {
                 });
 
                 setAssino(false);
-                seguir()
+
             }
         } catch (error) {
             console.log(error)
@@ -355,7 +408,8 @@ function Profile() {
                 firstName: username,
                 bio: bio,
                 lastName: sobrenome,
-                creator: true,
+                valorAssinatura: price,
+                img: selectedPhoto
 
             })
         } catch (error) {
@@ -453,6 +507,38 @@ function Profile() {
             return value
         }
     }
+    function mascaraMoeda(event) {
+        const onlyDigits = event.target.value
+            .split("")
+            .filter(s => /\d/.test(s))
+            .join("")
+            .padStart(3, "0")
+        const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
+        event.target.value = maskCurrency(digitsFloat)
+    }
+
+    function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+        const valorNew = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency
+        }).format(valor)
+        setPrice(valorNew)
+        return valorNew
+    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        // Adiciona um zero à esquerda para dias e meses menores que 10
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedMonth = month < 10 ? `0${month}` : month;
+
+        return `${formattedDay}/${formattedMonth}/${year}`;
+    };
+
 
     return (
         <div className="profile-container">
@@ -508,28 +594,55 @@ function Profile() {
                                     </div>
                                     <input type="text" className="form-control" value={bio} placeholder="Biografia" onChange={bioChange} aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
-                                    <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
-                                    <input onChange={handleFileSelect} className="form-control form-control-sm" id="formFileSm" type="file" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                {isCreator ? (<>
+                                    <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                        <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Foto de Perfil</label>
+                                        <input onChange={handleFileSelect} className="form-control form-control-sm" id="formFileSm" type="file" />
                                     </div>
-                                    <input type="text" className="form-control" value={instagramLink} placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+
+                                    <div className="input-group mb-3 d-flex justify-content-center text-center align-items-center">
+                                        <label style={{ marginRight: '5px' }} for="formFileSm" className="form-label">Assinatura Mensal R$</label>
+                                        <input type="text"
+                                            value={price}
+                                            className="form-control"
+                                            placeholder="Em branco para R$ 0,00"
+                                            aria-label="Amount (to the nearest dollar)"
+                                            onInput={mascaraMoeda} />
+
                                     </div>
-                                    <input type="text" className="form-control" value={tiktokLink} placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Instagram</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={instagramLink} placeholder="Instagram" onChange={instagramChenge} aria-label="Username" aria-describedby="basic-addon1" />
                                     </div>
-                                    <input type="text" className="form-control" placeholder="Amazon List" value={amazonLink} onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
-                                </div>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Tiktok</span>
+                                        </div>
+                                        <input type="text" className="form-control" value={tiktokLink} placeholder="TikTok" onChange={tiktokChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text" id="basic-addon1">Link para o Amazon</span>
+                                        </div>
+                                        <input type="text" className="form-control" placeholder="Amazon List" value={amazonLink} onChange={amazonChange} aria-label="Username" aria-describedby="basic-addon1" />
+                                    </div></>) : (
+                                    <div className="row" style={{ justifyContent: 'center' }}>
+                                        <p>Selecione uma Foto de Perfil</p>
+                                        <div className="row " style={{ justifyContent: 'center' }}>
+                                            <img src="https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg" style={{ width: '80px', height: '100px' }}></img>
+                                            <img src="https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif" style={{ width: '80px', height: '100px' }}></img>
+                                            <img src="https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg" style={{ width: '80px', height: '100px' }}></img>
+                                            <select onChange={(event) => handleImageSelection(event)}>
+                                                <option value="">Selecione uma opção</option>
+                                                <option value="opcao1">Coração</option>
+                                                <option value="opcao2">Black GIF</option>
+                                                <option value="opcao3">Emoji</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <Button className="buttons-profile" variant="secondary" type="submit" onClick={handleSaveProfileClick}>
                                     <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Salvar</span>
@@ -549,7 +662,7 @@ function Profile() {
                                         </Button>
 
                                             <Button className="buttons-profile m-2" onClick={() => { assinar() }} variant={assino ? 'danger' : 'secondary'} type="submit">
-                                                <span className="buttons-name-profile" style={{ fontWeight: assino ? 'normal' : 'bold', fontSize: assino ? '0.6rem' : '0.6rem' }}>{assino ? 'Deixar de Assinar' : `Assinar ${price != null ? price : ''}`}</span>
+                                                <span className="buttons-name-profile" style={{ fontWeight: assino ? 'normal' : 'bold', fontSize: assino ? '0.6rem' : '0.7rem' }}>{assino ? 'Deixar de Assinar' : `Assinar ${price != null ? price : ''}`}</span>
                                             </Button>
                                             {sigo ? (
                                                 <Button className="buttons-profile m-2" variant="secondary" type="submit">
@@ -632,54 +745,79 @@ function Profile() {
 
 
                 </div>
-                {price !== null && price !== '' && profile?.creator ? (
+                {isCreator ? (
                     <div className="container">
                         <div className="row mb-5">
                             {dadosPosts.length <= 0 ? (
                                 <p>Sem posts</p>
                             ) : (
-                                dadosPosts.map((dados, index) => (
-                                    <div key={index} className="col-md-4 mb-4">
-                                        <div className="square-thumbnail">
-                                            {dados.content.endsWith('.mp4') ? (
-                                                <div className="thumbnail-wrapper">
-                                                    <video
-                                                        className={dados.price !== '0,00' && !isYou ? 'thumbnail-video blurred' : 'thumbnail-video'}
-                                                        poster={dados.thumbnail}
-                                                        onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
-                                                    >
-                                                        <source src={dados.content} type="video/mp4" />
-                                                    </video>
-                                                    {dados.price !== '0,00' &&(
-                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                            Para visualizar, você precisa pagar o valor de {dados.price}
-                                                        </div>
-                                                    )}
+                                <>
+                                    {dadosPosts.map((dados, index) => {
+                                        const currentDate = new Date();
+                                        const agendamentoPostDate = new Date(dados.agendamentoPost);
+
+                                        if (isYou || (assino && agendamentoPostDate <= currentDate)) {
+                                            return (
+                                                <div key={index} className="col-md-4 mb-4">
+                                                    <div className="square-thumbnail">
+                                                        {dados.content.endsWith('.mp4') ? (
+                                                            <div className="thumbnail-wrapper">
+                                                                <video
+                                                                    className={dados.price !== '0,00' && !isYou ? 'thumbnail-video blurred' : 'thumbnail-video'}
+                                                                    poster={dados.thumbnail}
+                                                                    onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda)}
+                                                                >
+                                                                    <source src={dados.content} type="video/mp4" />
+                                                                </video>
+                                                                {dados.price !== '0,00' && !isYou && (
+                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                        Para visualizar, você precisa pagar o valor de {dados.price}
+                                                                    </div>
+                                                                )}
+                                                                {agendamentoPostDate > currentDate && isYou && (
+                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                        Post agendado para {formatDate(dados.agendamentoPost)}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="thumbnail-wrapper">
+                                                                <img
+                                                                    className={dados.price !== '0,00' && !isYou ? 'thumbnail-image blurred' : 'thumbnail-image'}
+                                                                    src={dados.content}
+                                                                    alt="Imagem do post"
+                                                                    onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda, dados.id)}
+                                                                />
+                                                                {dados.price !== '0,00' && !isYou && (
+                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                        Para visualizar, você precisa pagar o valor de {dados.price}
+                                                                    </div>
+                                                                )}
+                                                                {agendamentoPostDate > currentDate && isYou && (
+                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                        Post agendado para {formatDate(dados.agendamentoPost)}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            ) : (
-                                                <div className="thumbnail-wrapper">
-                                                    <img
-                                                        className={dados.price !== '0,00' && !isYou ? 'thumbnail-image blurred' : 'thumbnail-image'}
-                                                        src={dados.content}
-                                                        alt="Imagem do post"
-                                                        onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda, dados.id)}
-                                                    />
-                                                    {dados.price !== '0,00' && (
-                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                            Para visualizar, você precisa pagar o valor de {dados.price}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))
+                                            );
+                                        }
+                                        return null;
+                                    })}
+
+                                    {!isYou && dadosPosts.every((dados) => assino === false) && (
+                                        <p style={{ textAlign: 'center' }}>Você precisa assinar este perfil para exibir o conteúdo</p>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>
                 ) : (
-                    <p>Você precisa assinar este perfil para visualizar</p>
+                    <p>Esse perfil não é de criador</p>
                 )}
+
 
 
 

@@ -39,7 +39,6 @@ function Main() {
             // if (!localStorage.cc_p || !localStorage.cc_t) {
             //     navigate('/home');
             // }
-            console.log(id, token);
 
             const response = await api.get(`/profile/${id}`, {
                 headers: {
@@ -103,10 +102,10 @@ function Main() {
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
-                <IconButton component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
+                <IconButton  component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
                 <IconButton component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
                 {isCreator ? (<> <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton></>) : (null)}
-                <IconButton component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
+                <IconButton  component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{ color: 'black' }} /></IconButton>
 
 

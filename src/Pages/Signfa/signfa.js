@@ -150,7 +150,8 @@ function Signfa() {
             creator: false,
             user: response.data._id,
             firstName: name,
-            lastName: sobrenome
+            lastName: sobrenome,
+            img: 'https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg'
           })
           if (responseProfile.data._id) {
             localStorage.setItem('cc_p', responseProfile.data._id)
