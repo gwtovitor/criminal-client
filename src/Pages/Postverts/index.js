@@ -124,7 +124,7 @@ function Postverts() {
         console.log(error)
       }
     } else {
-      toast.error("Selecione um Video para postar", {
+      toast.error("Selecione um Video para publicar", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -181,49 +181,7 @@ function Postverts() {
               src={videoURL} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
           </div>
         )}
-        <div className='row mt-4'>
-          <div className='col-12'>
-            <div className="input-group">
-              <div className="form-check-reverse text-start form-switch">
-                <input
-                  className="form-check-input"
-                  style={{ width: '2.5rem', height: '1.5rem' }}
-                  onChange={(e) => setDataDisable(e.target.checked)}
-                  type="checkbox"
-                  role="switch"
-                  id="flexSwitchCheckDefault"
-                />
-                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='row mt-3'>
-          <div className='col-12'>
-            {dataDisable && (<div class="input-group">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateField
-                  label="Data"
-                  value={data}
-
-                  onChange={handleDataChange}
-                  views={['day', 'month', 'year']}
-                  format="DD / MM / YYYY"
-
-                />
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimeField
-                  label="Horário"
-                  value={hora}
-                  onChange={handleHoraChange}
-                  format="HH:mm"
-
-                />
-              </LocalizationProvider>
-            </div>)}
-          </div>
-        </div>
+       
         <div className='row mt-3'>
           <div className='col-12 d-grid'>
             <button className='btn btn-info text-white' onClick={postarVerts}>Publicar</button>

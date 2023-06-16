@@ -14,12 +14,14 @@ function Postfeed() {
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [legenda, setLegenda] = useState('')
+  const [legenda, setLegenda] = useState('');
   const idUser = localStorage.getItem('cc_p');
   const token = localStorage.getItem('cc_t')
   const [fileUrl, setfileUrl] = useState('');
-  const [newPosts, setNewPosts] = useState([])
-  const [price, setPrice] = useState('0,00')
+  const [newPosts, setNewPosts] = useState([]);
+  const [price, setPrice] = useState('0,00');
+  const [combinedDateTime, setCombinedDateTime] = useState('');
+
 
   useEffect(() => {
     async function loadPosts() {
@@ -41,11 +43,18 @@ function Postfeed() {
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
-    if (selectedDate.isBefore(currentDate)) {
+  
+    if (!selectedDate.isValid()) {
+      // Verificar se o valor não é uma data válida
+      setData(null); // Limpar a data selecionada
+    } else if (selectedDate.isBefore(currentDate)) {
       // A data selecionada é anterior à data atual
       setData(null); // Limpar a data selecionada
     } else {
       setData(newValue);
+      const isoDate = selectedDate.toISOString();
+      setCombinedDateTime(isoDate)
+  
       if (dayjs(data).isSame(currentDate, 'day')) {
         // A data selecionada é a data atual, verifique também a hora selecionada
         const currentDateTime = dayjs();
@@ -56,7 +65,13 @@ function Postfeed() {
         }
       }
     }
+  
+    // Converter a data para o formato ISO 8601
+ 
   };
+  
+  
+ /* 
 
   const handleHoraChange = (newValue) => {
     const currentDateTime = dayjs();
@@ -69,7 +84,7 @@ function Postfeed() {
       setHora(newValue);
     }
   };
-
+*/
 
   const handleFileSelect = (event) => {
     // we only get the selected file from input element's event
@@ -86,65 +101,68 @@ function Postfeed() {
   }
 
   async function postarVerts() {
-    if (selectedFile != null) {
-      const formData = new FormData();
+    
+     if (selectedFile != null) {
+        const formData = new FormData();
 
 
-      formData.append("file", selectedFile);
-
-      try {
-        const response = await api.post("/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" }
-        })
-        const videoPath = response.data.file.location
+        formData.append("file", selectedFile);
 
         try {
-          const postandoVerts = await api.post(`/post`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            user: idUser,
-            content: videoPath,
-            legenda: legenda,
-            price: price
-
+          const response = await api.post("/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
           })
-          const idPost = postandoVerts.data._id
+          const videoPath = response.data.file.location
 
-          const newPostsWithId = [...newPosts, idPost];
           try {
-            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+            const postandoFeed = await api.post(`/post`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               },
-              posts: newPostsWithId
-            });
-          } catch (error) {
-            console.log(error);
-          }
+              user: idUser,
+              content: videoPath,
+              legenda: legenda,
+              price: price,
+              agendamentoPost: combinedDateTime,
+            })
+            const idPost = postandoFeed.data._id
 
+            const newPostsWithId = [...newPosts, idPost];
+            try {
+              const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                },
+                posts: newPostsWithId
+              });
+            } catch (error) {
+              console.log(error);
+            }
+
+          } catch (error) {
+            console.log(error)
+          }
+          window.location.reload()
         } catch (error) {
           console.log(error)
         }
-        window.location.reload()
-      } catch (error) {
-        console.log(error)
+      } else {
+        toast.error("Selecione uma mídia para publicar", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
-    } else {
-      toast.error("Selecione um Video para postar", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
+
 
 
   };
+
   const changeLegenda = (event) => {
     setLegenda(event.target.value);
   };
@@ -172,9 +190,9 @@ function Postfeed() {
   }
 
 
- 
+
   const getFileType = (file) => {
-    console.log(file.type)
+
   };
 
   return (
@@ -212,10 +230,10 @@ function Postfeed() {
         {fileUrl && (
           <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
             {getFileType(fileUrl) === 'image' ? (
-            <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
-          ) : (
-            <video controls src={fileUrl} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
-          )}
+              <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            ) : (
+              <video controls src={fileUrl} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            )}
           </div>
         )}
 
@@ -259,7 +277,7 @@ function Postfeed() {
             {dataDisable && (<div class="input-group">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField
-                  label="Data"
+                  label="Data e Horário"
                   value={data}
 
                   onChange={handleDataChange}
@@ -268,15 +286,7 @@ function Postfeed() {
 
                 />
               </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimeField
-                  label="Horário"
-                  value={hora}
-                  onChange={handleHoraChange}
-                  format="HH:mm"
 
-                />
-              </LocalizationProvider>
             </div>)}
           </div>
         </div>

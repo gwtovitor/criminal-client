@@ -27,6 +27,7 @@ function Signcriador() {
   const [isCPFComplete, setIsCPFComplete] = useState(false);
   const [isCheckedAssinatura, setischeckdAssinatura] = useState(false);
   const [isActiveAssinaturaButton, setisActiveAssinaturaButton] = useState(false);
+  const [price, setPrice] = useState('')
 
   const handleCPFChange = (e) => {
     const cpfValue = e.target.value;
@@ -186,34 +187,47 @@ function Signcriador() {
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
           cpf: cpf
         });
-        try {
+        if(price != ''){
+          try {
             const responseUser = await api.post("/profile", {
               creator: true,
               user: response.data._id,
               firstName: name,
-              lastName: sobrenome
+              lastName: sobrenome,
+              valorAssinatura: price
             })
           } catch (error) {
             console.log(error)
-        }
+          }}else{
+            try {
+              const responseUser = await api.post("/profile", {
+                creator: true,
+                user: response.data._id,
+                firstName: name,
+                lastName: sobrenome,
+              })
+            } catch (error) {
+              console.log(error)
+            }
+          }
           navigate('/home')
 
-        
 
-      } catch (error) {
-        toast.error(error.response.data.message, {
 
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        } catch (error) {
+          toast.error(error.response.data.message, {
+
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
-    }
   }
   const handleSelectPais = (paisSelecionado) => {
     setPaisSelecionado(paisSelecionado);
@@ -268,7 +282,24 @@ function Signcriador() {
       setDataNascimento('');
     }
   };
+  function mascaraMoeda(event) {
+    const onlyDigits = event.target.value
+      .split("")
+      .filter(s => /\d/.test(s))
+      .join("")
+      .padStart(3, "0")
+    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
+    event.target.value = maskCurrency(digitsFloat)
+  }
 
+  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+    const valorNew = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency
+    }).format(valor)
+    setPrice(valorNew)
+    return valorNew
+  }
 
   return (
     <div className='container-signcriador'>
@@ -317,18 +348,21 @@ function Signcriador() {
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Assinatura Mensal</Form.Label>
-            <InputGroup>
-              <InputGroup.Checkbox id="inputGroupPrepend"
-                type="checkbox"
-                onSubmit={checkAssinaturaSubmmit}
-                onChange={chekboxassinatura}
 
-              ></InputGroup.Checkbox>
-              <Form.Control
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">R$</span>
+              </div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Em branco para R$ 0,00"
+                aria-label="Amount (to the nearest dollar)"
+                onInput={mascaraMoeda}
+              />
 
-                disabled={!isActiveAssinaturaButton}
-                type="text" placeholder="Valor da Assinatura (Desmarcado para R$ 0,00)" />
-            </InputGroup>
+            </div>
+
 
           </Form.Group>
           <Form.Group className='mb-3' controlId="formCpf">

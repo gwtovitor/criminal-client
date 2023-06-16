@@ -83,31 +83,29 @@ function Seguidores() {
 
   return (
     <div className='row mt-3'>
-      <div className='col-10'>
-        <strong>{followersData.length} Seguidores</strong>
-        <div className='row mt-1'>
-          {
-            followersData.map(d => {
-              return (
-                <div className='row mt-1'>
-                  <a className='link-dark link-underline-opacity-0 col-12 col-lg-8 mt-3' style={{marginLeft: '10px', cursor:'pointer'}}  onClick={() => { navigate(`../profile/${d._id}`) }}>
-                    <div className='row mt-1'>
-                      <div className="col-3 col-lg-3">
-                        <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px' }} alt='profile picture' />
-                      </div>
-                      <div className="col-8 ms-1">
-                        <strong>{`${d.firstName} ${d.lastName}`}</strong>
-                        <p>{d.username}</p>
-                      </div>
-                    </div>
-                  </a>
+
+    <strong>{followersData.length} seguidores</strong>
+    <ul class="list-group mt-4" style={{marginRight: '0.5rem'}}>
+      {followersData.map(d => {
+        return (
+
+          <>
+            <li class="list-group-item">
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px', marginRight:'0.5rem' }} alt='profile picture' />
+                <div>
+                  <strong>{`${d.firstName} ${d.lastName}`}</strong>
+                  <p>{d.username}</p>
                 </div>
-              )
-            })
-          }
-        </div>
-      </div>
-    </div>
+              </div>
+            </li>
+          </>
+
+        )
+      })}
+    </ul>
+
+  </div>
   )
 }
 

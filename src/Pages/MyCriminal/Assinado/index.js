@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../../../Services/api';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function Assinado() {
   const [data, setData] = useState([]);
@@ -9,7 +10,7 @@ function Assinado() {
   const [followersData, setFollowers] = useState([])
   const idUser = localStorage.getItem('cc_p');
   const token = localStorage.getItem('cc_t')
- 
+  const navigate = useNavigate();
   
   useEffect(() => {
     getDados();
@@ -22,7 +23,7 @@ function Assinado() {
           'Authorization': `Bearer ${token}`
         }
       });
-      setSeguidores(respondeUserFollowers.data.following);
+      setSeguidores(respondeUserFollowers.data.subscribing);
     } catch (error) {
       console.log(error);
       if (error) {
@@ -52,14 +53,15 @@ function Assinado() {
 
           const userResponse = await api.get(`/user/${response.data.user}`);
           const { username } = userResponse.data;
-          const { firstName, lastName, img } = response.data;
+          const { firstName, lastName, img, _id } = response.data;
+       
   
           const followerData = {
             firstName,
             lastName,
             img,
-            username
-             
+            username,
+            _id
           };
   
           followersData.push(followerData);
@@ -79,42 +81,30 @@ function Assinado() {
   
 
 
-  const following = {
-    page: 'Seguindo',
-    data: followersData.map((seguidor) => ({
-      name: seguidor.firstName + ' ' + seguidor.lastName,
-      username: seguidor.username,
-      img: seguidor.img
-    }))
-  };
-
-
   return (
     <div className='row mt-3'>
-      <div className='col-10'>
-        <strong>{followersData.length} Seguidores</strong>
-        <div className='row mt-1'>
-          {
-            followersData.map(d => {
-              return (
-                <div className='row mt-1'>
-                  <a className='link-dark link-underline-opacity-0 col-12 col-lg-4 mt-1' href="#">
-                    <div className='row mt-1'>
-                      <div className="col-3 col-lg-3">
-                        <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px' }} alt='profile picture' />
-                      </div>
-                      <div className="col-8 ms-1">
-                        <strong>{`${d.firstName} ${d.lastName}`}</strong>
-                        <p>{d.username}</p>
-                      </div>
-                    </div>
-                  </a>
+
+      <strong>Assinando {followersData.length} usuários</strong>
+      <ul class="list-group mt-4" style={{marginRight: '0.5rem'}}>
+        {followersData.map(d => {
+          return (
+
+            <>
+              <li class="list-group-item">
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px', marginRight:'0.5rem' }} alt='profile picture' />
+                  <div>
+                    <strong>{`${d.firstName} ${d.lastName}`}</strong>
+                    <p>{d.username}</p>
+                  </div>
                 </div>
-              )
-            })
-          }
-        </div>
-      </div>
+              </li>
+            </>
+
+          )
+        })}
+      </ul>
+
     </div>
   )
 }

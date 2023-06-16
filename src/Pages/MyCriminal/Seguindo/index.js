@@ -11,11 +11,11 @@ function Seguindo() {
   const idUser = localStorage.getItem('cc_p');
   const token = localStorage.getItem('cc_t')
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     getDados();
   }, []);
-  
+
   async function getDados() {
     try {
       const respondeUserFollowers = await api.get(`/profile/${idUser}`, {
@@ -38,11 +38,11 @@ function Seguindo() {
       }
     }
   }
-  
+
   useEffect(() => {
     async function fetchFollowersData() {
       const followersData = [];
-  
+
       for (const p of seguidores) {
         try {
           const response = await api.get(`/profile/${p}`, {
@@ -54,8 +54,8 @@ function Seguindo() {
           const userResponse = await api.get(`/user/${response.data.user}`);
           const { username } = userResponse.data;
           const { firstName, lastName, img, _id } = response.data;
-       
-  
+
+
           const followerData = {
             firstName,
             lastName,
@@ -63,51 +63,50 @@ function Seguindo() {
             username,
             _id
           };
-  
+
           followersData.push(followerData);
         } catch (error) {
           console.log(`Erro ao obter dados do seguidor ${p}:`, error);
         }
       }
-  
+
       setFollowers(followersData);
       console.log(followersData)
     }
-  
+
     if (seguidores.length > 0) {
       fetchFollowersData();
     }
   }, [seguidores]);
-  
+
 
 
   return (
     <div className='row mt-3'>
-      <div className='col-10'>
-        <strong>{followersData.length} Usuarios</strong>
-        <div className='row mt-1'>
-          {
-            followersData.map(d => {
-              return (
-                <div className='row mt-1'>
-                  <a className='link-dark link-underline-opacity-0 col-12 col-lg-10 mt-3' style={{marginLeft: '10px', cursor:'pointer'}}  onClick={() => { navigate(`../profile/${d._id}`) }}>
-                    <div className='row mt-1'>
-                      <div className="col-3 col-lg-10">
-                        <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px' }} alt='profile picture' />
-                      </div>
-                      <div className="col-8 ms-1">
-                        <strong>{`${d.firstName} ${d.lastName}`}</strong>
-                        <p>{d.username}</p>
-                      </div>
-                    </div>
-                  </a>
+
+      <strong>Seguindo {followersData.length} usuários</strong>
+      <ul class="list-group mt-4" style={{marginRight: '0.5rem'}}>
+        {followersData.map(d => {
+          return (
+
+            <>
+              <li class="list-group-item">
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <img src={d.img} className="rounded-circle" style={{ width: '50px', height: '50px', marginRight:'0.5rem' }} alt='profile picture' />
+                  <div>
+                    <strong>{`${d.firstName} ${d.lastName}`}</strong>
+                    <p>{d.username}</p>
+                  </div>
                 </div>
-              )
-            })
-          }
-        </div>
-      </div>
+              </li>
+            </>
+
+          )
+        })}
+      </ul>
+
     </div>
+
   )
 }
 

@@ -32,6 +32,7 @@ function Profile() {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [newfollowing, setNewFallowing] = useState([]);
+    const [newSubscribing, setnewSubscribing] = useState([]);
     const url = window.location.href;
     const userId = url.split("/profile/")[1];
     const idUser = localStorage.getItem('cc_p');
@@ -47,18 +48,36 @@ function Profile() {
     const [user, setUser] = useState('');
     const [isYou, setIsYou] = useState(false);
     const [sigo, setSigo] = useState(false);
+    const [assino, setAssino] = useState(false);
     const formData = new FormData();
     const [selectedFile, setSelectedFile] = useState(null);
     const [dadosPosts, setDadosPosts] = useState([]);
     const [selectedContent, setSelectedContent] = useState(null);
     const [selectedLegenda, setSelectedLegenda] = useState(null)
+    const [postModal, setPostModal] = useState('')
+    const [price, setPrice] = useState('')
 
-    // Função para abrir o modal e definir o conteúdo selecionado
-    const openModal = (content, legenda) => {
+    const openModal = (content, legenda, post) => {
         setSelectedContent(content);
         setSelectedLegenda(legenda)
         setShowModal(true);
+        setPostModal(post)
     };
+
+    async function deletePost() {
+        const deletando = await api.delete(`./post/${postModal}`)
+        const responseUser = await api.get(`/profile/${idUser}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const oldPosts = responseUser.data.posts
+        const newPosts = oldPosts.filter((post) => post !== postModal);
+        const deletandoPost = await api.patch(`/profile/${idUser}`, {
+            posts: newPosts
+        })
+        window.location.reload()
+    }
 
 
     const handleFileSelect = (event) => {
@@ -82,7 +101,6 @@ function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            console.log(response.data)
             const responseUser = await api.get(`/user/${response?.data.user}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -105,7 +123,8 @@ function Profile() {
                 setEditingFunction(response.data.role)
                 setIscCreator(response?.data.creator)
                 setNewFallowing(respondeUserFollowers.data.following)
-
+                setnewSubscribing(respondeUserFollowers.data.subscribing)
+                setPrice(response.data.valorAssinatura)
             }
 
         } catch (error) {
@@ -127,14 +146,14 @@ function Profile() {
             const dados = await Promise.all(
                 posts.map(async (id) => {
                     try {
-                        if(id){
-                        const response = await api.get(`/post/${id}`);
-                        const { content, legenda, likes, comments, createdAt, price } = response.data;
-                        return { id, content, legenda, likes, comments, createdAt, price };
-                        }else{
+                        if (id) {
+                            const response = await api.get(`/post/${id}`);
+                            const { content, legenda, likes, comments, createdAt, price } = response.data;
+                            return { id, content, legenda, likes, comments, createdAt, price };
+                        } else {
                             return
                         }
-                        
+
                     } catch (error) {
                         console.log(`Erro ao obter dados do post ${id}:`, error);
                         return null;
@@ -142,7 +161,8 @@ function Profile() {
                 })
             );
 
-            setDadosPosts(dados.filter((dado) => dado !== null));
+            setDadosPosts(dados.filter((dado) => dado != null));
+            console.log(dadosPosts)
         };
 
         obterDados();
@@ -170,9 +190,32 @@ function Profile() {
 
     }
 
+
+    async function verificaAssinado() {
+
+        try {
+
+            const verificaseg = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const seguidoresUser = verificaseg.data.subscribing
+            if (seguidoresUser.includes(userId)) {
+                setAssino(true)
+            } else {
+                setAssino(false)
+            }
+
+        } catch (error) {
+
+        }
+
+    }
     useEffect(() => {
         getDados()
         verificaseguidor()
+        verificaAssinado()
     }, []);
 
     async function seguir() {
@@ -230,25 +273,68 @@ function Profile() {
         }
     }
 
+    async function assinar() {
+        try {
 
+            const verificaAssinante = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const assinanteUser = verificaAssinante.data.subscribing;
 
-    const images2 = [
-        {
-            src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
-            width: 320,
-            height: 212,
-            profile: 'Lidia Beatriz',
-            date: '05/02/2023',
-            price: 'R$ 15,00',
-            hora: '22:00',
-            legenda: 'Legenda da Foto',
-            tags: [
-                { value: "Verts", title: "Verts" },
+            if (idUser !== userId && assino !== true) {
 
-            ],
-            caption: "After Rain (Jeshu John - designerspics.com)",
-        },
-    ];
+                if (assinanteUser.includes(userId)) {
+
+                    return;
+
+                } else {
+
+                    const newAssinanteUpdate = [...newSubscribing, userId];
+                    const _enviaAssinante = await api.patch(`/profile/${idUser}`, {
+                        subscribing: newAssinanteUpdate
+                    });
+
+                    const verificaAssinante = await api.get(`/profile/${userId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const listaAssinantes = verificaAssinante.data.subscribing
+                    const newAssinantes = [...listaAssinantes, userId]
+                    const _enviaAssinantesUser = await api.patch(`/profile/${userId}`, {
+                        subscribing: newAssinantes
+                    });
+                    setAssino(true);
+                    seguir()
+                }
+            } else {
+                const newAssinantesUpdate = newSubscribing.filter(id => id !== userId);
+                const _enviaAssinante = await api.patch(`/profile/${idUser}`, {
+                    subscribing: newAssinantesUpdate
+                });
+                const verificaAssinante = await api.get(`/profile/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const listaAssinantes = verificaAssinante.data.subscribing;
+                const newAssinantes = listaAssinantes.filter(id => id !== userId);
+
+                const _enviarseguiruser = await api.patch(`/profile/${userId}`, {
+                    subscribing: newAssinantes
+                });
+
+                setAssino(false);
+                seguir()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     const handleUsernameChange = (event) => {
@@ -331,7 +417,7 @@ function Profile() {
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
             .then(() => {
-                toast.success("URL copiada para a área de transferência", {
+                toast.success("Link do perfil copiado", {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -343,7 +429,7 @@ function Profile() {
                 });
             })
             .catch(() => {
-                toast.error("Falha ao copiar para a área de transferência", {
+                toast.error("Falha ao copiar link do Perfil", {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -378,20 +464,21 @@ function Profile() {
                 alignItems: 'center',
                 flexDirection: 'column',
                 display: 'flex',
-                border: 'solid white',
+                borderBottom: 'solid white',
 
             }}>
                 <div className="div-central-profile">
-                    <div className="seguidores-posts-likes">
-                        <span>Seguidores <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile?.followers)}</span> </span>
-                        <span>Seguindo <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile?.following)}</span>   </span>
-                        <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile.posts)}</span></span>
-                    </div>
+
                     <div className="dados-profile">
 
-                        <h1 style={{ fontWeight: 'bold', margin: 3 }}>{`${profile.firstName} ${profile.lastName}`}</h1>
+                        <h1 style={{ fontWeight: 'bold', margin: 3, marginTop: '35%' }}>{`${profile.firstName} ${profile.lastName}`}</h1>
                         <h6 style={{ marginTop: '10px' }}>@{user?.username}</h6>
                         <h6 className="function-user">{profile.role}</h6>
+                        <div className="seguidores-posts-likes mt-4 mb-4">
+                            <span>Seguidores <br /> <span style={{ fontWeight: 'normal', }}>{seguidores(profile?.followers)}</span> </span>
+                            <span>Seguindo <br /> <span style={{ fontWeight: 'normal', margin: '0 5rem' }}>{seguidores(profile?.following)}</span>   </span>
+                            <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile.posts)}</span></span>
+                        </div>
                         {isYou ? (<Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
                             <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
                         </Button>) : (null)}
@@ -460,12 +547,14 @@ function Profile() {
                                         : (<><Button className="buttons-profile m-2" onClick={() => { seguir() }} variant={sigo ? 'danger' : 'secondary'} type="submit">
                                             <span className="buttons-name-profile" style={{ fontWeight: sigo ? 'normal' : 'bold', fontSize: sigo ? '0.6rem' : '15px' }}>{sigo ? 'Deixar de Seguir' : 'Seguir'}</span>
                                         </Button>
-                                            <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Assinar R$ 50</span>
+
+                                            <Button className="buttons-profile m-2" onClick={() => { assinar() }} variant={assino ? 'danger' : 'secondary'} type="submit">
+                                                <span className="buttons-name-profile" style={{ fontWeight: assino ? 'normal' : 'bold', fontSize: assino ? '0.6rem' : '0.6rem' }}>{assino ? 'Deixar de Assinar' : `Assinar ${price != null ? price : ''}`}</span>
                                             </Button>
-                                            <Button className="buttons-profile m-2" variant="secondary" type="submit">
-                                                <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
-                                            </Button></>)}
+                                            {sigo ? (
+                                                <Button className="buttons-profile m-2" variant="secondary" type="submit">
+                                                    <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Pedidos</span>
+                                                </Button>) : (null)}</>)}
 
                                 </div>
                             </>) : (null)}
@@ -482,7 +571,7 @@ function Profile() {
                                         Favoritar <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faStar} />
                                     </button>
                                     <button className="m-1" onClick={() => { copyToClipboard(url) }} style={{ border: 'none', background: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                        Copiar URL do Perfil <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faShareSquare} />
+                                        Compartilha <FontAwesomeIcon style={{ marginLeft: '0.5rem' }} icon={faShareSquare} />
                                     </button>
                                 </>
                             )
@@ -543,55 +632,55 @@ function Profile() {
 
 
                 </div>
-                {profile?.creator && (
-                    <div className="container ">
+                {price !== null && price !== '' && profile?.creator ? (
+                    <div className="container">
                         <div className="row mb-5">
                             {dadosPosts.length <= 0 ? (
                                 <p>Sem posts</p>
                             ) : (
-                                dadosPosts.map((dados) => (
-                                    <div key={dados.id} className="col-md-4 mb-4">
-                                      <div className="square-thumbnail">
-                                        {dados.content.endsWith('.mp4') ? (
-                                          <div className="thumbnail-wrapper">
-                                            <video
-                                              className={dados.price !== '0,00' ? 'thumbnail-video blurred' : 'thumbnail-video'}
-                                              poster={dados.thumbnail}
-                                              onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
-                                            >
-                                              <source src={dados.content} type="video/mp4" />
-                                            </video>
-                                            {dados.price !== '0,00' && (
-                                              <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                Para visualizar, você precisa pagar o valor de {dados.price}
-                                              </div>
+                                dadosPosts.map((dados, index) => (
+                                    <div key={index} className="col-md-4 mb-4">
+                                        <div className="square-thumbnail">
+                                            {dados.content.endsWith('.mp4') ? (
+                                                <div className="thumbnail-wrapper">
+                                                    <video
+                                                        className={dados.price !== '0,00' && !isYou ? 'thumbnail-video blurred' : 'thumbnail-video'}
+                                                        poster={dados.thumbnail}
+                                                        onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
+                                                    >
+                                                        <source src={dados.content} type="video/mp4" />
+                                                    </video>
+                                                    {dados.price !== '0,00' &&(
+                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                            Para visualizar, você precisa pagar o valor de {dados.price}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="thumbnail-wrapper">
+                                                    <img
+                                                        className={dados.price !== '0,00' && !isYou ? 'thumbnail-image blurred' : 'thumbnail-image'}
+                                                        src={dados.content}
+                                                        alt="Imagem do post"
+                                                        onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda, dados.id)}
+                                                    />
+                                                    {dados.price !== '0,00' && (
+                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                            Para visualizar, você precisa pagar o valor de {dados.price}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             )}
-                                          </div>
-                                        ) : (
-                                          <div className="thumbnail-wrapper">
-                                            <img
-                                              className={dados.price !== '0,00' ? 'thumbnail-image blurred' : 'thumbnail-image'}
-                                              src={dados.content}
-                                              alt="Imagem do post"
-                                              onClick={dados.price !== '0,00' ? null : () => openModal(dados.content, dados.legenda)}
-                                            />
-                                            {dados.price !== '0,00' && (
-                                              <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                Para visualizar, você precisa pagar o valor de {dados.price}
-                                              </div>
-                                            )}
-                                          </div>
-                                        )}
-                                      </div>
+                                        </div>
                                     </div>
-                                  ))
-                                  
-                                  
-
+                                ))
                             )}
                         </div>
                     </div>
+                ) : (
+                    <p>Você precisa assinar este perfil para visualizar</p>
                 )}
+
 
 
 
@@ -605,8 +694,8 @@ function Profile() {
                         {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={closeModal} variant="danger">Deletar</Button>
-                        <Button onClick={closeModal} variant="primary">Arquivar</Button>
+                        {isYou ? (<><Button onClick={() => { deletePost() }} variant="danger">Deletar</Button>
+                            <Button onClick={closeModal} variant="primary">Arquivar</Button></>) : (null)}
                         <Button onClick={closeModal} variant="primary">Fechar</Button>
 
                     </Modal.Footer>

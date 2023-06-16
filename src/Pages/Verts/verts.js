@@ -37,6 +37,7 @@ function Verts() {
           date: formattedDate, // Data formatada no padrão "dia/mm"
           profileID: vert.user,
         };
+        console.log(vert.createdAt)
 
         if (vert.user !== localStorage.cc_p) {
           NewvertsList.push(vertObj);
@@ -45,12 +46,13 @@ function Verts() {
     }
 
     setVertsList(NewvertsList);
+
   };
 
   useEffect(() => {
     montaVerts();
   }, []);
-
+  
   const handleSwipe = (videoId) => {
     navigate(`/profile/${videoId}`);
   };
@@ -69,6 +71,7 @@ function Verts() {
   };
 
   return (
+    
     <div>
       {vertsList.map((src, index) => (
         <div
