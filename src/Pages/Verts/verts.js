@@ -51,7 +51,22 @@ function Verts() {
     montaVerts();
   }, []);
 
-  
+  const handleSwipe = (videoId) => {
+    navigate(`/profile/${videoId}`);
+  };
+
+  const handleTouchStart = (id) => (event) => {
+    const startX = event.touches[0].clientX;
+    const handleTouchEnd = (event) => {
+      const endX = event.changedTouches[0].clientX;
+      const deltaX = startX - endX;
+      if (deltaX > 100) {
+        handleSwipe(id);
+      }
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+    document.addEventListener("touchend", handleTouchEnd);
+  };
 
   return (
     
@@ -59,7 +74,7 @@ function Verts() {
 
       {vertsList.map((src, index) => (
         <div
-         // onTouchStart={handleTouchStart(src.profileID)}
+         onTouchStart={handleTouchStart(src.profileID)}
         >
           <Videos
             src={src.src}
