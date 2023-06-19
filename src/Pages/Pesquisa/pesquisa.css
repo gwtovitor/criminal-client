@@ -20,18 +20,18 @@
 .img-search:hover {
   background-color: #f2f2f2;
 }
-input {
+.input_pesquisa {
   border: none;
   padding: 20px;
   width: 15rem;
   letter-spacing: none;
   transition: 0.3s;
 }
-input:hover {
+.input_pesquisa:hover {
   letter-spacing: 1px;
 }
 
-li {
+.li_pesquisa {
   list-style-type: none;
   font-weight: bold;
   font-size: 1.5rem;
@@ -51,12 +51,13 @@ li {
   margin-right: 3rem;
 }
 
-li:hover {
+.li_pesquisa:hover {
   background-color: #b9b9b9;
 }
 
 .imgUser {
   width: 4.6rem;
+  height: 4.6rem;
   border-radius: 50%;
   border: 2px solid black;
   margin-left: 2rem;

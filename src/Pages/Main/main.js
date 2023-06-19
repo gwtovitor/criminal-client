@@ -66,6 +66,7 @@ function Main() {
                             <MenuItem href="/verts" icon={<PersonalVideoIcon style={{ color: 'black' }} />}>Verts</MenuItem>
                             <MenuItem href="/" icon={<HomeIcon style={{ color: 'black' }} />}>Feed</MenuItem>
                             <MenuItem href="/mensagens" icon={<Send style={{ color: 'black' }} />}>Mensagens</MenuItem>
+                            <MenuItem href="/pesquisa" icon={<Search style={{ color: 'black' }} />}>Pesquisar</MenuItem>
                             {isCreator ? (
                                 <SubMenu icon={<AddBoxOutlined style={{ color: 'black' }} />} label="Publicar">
                                     <MenuItem href="/postfeed">Feed</MenuItem>

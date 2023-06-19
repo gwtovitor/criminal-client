@@ -83,7 +83,11 @@ function Feed() {
 
         let sortedPostIds = Object.keys(postDates).sort((a, b) => postDates[b] - postDates[a]);
         sortedPostIds = sortedPostIds.filter((postId) => !idsPassados.includes(postId));
-        for (let i = 0; i < sortedPostIds.length && i < 5; i++) {
+        for (let i = 0; i < sortedPostIds.length && i < 10; i++) {
+            if(sortedPostIds.length == 0){
+                setCarregando(false)
+                return 
+            }
             const postId = sortedPostIds[i];
             idsPassados.push(postId);
             if (postId == undefined) {
@@ -163,6 +167,7 @@ function Feed() {
         function handleScroll() {
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
             if (scrollTop + clientHeight >= scrollHeight) {
+                console.log('oi ')
                 montaFeed(localStorage.cc_p);
                 setCarregando(true)
             }
@@ -274,12 +279,12 @@ function Feed() {
                                 <strong>{post.likes} curtidas</strong>
                                 <p>{post.description}</p>
                                 {commentsFeed[post._id].slice(0, 2).map((comentario) => (
-                                    <div className='mb-2' data-toggle="modal" data-target={`#exampleModalLong${post._id}`}>
+                                    <div style={{ cursor: 'pointer' }} className='mb-2' data-toggle="modal" data-target={`#exampleModalLong${post._id}`}>
                                         <div style={{ display: 'flex', flexDirection: 'row', marginTop: '6px', alignItems: 'center' }} key={index}>
                                             <Avatar style={{ marginRight: '5px' }} src={comentario.profilePicture}></Avatar>
                                             <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row' }}>
                                                 <p style={{ fontWeight: 'bold' }}>{comentario.userName}</p>
-                                                <span style={{ cursor: 'pointer' }}>
+                                                <span >
                                                     <p>: {comentario.content}</p>
                                                 </span>
                                             </div>
@@ -302,19 +307,19 @@ function Feed() {
                                         <div className="modal-content">
                                             <div className="modal-header">
                                                 <h5 className="modal-title" id={`exampleModalLongTitle${post._id}`}>Comentários</h5>
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                <button type="button" className="" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div className="modal-body">
                                                 <div className="comment-list">
                                                     {commentsFeed[post._id].map((comentario, index) => (
-                                                        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center' }} key={index}>
+                                                        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', alignItems: 'center'}} key={index}>
                                                             <div style={{ marginTop: '5px', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                                <Avatar style={{ marginRight: '6px' }} src={comentario.profilePicture} />
+                                                                <Avatar className="close" data-dismiss="modal" onClick={() => { navigate(`profile/${post.profileId}`) }} style={{ marginRight: '6px',cursor:'pointer'  }} src={comentario.profilePicture} />
                                                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                                    <p style={{ fontWeight: 'bold' }}>{comentario.userName}</p>
-                                                                    <p>:{comentario.content}</p>
+                                                                    <p className="close" data-dismiss="modal" onClick={() => { navigate(`profile/${post.profileId}`) }} style={{ fontWeight: 'bold', cursor:'pointer'  }}>{comentario.userName}</p>
+                                                                    <p>: {comentario.content}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -345,7 +350,7 @@ function Feed() {
                     <p style={{ textAlign: 'center' }}>Carregando...</p>
                 )}
                 {carregando ? (
-                    <p style={{ textAlign: 'center' }}>Carregando...</p>
+                    <p className='mb-4' style={{ textAlign: 'center' }}>Carregando...</p>
                 ) : (
                     null
                 )}
