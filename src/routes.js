@@ -26,6 +26,7 @@ import Suporte from './Pages/Suporte'
 import MyGallery from './Pages/Galeria'
 import NivelConta from './Pages/Financas/Nivelconta'
 import Arquivados from './Pages/Arquivados'
+import Pesquisa from './Pages/Pesquisa'
 
 function RoutesApp() {
     return (
@@ -58,6 +59,7 @@ function RoutesApp() {
                     <Route path='/favoritos' element={<MyGallery />} />
                     <Route path='/profile/:id' element={<Profile />} />
                     <Route path='/profilefa' element={<Profilefa />} />
+                    <Route path='/pesquisa' element={<Pesquisa />} />
                 </Route>
             </Routes>
         </BrowserRouter>
