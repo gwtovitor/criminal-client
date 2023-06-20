@@ -68,100 +68,80 @@ function Feed() {
 
 
 
-    async function montaPosts(feedProps) {
+    async function montaFeed(id) {
+        if (!localStorage.cc_p || !localStorage.cc_t) {
+          return navigate('/home');
+        }
+        const posts = await api.get(`feed/${id}`);
+        await montaPosts(posts.data);
+      }
+      
+      async function montaPosts(feedProps) {
         const newFeed = [...feed];
         const postDates = {};
-
+        const fetchPostDataPromises = [];
+      
         for (const postId of feedProps) {
-            if (postId != null) {
-                const postData = await api.get(`/post/${postId}`);
-
-                postDates[postData.data._id] = new Date(postData.data.createdAt);
-            }
-
+          if (postId != null) {
+            const fetchPromise = api.get(`/post/${postId}`)
+              .then((response) => {
+                const postData = response.data;
+                postDates[postData._id] = new Date(postData.createdAt);
+              });
+            fetchPostDataPromises.push(fetchPromise);
+          }
         }
-
+      
+        await Promise.all(fetchPostDataPromises);
+      
         let sortedPostIds = Object.keys(postDates).sort((a, b) => postDates[b] - postDates[a]);
         sortedPostIds = sortedPostIds.filter((postId) => !idsPassados.includes(postId));
         for (let i = 0; i < sortedPostIds.length && i < 10; i++) {
-            if(sortedPostIds.length == 0){
-                setCarregando(false)
-                return 
-            }
-            const postId = sortedPostIds[i];
-            idsPassados.push(postId);
-            if (postId == undefined) {
-                break;
-            }
-
-            const postData = await api.get(`/post/${postId}`);
-            const profileData = await api.get(`profile/${postData.data.user}`);
-            // ...
-            const comentarios = postData.data.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
-            setCommmentsFeed((prevCommentsFeed) => {
-                return { ...prevCommentsFeed, [postData.data._id]: comentarios };
-            });
-            const postObj = {
-                "_id": postData.data._id,
-                "price": postData.data.price,
-                "profileId": profileData.data._id,
-                "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
-                "profilePicture": profileData.data.img,
-                "user": "vc_sabia",
-                "content": postData.data.content,
-                "description": postData.data.legenda,
-                "likes": postData.data.likes.length,
-                "comentarios": comentarios,
-                "createdAt": postData.data.createdAt,
-                "liked": postData.data.likes.includes(idUser) ? true : false,
-                "agendamentoPost": postData.data.agendamentoPost
-            };
-
-            if (postObj.agendamentoPost && new Date(postObj.agendamentoPost) > new Date()) {
-            } else {
-                newFeed.push(postObj);
-            }
-        }
-        setFeed(newFeed);
-        setCarregando(false)
-    }
-
-    /*
-
-    async function getComentarios(comentarioID) {
-        try {
-          var cont = 0;
-          const comentarios = [];
-          while (cont < comentarioID.length) {
-            const montaComentarios = await api.get(`/comentario/${comentarioID[cont]}`);
-            const profile = await api.get(`/profile/${montaComentarios.data.perfil}`);
-            const name = `${profile.data.firstName} ${profile.data.lastName}`;
-      
-            const postObj = {
-              "_id": montaComentarios.data._id,
-              "name": name,
-              "profilePicture": profile.data.img,
-              "content": montaComentarios.data.content,
-              "likes": montaComentarios.data.likes.length,
-              "createdAt": montaComentarios.data.createdAt,
-              "liked": montaComentarios.data.likes.includes(idUser) ? true : false,
-            };
-            comentarios.push(postObj);
-            cont++;
+          const postId = sortedPostIds[i];
+          idsPassados.push(postId);
+          if (postId == undefined) {
+            break;
           }
-          console.log(comentarios)
-          return comentarios;
-        } catch (error) {
-          console.error("Ocorreu um erro:", error);
-          throw error; // Você pode escolher lançar o erro novamente ou retornar um objeto vazio, se preferir.
+      
+          const postData = await api.get(`/post/${postId}`);
+          const profileData = await api.get(`profile/${postData.data.user}`);
+      
+          const comentarios = postData.data.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+          setCommmentsFeed((prevCommentsFeed) => {
+            return { ...prevCommentsFeed, [postData.data._id]: comentarios };
+          });
+      
+          const postObj = {
+            "_id": postData.data._id,
+            "price": postData.data.price,
+            "profileId": profileData.data._id,
+            "author": `${profileData.data.firstName} ${profileData.data.lastName}`,
+            "profilePicture": profileData.data.img,
+            "content": postData.data.content,
+            "user": "vc_sabia",
+            "description": postData.data.legenda,
+            "likes": postData.data.likes.length,
+            "comentarios": comentarios,
+            "createdAt": postData.data.createdAt,
+            "liked": postData.data.likes.includes(idUser) ? true : false,
+            "agendamentoPost": postData.data.agendamentoPost
+          };
+      
+          if (postObj.agendamentoPost && new Date(postObj.agendamentoPost) > new Date()) {
+            // Fazer algo caso o post esteja agendado para o futuro
+          } else {
+            newFeed.push(postObj);
+          }
         }
+      
+        setFeed(newFeed);
+        setCarregando(false);
       }
-      */
-
-    useEffect(() => {
+      
+      useEffect(() => {
         montaFeed(localStorage.cc_p);
-
-    }, []);
+      }, []);
+      
 
     useEffect(() => {
         function handleScroll() {
