@@ -160,7 +160,6 @@ function Signfa() {
                 login: userName,
                 password: password
               })
-              console.log(login.data.token)
               if(login.data.token){
                 localStorage.setItem('cc_t', login.data.token)
                 navigate('/')

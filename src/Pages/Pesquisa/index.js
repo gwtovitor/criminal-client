@@ -42,7 +42,6 @@ const Pesquisa = () => {
         user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.usuario?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    console.log(filteredUsers);
     setFilteredUsers(filteredUsers);
   };
 

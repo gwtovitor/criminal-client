@@ -69,7 +69,6 @@ function Profile() {
     const handleImageSelection = (event) => {
         const option = event.target.value;
         setSelectedOption(option);
-        console.log(option)
       
         switch (option) {
           case 'opcao1':
@@ -86,8 +85,7 @@ function Profile() {
             setSelectedPhoto('');
             break;
         }
-      
-        console.log(selectedPhoto);
+
       };
       
 
@@ -189,7 +187,6 @@ function Profile() {
 
             const sortedDados = dados.filter((dado) => dado != null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setDadosPosts(sortedDados);
-            console.log(sortedDados);
         };
 
         obterDados();
@@ -425,7 +422,6 @@ function Profile() {
             const response = await api.post("/upload", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             })
-            console.log(response.data)
             const imgPath = response.data.file.location
             try {
                 const attProfile = await api.patch(`/profile/${id}`, {

@@ -61,7 +61,7 @@ function Main() {
         const offcanvas = document.getElementById('offcanvasNavbarMain');
         const offcanvasInstance = Offcanvas.getInstance(offcanvas);
         offcanvasInstance.hide();
-        offcanvas.setAttribute('data-bs-dismiss', 'offcanvas');
+        offcanvas.setAttribute('offcanvas', 'offcanvas');
     }
     function closeOffCanvas(){
         const offcanvas = document.getElementById('offcanvasBottom');

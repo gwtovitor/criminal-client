@@ -41,7 +41,6 @@ function Verts() {
           date: formattedDate, // Data formatada no padrão "dia/mm"
           profileID: vert.user,
         };
-        console.log(vert.createdAt);
 
         if (vert.user !== localStorage.cc_p) {
           NewvertsList.push(vertObj);
@@ -50,7 +49,6 @@ function Verts() {
 
 
       setVertsList(NewvertsList);
-      console.log(vertsList)
     };
     montaVerts();
   }, []);

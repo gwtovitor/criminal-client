@@ -71,7 +71,7 @@ function Seguindo() {
       }
 
       setFollowers(followersData);
-      console.log(followersData)
+
     }
 
     if (seguidores.length > 0) {

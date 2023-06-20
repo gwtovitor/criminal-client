@@ -42,10 +42,9 @@ function Feed() {
                 date: Date.now(),
                 profilePicture: userData.data.img
             }
-            // console.log(objetoComentario)
+
             const getComentarios = await api.get(`/post/${postId}`)
             const newComentarios = getComentarios.data.comments
-            // console.log(newComentarios)
             const comentariosOK = [...newComentarios, objetoComentario]
             comentariosOK.sort((a, b) => new Date(b.date) - new Date(a.date));
             const postComentarioPost = await api.patch(`/post/${postId}`, {
@@ -147,7 +146,6 @@ function Feed() {
         function handleScroll() {
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
             if (scrollTop + clientHeight >= scrollHeight) {
-                console.log('oi ')
                 montaFeed(localStorage.cc_p);
                 setCarregando(true)
             }

@@ -18,7 +18,6 @@ import Main from './Pages/Main/main'
 import Verts from './Pages/Verts/verts'
 import Mensagens from './Pages/Mensagens/mensagens'
 import Profile from './Pages/Profile/profile'
-import Profilefa from './Pages/ProfileFa/profilefa'
 import Postfeed from './Pages/Postfeed'
 import Postverts from './Pages/Postverts'
 import PostMsg from './Pages/PostMsg'
@@ -58,7 +57,6 @@ function RoutesApp() {
                     <Route path='/arquivados' element={<Arquivados />} />
                     <Route path='/favoritos' element={<MyGallery />} />
                     <Route path='/profile/:id' element={<Profile />} />
-                    <Route path='/profilefa' element={<Profilefa />} />
                     <Route path='/pesquisa' element={<Pesquisa />} />
                 </Route>
             </Routes>
