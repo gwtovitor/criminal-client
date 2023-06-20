@@ -4,10 +4,10 @@ import { ThumbUp } from "@mui/icons-material";
 import "./Video.css";
 import { Avatar } from "@mui/material";
 import { VolumeOff, VolumeUp } from "@mui/icons-material";
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
-import api from '../../../Services/api';
+import api from "../../../Services/api";
 
 function Video({
   id,
@@ -19,7 +19,7 @@ function Video({
   date,
   userName,
   itemId,
-  profileId
+  profileId,
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -35,8 +35,8 @@ function Video({
     setShowFullDescription(!showFullDescription);
   }
 
-  const shortDescription = description.split(' ').slice(0, 2).join(' ');
-  const fullDescription = description.split(' ').slice(2).join(' ');
+  const shortDescription = description.split(" ").slice(0, 2).join(" ");
+  const fullDescription = description.split(" ").slice(2).join(" ");
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -72,7 +72,10 @@ function Video({
     return () => {
       if (videoRef.current) {
         videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
-        videoRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
+        videoRef.current.removeEventListener(
+          "loadedmetadata",
+          handleLoadedMetadata
+        );
       }
     };
   }, []);
@@ -82,7 +85,10 @@ function Video({
       const videoElement = videoRef.current;
       if (videoElement) {
         const boundingClientRect = videoElement.getBoundingClientRect();
-        if (boundingClientRect.top >= 0 && boundingClientRect.bottom <= window.innerHeight) {
+        if (
+          boundingClientRect.top >= 0 &&
+          boundingClientRect.bottom <= window.innerHeight
+        ) {
           videoElement.play();
           setPlaying(true);
         } else {
@@ -98,7 +104,7 @@ function Video({
 
   const verificaLike = () => {
     like.includes(localStorage.cc_p) ? setLiked(true) : setLiked(false);
-  }
+  };
 
   const handleVideoPress = () => {
     if (playing) {
@@ -132,26 +138,37 @@ function Video({
   const scrollUp = () => {
     window.scrollBy({
       top: -100,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
   const scrollDown = () => {
     window.scrollBy({
       top: 100,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
   return (
     <div className="video">
-      <div className="video__cc"><h3>{`CC ${userName}`}</h3></div>
+      <div className="video__cc">
+        <h3>{`CC ${userName}`}</h3>
+      </div>
       <div className="video__buttons">
-        <button type="button" onClick={scrollUp} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowUpIcon />
+        <button
+          type="button"
+          onClick={scrollUp}
+          class="btn btn-primary btn-circle btn-xl"
+        >
+          <KeyboardArrowUpIcon />
         </button>
-        <button type="button" onClick={scrollDown} class="btn btn-primary btn-circle btn-xl"><KeyboardArrowDownIcon />
+        <button
+          type="button"
+          onClick={scrollDown}
+          class="btn btn-primary btn-circle btn-xl"
+        >
+          <KeyboardArrowDownIcon />
         </button>
-
       </div>
 
       <video
@@ -164,7 +181,6 @@ function Video({
         muted={muted}
       />
       <div className="video__controls">
-
         <input
           type="range"
           min="0"
@@ -177,7 +193,6 @@ function Video({
         <div>{formatTime(duration)}</div>
       </div>
 
-
       <div className="shortsContainer">
         <div className="shortsVideoTop">
           <div className="shortsVideoTopIcon"></div>
@@ -186,13 +201,18 @@ function Video({
           <div className="shortsVideoSideIcon">
             <Avatar className="buttonsShortsSide" src={avatar} />
             {liked ? (
-              <ThumbUp className="buttonsShortsSide text-info" onClick={handleLikeClick} />
+              <ThumbUp
+                className="buttonsShortsSide text-info"
+                onClick={handleLikeClick}
+              />
             ) : (
-              <ThumbUp className="buttonsShortsSide" onClick={handleLikeClick} />
+              <ThumbUp
+                className="buttonsShortsSide"
+                onClick={handleLikeClick}
+              />
             )}
 
             <p>{like.length}</p>
-
           </div>
           <div onClick={handleMuteClick}>
             {muted ? (
@@ -201,55 +221,109 @@ function Video({
               <VolumeUp className="buttonsShortsSide" />
             )}
           </div>
-          <span style={{ cursor: 'pointer' }} data-toggle="modal" data-target={`#exampleModalLong`}>
-            <MoreVert style={{ marginTop: '15px' }} className="buttonsShortsSide" />
+          <span
+            style={{ cursor: "pointer" }}
+            data-toggle="modal"
+            data-target={`#exampleModalLong`}
+          >
+            <MoreVert
+              style={{ marginTop: "15px" }}
+              className="buttonsShortsSide"
+            />
           </span>
-
         </div>
-        <div class="modal fade" id={'exampleModalLong'} tabindex="-1" role="dialog" aria-labelledby={`exampleModalLongTitle$`} aria-hidden="true">
+        <div
+          class="modal fade"
+          id={"exampleModalLong"}
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby={`exampleModalLongTitle$`}
+          aria-hidden="true"
+        >
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id={`exampleModalLongTitle`}>Comentários</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                <h5 class="modal-title" id={`exampleModalLongTitle`}>
+                  Comentários
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span class="xClose" aria-hidden="true">
+                    &times;
+                  </span>
                 </button>
               </div>
               <div class="modal-body">
                 <div className="comment-list d-flex flex-column">
-                  <button type="button" class="btn btn-danger mt-2">Denunciar Video</button>
-                  <button type="button" class="btn btn-primary mt-2">Denunciar Perfil</button>
-                  <button type="button" class="btn btn-primary mt-2 mt-2">Copiar Link do Perfil</button>
-                  <button type="button" class="btn btn-primary mt-2">Copiar Link do Video</button>
+                  <button type="button" class="btn btn-danger mt-2">
+                    Denunciar Video
+                  </button>
+                  <button type="button" class="btn btn-primary mt-2">
+                    Denunciar Perfil
+                  </button>
+                  <button type="button" class="btn btn-primary mt-2 mt-2">
+                    Copiar Link do Perfil
+                  </button>
+                  <button type="button" class="btn btn-primary mt-2">
+                    Copiar Link do Video
+                  </button>
                 </div>
-
               </div>
               <div class="modal-footer">
-                <div className="add-comment" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-
-                </div>
-
-
-
-
+                <div
+                  className="add-comment"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                ></div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="shortsBottom">
-
           <div className="shortsDesc">
             <div className="vertsBotton">
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <p style={{ color: 'white', fontWeight: 'bold', marginRight: '5px' }}>{channel}</p>
-                <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '12px' }}> - {date}</p>
-
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <p
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginRight: "5px",
+                  }}
+                >
+                  {channel}
+                </p>
+                <p
+                  style={{
+                    color: "rgba(255, 255, 255, 0.6)",
+                    fontSize: "12px",
+                  }}
+                >
+                  {" "}
+                  - {date}
+                </p>
               </div>
               {showFullDescription ? (
-                <p className="description" onClick={toggleShowFullDescription}>{description}</p>
+                <p className="description" onClick={toggleShowFullDescription}>
+                  {description}
+                </p>
               ) : (
-                <p className="description" onClick={toggleShowFullDescription}>{shortDescription}...</p>
+                <p className="description" onClick={toggleShowFullDescription}>
+                  {shortDescription}...
+                </p>
               )}
             </div>
           </div>
