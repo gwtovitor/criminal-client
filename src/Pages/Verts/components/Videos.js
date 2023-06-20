@@ -208,7 +208,7 @@ function Video({
         </div>
         <div className="shortsVideoSideIcons">
           <div className="shortsVideoSideIcon">
-            <Avatar className="buttonsShortsSide"  onClick={()=> {navegaProfile(profileId)}} src={avatar} />
+            <Avatar className="buttonsShortsSide" style={{cursor:'pointer'}} onClick={()=> {navegaProfile(profileId)}} src={avatar} />
             {liked ? (
               <ThumbUp
                 className="buttonsShortsSide text-info"

@@ -15,6 +15,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import api from '../../Services/api';
 import Swal from 'sweetalert2';
+import { Offcanvas } from 'bootstrap';
+
 
 
 function Main() {
@@ -54,6 +56,44 @@ function Main() {
         }
     }
 
+    function closeModal() {
+
+        const offcanvas = document.getElementById('offcanvasNavbarMain');
+        const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+        offcanvasInstance.hide();
+        offcanvas.setAttribute('data-bs-dismiss', 'offcanvas');
+    }
+    function closeOffCanvas(){
+        const offcanvas = document.getElementById('offcanvasBottom');
+        const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+        offcanvasInstance.hide();
+        offcanvas.setAttribute('data-bs-dismiss', 'offcanvas');
+    }
+    
+    function closeModalLateral() {
+        const offcanvas = document.getElementById('offcanvasNavbarMyCriminal');
+        const offcanvass = document.getElementById('offcanvasNavbarMain');
+        const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+        const offcanvassInstance = Offcanvas.getInstance(offcanvass);
+        offcanvasInstance.hide();
+        offcanvassInstance.hide()
+        offcanvass.setAttribute('data-bs-dismiss', 'offcanvas');
+        offcanvas.setAttribute('data-bs-dismiss', 'offcanvas');
+    }
+    
+    function closeModalFinancas() {
+        const offcanvas = document.getElementById('offcanvasNavbarFinancas');
+        const offcanvass = document.getElementById('offcanvasNavbarMain');
+        const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+        const offcanvassInstance = Offcanvas.getInstance(offcanvass);
+        offcanvasInstance.hide();
+        offcanvassInstance.hide()
+        offcanvass.setAttribute('data-bs-dismiss', 'offcanvas');
+        offcanvas.setAttribute('data-bs-dismiss', 'offcanvas');
+    }
+    
+    
+      
     useEffect(() => {
         getDados();
     }, []);
@@ -104,109 +144,109 @@ function Main() {
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
-                <IconButton component={Link} to="/verts"><div><PersonalVideoIcon style={{ color: 'black', fontSize: '1.3rem' }} /> <p style={{ color: 'black', fontSize: '0.8rem' }}>VERTS</p></div></IconButton>
-                <IconButton component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
+                <IconButton onClick={()=>{closeModal()}} component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black', fontSize: '1.3rem' }} /></IconButton>
+                <IconButton onClick={()=>{closeModal()}} component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
                 {isCreator ? (<> <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton></>) : (null)}
-                <IconButton component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
+                <IconButton onClick={()=>{closeModal()}} component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{ color: 'black' }} /></IconButton>
 
 
             </footer>
 
 
-            <div class="offcanvas offcanvas-bottom h-50" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Postagem</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div className="offcanvas offcanvas-bottom h-50 focus" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }} id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="offcanvasBottomLabel">Postagem</h5>
+                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body small">
+                <div className="offcanvas-body small">
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <Link className='btn btn-info text-white m-1' component={Link} to="/postverts">Verts</Link>
-                        <Link className='btn btn-info text-white  m-1' component={Link} to="/postfeed">Feed</Link>
-                        <Link className='btn btn-info text-white  m-1' component={Link} to="/verts">Mensagens</Link>
+                        <Link className='btn btn-info text-white m-1' component={Link} to="/postverts" onClick={() => closeOffCanvas()}>Verts</Link>
+                        <Link className='btn btn-info text-white m-1' component={Link} to="/postfeed" onClick={() => closeOffCanvas()}>Feed</Link>
+                        <Link className='btn btn-info text-white m-1' component={Link} to="/verts" onClick={() => closeOffCanvas()}>Mensagens</Link>
                     </div>
                 </div>
-
             </div>
-            <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
-                <div class="offcanvas-header">
-                    <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <Avatar style={{marginRight:'0.5rem'}} src={myDados.img}></Avatar>
-                        <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">{`${myDados.firstName} ${myDados.lastName}`}</strong>
+
+            <div className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
+                <div className="offcanvas-header">
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Avatar style={{ marginRight: '0.5rem' }} src={myDados.img}></Avatar>
+                        <strong className="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">{`${myDados.firstName} ${myDados.lastName}`}</strong>
                     </div>
-                    <a type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
+                    <a type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <h5><a class="nav-link active" aria-current="page" href="../"><Search style={{ color: 'black' }} className='me-2' />Procurar</a></h5>
+                <div className="offcanvas-body">
+                    <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li className="nav-item">
+                            <h5><a className="nav-link active" aria-current="page" href="../pesquisa"><Search style={{ color: 'black' }} className='me-2' />Procurar</a></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-current="page" hi9><AttachMoneyIcon style={{ color: 'black' }} className='me-2' />Finanças</a></h5>
+                        <li className="nav-item">
+                            <h5><a className="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarFinancas" aria-controls="offcanvasNavbarFinancas" aria-current="page" ><AttachMoneyIcon style={{ color: 'black' }} className='me-2' />Finanças</a></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><a class="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" hi9><ClosedCaptionOff style={{ color: 'black' }} className='me-2' />My Criminal</a></h5>
+                        <li className="nav-item">
+                            <h5><a className="nav-link active" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-controls="offcanvasNavbarMyCriminal" aria-current="page" ><ClosedCaptionOff style={{ color: 'black' }} className='me-2' />My Criminal</a></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" component={Link} onClick={() => updateUrlAndReload(`/profile/${id}`)}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" component={Link} onClick={() => updateUrlAndReload(`/profile/${id}`)}><AccountCircleIcon style={{ color: 'black' }} className='me-2' />Perfil</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" onClick={() => { logoff() }} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" onClick={() => { logoff() }} to={'./home'}><Logout style={{ color: 'black' }} className='me-2' />Sair</Link></h5>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMyCriminal" aria-labelledby="offcanvasNavbarMyCriminalLabel">
-                <div class="offcanvas-header">
-                    <strong class="offcanvas-title" id="offcanvasNavbarMyCriminal"><ClosedCaptionOff /> My Criminal</strong>
-                    <a type="button" class="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
+            <div className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" id="offcanvasNavbarMyCriminal" aria-labelledby="offcanvasNavbarMyCriminalLabel">
+                <div className="offcanvas-header">
+                    <strong className="offcanvas-title" id="offcanvasNavbarMyCriminal"><ClosedCaptionOff /> My Criminal</strong>
+                    <a type="button" className="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./seguidores"}>Seguidores</Link></h5>
+                <div className="offcanvas-body">
+                    <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" onClick={()=>{closeModalLateral()}} to={"./seguidores"}>Seguidores</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./seguindo"}>Seguindo</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page"onClick={()=>{closeModalLateral()}} to={"./seguindo"}>Seguindo</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./assinantes"}>Assinantes</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" onClick={()=>{closeModalLateral()}} to={"./assinantes"}>Assinantes</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./assinando"}>Assinando</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page"onClick={()=>{closeModalLateral()}} to={"./assinando"}>Assinando</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./favoritos"}>Galeria</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" onClick={()=>{closeModalLateral()}} to={"./favoritos"}>Galeria</Link></h5>
                         </li>
-                        <li class="nav-item">
-                            <h5><Link class="nav-link active" aria-current="page" to={"./suporte"}>Suporte CC</Link></h5>
+                        <li className="nav-item">
+                            <h5><Link className="nav-link active" aria-current="page" onClick={()=>{closeModalLateral()}} to={"./suporte"}>Suporte CC</Link></h5>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarFinancas" aria-labelledby="offcanvasNavbarFinancasLabel">
-                <div class="offcanvas-header">
-                    <strong class="offcanvas-title" id="offcanvasNavbarFinancas"><AttachMoneyIcon /> Finanças</strong>
-                    <a type="button" class="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
-                    {/* <a type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-label="Close"></a> */}
+            <div className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" id="offcanvasNavbarFinancas" aria-labelledby="offcanvasNavbarFinancasLabel">
+                <div className="offcanvas-header">
+                    <strong className="offcanvas-title" id="offcanvasNavbarFinancas"><AttachMoneyIcon /> Finanças</strong>
+                    <a type="button" className="btn-close-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-label="Close"><ArrowBack className='text-secondary' /></a>
+                    {/* <a type="button" className="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMyCriminal" aria-label="Close"></a> */}
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav flex-grow-1 pe-3">
-                        <li class="nav-item">
+                <div className="offcanvas-body">
+                    <ul className="navbar-nav flex-grow-1 pe-3">
+                        <li className="nav-item">
                             <h5>
-                                <Link class="nav-link active" aria-current="page" to={"./balanco"}>Balanço</Link>
+                                <Link className="nav-link active" onClick={()=>{closeModalFinancas()}} aria-current="page" to={"./balanco"}>Balanço</Link>
                             </h5>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                             <h5>
-                                <Link class="nav-link active" aria-current="page" to={"./compras"}>Compras</Link>
+                                <Link className="nav-link active"onClick={()=>{closeModalFinancas()}}aria-current="page" to={"./compras"}>Compras</Link>
                             </h5>
                         </li>
-                        <li class="nav-item">
+                        <li className="nav-item">
                             <h5>
-                                <Link class="nav-link active" aria-current="page" to={"./banco"}>Banco</Link>
+                                <Link className="nav-link active" onClick={()=>{closeModalFinancas()}} aria-current="page" to={"./banco"}>Banco</Link>
                             </h5>
                         </li>
                     </ul>
