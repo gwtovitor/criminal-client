@@ -99,7 +99,7 @@ function Main() {
 
                 </div>
             </div>
-            <div className='col-12 col-lg-9 container-outlet mb-3'>
+            <div className='col-12 col-lg-9 container-outlet mb-3 w-100'>
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
