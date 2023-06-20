@@ -307,7 +307,7 @@ function Feed() {
                                                 </div>
                                             </div>
                                             <div className="modal-footer">
-                                                <div className="add-comment" style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className="add-comment mb-5" style={{ display: 'flex', alignItems: 'center' }}>
                                                     <input
                                                         type="text"
                                                         value={commentInputs[post._id] || ''}

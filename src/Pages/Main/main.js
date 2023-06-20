@@ -5,7 +5,7 @@ import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 import CottageIcon from '@mui/icons-material/Cottage';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { IconButton } from '@mui/material';
+import { Avatar, IconButton } from '@mui/material';
 import { Outlet, Link } from 'react-router-dom';
 import { ClosedCaptionOff, Logout, Search, Menu as MenuHamburger, AddBoxOutlined } from '@mui/icons-material';
 import { ArrowBack } from '@mui/icons-material';
@@ -21,6 +21,7 @@ function Main() {
     const navigate = useNavigate();
     const id = localStorage.getItem('cc_p');
     const [isCreator, setIscCreator] = useState(false);
+    const [myDados, setMyDados] = useState([])
     const token = localStorage.getItem('cc_t');
 
     function logoff() {
@@ -45,7 +46,7 @@ function Main() {
                     'Authorization': `Bearer ${token}`
                 }
             })
-
+            setMyDados(response?.data)
             setIscCreator(response?.data.creator)
 
         } catch (error) {
@@ -103,10 +104,10 @@ function Main() {
                 < Outlet />
             </div>
             <footer className="footer border-top border-dark-subtle border-2">
-                <IconButton  component={Link} to="/verts"><PersonalVideoIcon style={{ color: 'black' }} /></IconButton>
+                <IconButton component={Link} to="/verts"><div><PersonalVideoIcon style={{ color: 'black', fontSize: '1.3rem' }} /> <p style={{ color: 'black', fontSize: '0.8rem' }}>VERTS</p></div></IconButton>
                 <IconButton component={Link} to='../'><CottageIcon style={{ color: 'black' }} /></IconButton>
                 {isCreator ? (<> <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" ><AddBoxOutlined style={{ color: 'black' }} /></IconButton></>) : (null)}
-                <IconButton  component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
+                <IconButton component={Link} to='../'><SendOutlined style={{ color: 'black' }} /></IconButton>
                 <IconButton data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarMain" aria-controls="offcanvasNavbarMain" aria-label="Toggle navigation"><MenuHamburger style={{ color: 'black' }} /></IconButton>
 
 
@@ -129,7 +130,10 @@ function Main() {
             </div>
             <div class="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75" tabindex="-1" id="offcanvasNavbarMain" aria-labelledby="offcanvasNavbarMainLabel">
                 <div class="offcanvas-header">
-                    <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">Minha Conta</strong>
+                    <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+                        <Avatar style={{marginRight:'0.5rem'}} src={myDados.img}></Avatar>
+                        <strong class="offcanvas-title justify-content-center" id="offcanvasNavbarMainLabel">{`${myDados.firstName} ${myDados.lastName}`}</strong>
+                    </div>
                     <a type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></a>
                 </div>
                 <div class="offcanvas-body">

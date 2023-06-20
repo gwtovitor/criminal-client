@@ -19,17 +19,21 @@ function Video({
   date,
   userName,
   itemId,
+  muted, 
   profileId,
+  onMutedChange // Adicione essa prop
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [muted, setMuted] = useState(false);
+  //const [muted, setMuted] = useState(false);
   const [liked, setLiked] = useState(false);
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const navigate = useNavigate();
+
+
 
   function toggleShowFullDescription() {
     setShowFullDescription(!showFullDescription);
@@ -117,7 +121,8 @@ function Video({
   };
 
   const handleMuteClick = () => {
-    setMuted((prevMuted) => !prevMuted);
+    const updatedMuted = !muted; // Inverte o valor de "muted"
+    onMutedChange(updatedMuted); // Chama o callback do componente pai com o valor atualizado
   };
 
   const handleLikeClick = async () => {
@@ -134,6 +139,10 @@ function Video({
 
     verificaLike();
   };
+
+  async function navegaProfile(id){
+    navigate(`/profile/${id}`)
+  }
 
   const scrollUp = () => {
     window.scrollBy({
@@ -199,7 +208,7 @@ function Video({
         </div>
         <div className="shortsVideoSideIcons">
           <div className="shortsVideoSideIcon">
-            <Avatar className="buttonsShortsSide" src={avatar} />
+            <Avatar className="buttonsShortsSide"  onClick={()=> {navegaProfile(profileId)}} src={avatar} />
             {liked ? (
               <ThumbUp
                 className="buttonsShortsSide text-info"
@@ -215,7 +224,7 @@ function Video({
             <p>{like.length}</p>
           </div>
           <div onClick={handleMuteClick}>
-            {muted ? (
+            {muted? (
               <VolumeOff className="buttonsShortsSide" />
             ) : (
               <VolumeUp className="buttonsShortsSide" />
@@ -302,7 +311,9 @@ function Video({
                     color: "white",
                     fontWeight: "bold",
                     marginRight: "5px",
+                    cursor: "pointer"
                   }}
+                  onClick={()=> {navegaProfile(profileId)}}
                 >
                   {channel}
                 </p>
