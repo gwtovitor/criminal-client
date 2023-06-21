@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../Services/api";
 import Swal from "sweetalert2";
 import { Offcanvas } from "bootstrap";
+import { ShoppingBagOutlined } from "@mui/icons-material";
 
 function Main() {
   const navigate = useNavigate();
@@ -103,10 +104,12 @@ function Main() {
   return (
     <div className="row">
       <div className="col col-lg-3">
-        <img className="logobraba" src={logo} alt="logo"></img>
+       
 
         <div className="navlateral">
+        <img className="logobraba" src={logo} alt="logo"></img>
           <Sidebar className="navbarside-feed">
+            
             <Menu>
               <MenuItem
                 href="/verts"
@@ -129,6 +132,7 @@ function Main() {
               >
                 Pesquisar
               </MenuItem>
+              <MenuItem icon={<ShoppingBagOutlined style={{color:'black'}}/>} href="/favoritos">Galeria de Compras</MenuItem>
               {isCreator ? (
                 <SubMenu
                   icon={<AddBoxOutlined style={{ color: "black" }} />}
@@ -139,6 +143,7 @@ function Main() {
                   <MenuItem href="/postmsg">Mensagens</MenuItem>
                 </SubMenu>
               ) : null}
+              
               <SubMenu
                 icon={<AttachMoneyIcon style={{ color: "black" }} />}
                 label="Finanças"
@@ -156,7 +161,6 @@ function Main() {
                 <MenuItem href="/seguindo">Seguindo</MenuItem>
                 <MenuItem href="/assinantes">Assinantes</MenuItem>
                 <MenuItem href="/assinando">Assinando</MenuItem>
-                <MenuItem href="/favoritos">Galeria</MenuItem>
                 <MenuItem onClick={() => updateUrlAndReload(`/profile/${id}`)}>
                   Perfil
                 </MenuItem>

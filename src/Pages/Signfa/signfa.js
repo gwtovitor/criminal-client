@@ -142,9 +142,11 @@ function Signfa() {
           username: userName,
           password: password,
           paisResidencia: paisSelecionado,
-          dataNascimento: formattedDataNascimento, // Utiliza a data formatada
-          cpf: ''
-        });
+          dataNascimento: formattedDataNascimento, 
+          estaativo: email,
+          cpf: '',
+         });
+         console.log(response)
         try {
           const responseProfile = await api.post("/profile", {
             creator: false,
@@ -153,6 +155,7 @@ function Signfa() {
             lastName: sobrenome,
             img: 'https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg'
           })
+         
           if (responseProfile.data._id) {
             localStorage.setItem('cc_p', responseProfile.data._id)
             try {
@@ -162,7 +165,7 @@ function Signfa() {
               })
               if(login.data.token){
                 localStorage.setItem('cc_t', login.data.token)
-                navigate('/')
+               // navigate('/')
               }
               
               
