@@ -146,6 +146,7 @@ function Signfa() {
           estaativo: email,
           cpf: '',
          });
+         
          console.log(response)
         try {
           const responseProfile = await api.post("/profile", {
