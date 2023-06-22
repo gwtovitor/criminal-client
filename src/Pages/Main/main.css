@@ -110,7 +110,7 @@
 
   .footer {
     display: flex;
-    /* z-index: 99999; */
+    z-index: 99999;
   }
 
   .container-feed {

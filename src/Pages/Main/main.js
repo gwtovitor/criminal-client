@@ -292,7 +292,7 @@ function Main() {
       </div>
 
       <div
-        className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75 "
+        className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75 mb-5"
         id="offcanvasNavbarMain"
         aria-labelledby="offcanvasNavbarMainLabel"
       >
