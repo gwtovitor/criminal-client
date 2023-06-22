@@ -19,6 +19,9 @@
 
   /* z-index: 99999; */
 }
+.testeh:hover{
+  background-color: red;
+}
 .div-todo {
   display: flex;
   align-items: flex-end;
@@ -103,6 +106,7 @@
   .navbarside-feed {
     display: none;
     z-index: 99999;
+
   }
   .logobraba {
     display: none;
@@ -112,7 +116,6 @@
     display: flex;
     z-index: 99999;
   }
-
   .container-feed {
     padding-bottom: 50px;
   }
