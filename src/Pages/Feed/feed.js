@@ -68,9 +68,6 @@ function Feed() {
 
 
     async function montaFeed(id) {
-        if (!localStorage.cc_p || !localStorage.cc_t) {
-          return navigate('/home');
-        }
         const posts = await api.get(`feed/${id}`);
         await montaPosts(posts.data);
       }

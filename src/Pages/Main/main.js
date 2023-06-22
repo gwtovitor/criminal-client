@@ -106,11 +106,12 @@ function Main() {
       <div className="col col-lg-3">
         <div className="navlateral">
           <img className="logobraba" src={logo} alt="logo"></img>
-          <Sidebar className="navbarside-feed">
-            <Menu>
+          <Sidebar backgroundColor="white" className="navbarside-feed">
+            <Menu  >
               <MenuItem
+               className="testeh"
                 href="/verts"
-                icon={<PersonalVideoIcon style={{ color: "black" }} />}
+                icon={<PersonalVideoIcon style={{ color: "black",}} />}
               >
                 Verts
               </MenuItem>
@@ -376,20 +377,21 @@ function Main() {
                   </Link>
                 </h5>
               </li>
+              <div className="namee">
+                <Avatar
+                  className="nav-link active img-myDados"
+                  style={{ marginRight: "0" }}
+                  src={myDados.img}
+                ></Avatar>
+                <strong
+                  className="offcanvas-title justify-content-center font-teste"
+                  id="offcanvasNavbarMainLabel"
+                >{`${myDados.firstName} ${myDados.lastName}`}</strong>
+              </div>
             </ul>
           </div>
         </div>
-        <div className="namee">
-          <Avatar
-            className="nav-link active img-myDados"
-            style={{ marginRight: "0" }}
-            src={myDados.img}
-          ></Avatar>
-          <strong
-            className="offcanvas-title justify-content-center font-teste"
-            id="offcanvasNavbarMainLabel"
-          >{`${myDados.firstName} ${myDados.lastName}`}</strong>
-        </div>
+
       </div>
 
       <div
