@@ -133,7 +133,7 @@ function Main() {
                 icon={<ShoppingBagOutlined style={{ color: "black" }} />}
                 href="/favoritos"
               >
-                Galeria de Compras
+                Compras
               </MenuItem>
               {isCreator ? (
                 <SubMenu
@@ -151,8 +151,8 @@ function Main() {
                 label="Finanças"
               >
                 <MenuItem href="/balanco">Balanço</MenuItem>
-                <MenuItem href="/compras">Compras</MenuItem>
-                <MenuItem href="/banco">Banco</MenuItem>
+                <MenuItem href="/compras">Transações</MenuItem>
+                <MenuItem href="/banco">Dados Bancários</MenuItem>
               </SubMenu>
               <SubMenu
                 icon={<ClosedCaptionOff style={{ color: "black" }} />}
@@ -292,103 +292,108 @@ function Main() {
       </div>
 
       <div
-        className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75 mb-5"
+        className="offcanvas offcanvas-end w-75 border-4 border-start border-danger-subtle border-opacity-75 mb-5"
         id="offcanvasNavbarMain"
         aria-labelledby="offcanvasNavbarMainLabel"
       >
-        <div className=" div-todo ">
-          <div className="offcanvas-body">
-            <ul className="navbar-nav">
-              <li className="">
-                <h5>
-                  <a
-                    className="nav-link active"
-                    aria-current="page"
-                    href="../pesquisa"
-                  >
-                    <Search style={{ color: "black" }} className="me-2" />
-                    Procurar
-                  </a>
-                </h5>
-              </li>
-              <li className="nav-item">
-                <h5>
-                  <a
-                    className="nav-link active"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasNavbarFinancas"
-                    aria-controls="offcanvasNavbarFinancas"
-                    aria-current="page"
-                  >
-                    <AttachMoneyIcon
-                      style={{ color: "black" }}
-                      className="me-2"
-                    />
-                    Finanças
-                  </a>
-                </h5>
-              </li>
-              <li className="nav-item">
-                <h5>
-                  <a
-                    className="nav-link active"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasNavbarMyCriminal"
-                    aria-controls="offcanvasNavbarMyCriminal"
-                    aria-current="page"
-                  >
-                    <ClosedCaptionOff
-                      style={{ color: "black" }}
-                      className="me-2"
-                    />
-                    My Criminal
-                  </a>
-                </h5>
-              </li>
-              <li className="nav-item">
-                <h5>
-                  <Link
-                    className="nav-link active"
-                    aria-current="page"
-                    component={Link}
-                    onClick={() => updateUrlAndReload(`/profile/${id}`)}
-                  >
-                    <AccountCircleIcon
-                      style={{ color: "black" }}
-                      className="me-2"
-                    />
-                    Perfil
-                  </Link>
-                </h5>
-              </li>
-              <li className="nav-item">
-                <h5>
-                  <Link
-                    className="nav-link active"
-                    aria-current="page"
-                    onClick={() => {
-                      logoff();
-                    }}
-                    to={"./home"}
-                  >
-                    <Logout style={{ color: "black" }} className="me-2" />
-                    Sair
-                  </Link>
-                </h5>
-              </li>
-            </ul>
+        <div className="namee">
+          <img className="logoxixe" src={logo} alt="logo"></img>
+          <div className="alignImgName">
+            <Avatar
+              className="nav-link active img-myDados"
+              style={{ marginRight: "0.5" }}
+              src={myDados.img}
+            ></Avatar>
+            <strong
+              className="offcanvas-title justify-content-center font-teste"
+              id="offcanvasNavbarMainLabel"
+            >{`${myDados.firstName} ${myDados.lastName}`}</strong>
           </div>
         </div>
-        <div className="namee">
-          <Avatar
-            className="nav-link active img-myDados"
-            style={{ marginRight: "0" }}
-            src={myDados.img}
-          ></Avatar>
-          <strong
-            className="offcanvas-title justify-content-center font-teste"
-            id="offcanvasNavbarMainLabel"
-          >{`${myDados.firstName} ${myDados.lastName}`}</strong>
+        <div className=" div-todo ">
+          <div className="offcanvas-body">
+            <ul className="navbar-nav ul">
+              <div className="li">
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      aria-current="page"
+                      href="../pesquisa"
+                    >
+                      <Search style={{ color: "black" }} className="me-2" />
+                      Procurar
+                    </a>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasNavbarFinancas"
+                      aria-controls="offcanvasNavbarFinancas"
+                      aria-current="page"
+                    >
+                      <AttachMoneyIcon
+                        style={{ color: "black" }}
+                        className="me-2"
+                      />
+                      Finanças
+                    </a>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasNavbarMyCriminal"
+                      aria-controls="offcanvasNavbarMyCriminal"
+                      aria-current="page"
+                    >
+                      <ClosedCaptionOff
+                        style={{ color: "black" }}
+                        className="me-2"
+                      />
+                      My Criminal
+                    </a>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <Link
+                      className="nav-link active"
+                      aria-current="page"
+                      component={Link}
+                      onClick={() => updateUrlAndReload(`/profile/${id}`)}
+                    >
+                      <AccountCircleIcon
+                        style={{ color: "black" }}
+                        className="me-2"
+                      />
+                      Perfil
+                    </Link>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <Link
+                      className="nav-link active"
+                      aria-current="page"
+                      onClick={() => {
+                        logoff();
+                      }}
+                      to={"./home"}
+                    >
+                      <Logout style={{ color: "black" }} className="me-2" />
+                      Sair
+                    </Link>
+                  </h5>
+                </li>
+              </div>
+            </ul>
+          </div>
         </div>
       </div>
 

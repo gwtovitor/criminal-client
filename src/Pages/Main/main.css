@@ -19,27 +19,46 @@
 
   /* z-index: 99999; */
 }
-.testeh:hover{
+.testeh:hover {
   background-color: red;
 }
 .div-todo {
   display: flex;
   align-items: flex-end;
-  margin-top: 1rem;
+  margin-right: 1.3rem;
+  /* margin-top: 1rem; */
   /* margin-left: 0.2rem; */
-  height: 100vh;
+  height: 80vh;
   /* width: 100vw; */
 }
+
+.ul {
+  display: flex;
+  align-items: flex-end;
+}
+.li {
+  display: flex;
+  flex-direction: column;
+}
 .namee {
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
   /* width: 50vw; */
   display: flex;
-  align-items: center;
-  /* justify-content: space-between; */
+  flex-direction: column;
+  margin-right: 0.9rem;
+  align-items: flex-end;
+  /* justify-content: flex-start; */
   /* padding-left: 10px; */
   /* margin-left: 0.8rem; */
   /* padding-right: 10px; */
   /* width: 100vw; */
+}
+
+.alignImgName {
+  display: flex;
+  align-items: center;
+  margin-top: 0.7rem;
+  margin-right: 1.9rem;
 }
 .font-teste {
   font-size: 1.1rem;
@@ -56,6 +75,10 @@
   margin-bottom: 2rem;
   padding: 3px;
   cursor: pointer;
+}
+.logoxixe {
+  width: 10.5rem;
+  /* border-bottom: 1px solid black; */
 }
 .navlateral {
   margin-left: 2.5rem;
@@ -106,7 +129,6 @@
   .navbarside-feed {
     display: none;
     z-index: 99999;
-
   }
   .logobraba {
     display: none;
