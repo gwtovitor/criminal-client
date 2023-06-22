@@ -185,8 +185,10 @@ function Signcriador() {
           password: password,
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
-          cpf: cpf
+          cpf: cpf,
+          isActive: true,
         });
+        console.log(response)
 
         try {
           const responseUser = await api.post("/profile", {
@@ -199,7 +201,7 @@ function Signcriador() {
           console.log(error)
         }
 
-        navigate('/home')
+   //     navigate('/home')
 
       } catch (error) {
         toast.error(error.response.data.message, {

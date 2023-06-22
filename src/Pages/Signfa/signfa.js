@@ -143,7 +143,7 @@ function Signfa() {
           password: password,
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, 
-          estaativo: email,
+          isActive: true,
           cpf: '',
          });
          
@@ -156,7 +156,7 @@ function Signfa() {
             lastName: sobrenome,
             img: 'https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg'
           })
-         
+         console.log(responseProfile)
           if (responseProfile.data._id) {
             localStorage.setItem('cc_p', responseProfile.data._id)
             try {
