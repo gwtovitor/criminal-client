@@ -41,7 +41,7 @@ function Login() {
           console.log(profile)
           localStorage.setItem("cc_t", response.data.token);
           localStorage.setItem("cc_p", profile.data._id);
-        //  navigate("../");
+          navigate("../");
         }
       } catch (error) {
         if (error.message === "Request failed with status code 404") {
