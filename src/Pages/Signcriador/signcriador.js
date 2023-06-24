@@ -186,10 +186,10 @@ function Signcriador() {
           paisResidencia: paisSelecionado,
           dataNascimento: formattedDataNascimento, // Utiliza a data formatada
           cpf: cpf,
-          isActive: true,
+          isActive: false,
         });
         console.log(response)
-
+        localStorage.setItem('cc_i', response.data._id)
         try {
           const responseUser = await api.post("/profile", {
             creator: true,

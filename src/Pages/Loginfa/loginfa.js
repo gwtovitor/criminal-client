@@ -34,14 +34,27 @@ function Loginfa() {
             login: email,
             password: password,
           });
-         
+          navigate('../')
           if (response.data.token) {
             const user = await api.get(`user/username/${email}`);
             const profile = await api.get(`profile/user/${user.data._id}`);
-  
+            console.log(user)
             localStorage.setItem("cc_t", response.data.token);
             localStorage.setItem("cc_p", profile.data._id)
-            navigate('../')
+            if(user.data.isActive){
+              navigate('../')
+            }else{
+              toast.error("Seu usuário ainda nao está ativo, aguarde o email com informações", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+            }
           }
           
         } catch (error) {

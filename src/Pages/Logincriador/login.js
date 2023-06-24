@@ -41,7 +41,21 @@ function Login() {
           console.log(profile)
           localStorage.setItem("cc_t", response.data.token);
           localStorage.setItem("cc_p", profile.data._id);
-          navigate("../");
+          if (user.data.isActive) {
+            navigate('../')
+          } else {
+            toast.error("Seu usuário ainda nao está ativo, aguarde o email com informações", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+
         }
       } catch (error) {
         if (error.message === "Request failed with status code 404") {

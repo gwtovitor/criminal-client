@@ -26,6 +26,7 @@ import MyGallery from './Pages/Galeria'
 import NivelConta from './Pages/Financas/Nivelconta'
 import Arquivados from './Pages/Arquivados'
 import Pesquisa from './Pages/Pesquisa'
+import EnvioDocs from './Pages/Signcriador/envioDocs/envioDocs'
 
 function RoutesApp() {
     return (
@@ -36,6 +37,7 @@ function RoutesApp() {
                 <Route path='/loginfa' element={<Loginfa />} />
                 <Route path='/signfa' element={<Signfa />} />
                 <Route path='/signcriador' element={<Signcriador />} />
+                <Route path='/enviodocs' element={<EnvioDocs />} />
 
                 <Route path='/' element={<Main />}>
                     <Route index element={<Feed />} />
@@ -58,6 +60,7 @@ function RoutesApp() {
                     <Route path='/favoritos' element={<MyGallery />} />
                     <Route path='/profile/:id' element={<Profile />} />
                     <Route path='/pesquisa' element={<Pesquisa />} />
+                
                 </Route>
             </Routes>
         </BrowserRouter>

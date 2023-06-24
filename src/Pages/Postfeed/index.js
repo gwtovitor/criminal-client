@@ -107,7 +107,7 @@ function Postfeed() {
 
 
         formData.append("file", selectedFile);
-
+        console.log(formData)
         try {
           const response = await api.post("/upload", formData, {
             headers: { "Content-Type": "multipart/form-data" }
