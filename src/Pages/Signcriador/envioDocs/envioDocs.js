@@ -14,7 +14,6 @@ function EnvioDocs() {
     cpf: null,
     selfie: null
   });
-  const patchs = []
 
   const handleRgFrente = (event) => {
     setFiles({ ...files, rgFrente: event.target.files[0] });
@@ -34,45 +33,50 @@ function EnvioDocs() {
 
 
   async function enviarDocs() {
-    if (
-      files.rgFrente &&
-      files.rgVerso &&
-      files.cpf &&
-      files.selfie
-    ) {
-      const formData = new FormData();
-      const uploadPromises = [];
-      const patchs = {}; // Usando um objeto para armazenar os patches
-      console.log(files.rgFrente)
-      console.log(files.rgVerso)
-      console.log(files.cpf)
-      console.log(files.selfie)
-      for (const key in files) {
-        formData.append("file", files[key]);
-        console.log(files[key])
-        uploadPromises.push(
-          api.post("/upload", formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-          })
-        );
-      }
-  
+    if (files.rgFrente && files.rgVerso && files.cpf && files.selfie) {
       try {
-        const responses = await Promise.all(uploadPromises);
-        for (let i = 0; i < responses.length; i++) {
-          const fileKey = Object.keys(files)[i];
-          const response = responses[i];
-          const patch = response.data.file.location;
-          patchs[fileKey] = patch; 
-        }
-  
-        console.log("Patchs:", patchs);
-  
-      } catch (error) {
-      }
-      console.log(patchs)
+        const envioRgFrente = await api.post("/upload", createFormData("rgFrente", files.rgFrente), {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
 
-    
+        const rgFrentePatch = envioRgFrente.data.files[0].location;
+        console.log(rgFrentePatch)
+
+        const envioVerso = await api.post("/upload", createFormData("rgVerso", files.rgVerso), {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        const rgVersoPatch = envioVerso.data.files[0].location;
+        console.log(rgVersoPatch)
+        const envioCPF = await api.post("/upload", createFormData("cpf", files.cpf), {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        const cpfPatch = envioCPF.data.files[0].location;
+        console.log(cpfPatch)
+        const envioSelfie = await api.post("/upload", createFormData("selfie", files.selfie), {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        const selfiePatch = envioSelfie.data.files[0].location;
+        console.log(selfiePatch)
+        try {
+          const user = localStorage.getItem('cc_i')
+          const postUserDocs = await api.post('/documentos', {
+            user: user,
+            rgfrente: rgFrentePatch,
+            rgverso: rgVersoPatch,
+            rgself: selfiePatch,
+            cpf: cpfPatch
+          })
+          console.log(postUserDocs)
+        } catch (err) {
+          console.log(err)
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       toast.error('Favor selecionar todos os documentos', {
         position: "top-right",
@@ -85,6 +89,13 @@ function EnvioDocs() {
         theme: "light",
       });
     }
+  }
+
+  // Função para criar uma nova instância de FormData para um arquivo específico
+  function createFormData(name, file) {
+    const formData = new FormData();
+    formData.append('files', file);
+    return formData;
   }
 
 
