@@ -34,7 +34,6 @@ function Loginfa() {
             login: email,
             password: password,
           });
-          navigate('../')
           if (response.data.token) {
             const user = await api.get(`user/username/${email}`);
             const profile = await api.get(`profile/user/${user.data._id}`);

@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import './envioDocs.css'
 import api from '../../../Services/api';
 import { toast } from 'react-toastify';
-
-
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function EnvioDocs() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState({
     rgFrente: null,
     rgVerso: null,
@@ -69,13 +70,22 @@ function EnvioDocs() {
             rgself: selfiePatch,
             cpf: cpfPatch
           })
-          console.log(postUserDocs)
+          Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Envio de documentos realizado com sucesso, agora aguarde o contato da nossa equipe via email para ativar sua conta',
+            willClose: () => {
+                navigate('/home')
+            }
+        });
+          
         } catch (err) {
           console.log(err)
         }
 
       } catch (error) {
         console.error(error);
+
       }
     } else {
       toast.error('Favor selecionar todos os documentos', {
