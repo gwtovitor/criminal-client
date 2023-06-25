@@ -191,29 +191,6 @@ function Postfeed() {
   }
 
 
-
-  const getFileType = async (fileUrl) => {
-    try {
-      const response = await fetch(fileUrl);
-      const contentType = response.headers.get('content-type');
-  
-      if (contentType.includes('image')) {
-        return 'image';
-      } else if (contentType.includes('video')) {
-        return 'video';
-      } else {
-        return 'unknown';
-      }
-    } catch (error) {
-      console.error(error);
-      return 'unknown';
-    }
-  };
-  
-  
-  
-
-
   return (
 
     <div className='ms-4 mb-5 mt-3' style={{ marginRight: '-1.53rem' }}>
@@ -247,14 +224,15 @@ function Postfeed() {
 
 
         {fileUrl && (
-          <div className='fullscreen-video-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
-            {getFileType(fileUrl) === 'image' ? (
-              <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
-            ) : (
+          <div className='content-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
+            {selectedFile.type.includes('video') ? (
               <video controls src={fileUrl} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            ) : (
+              <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
             )}
           </div>
         )}
+
 
 
         <div className='row mt-3'>
