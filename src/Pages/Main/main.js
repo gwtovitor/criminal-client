@@ -77,20 +77,12 @@ function Main() {
   function closeOffCanvas() {
     const offcanvas = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
-<<<<<<< HEAD
-
-    if (offcanvas.classList.contains("show")) {
-      offcanvasInstance.hide();
-      offcanvas.classList.remove("show");
-    }
-=======
    try{
     offcanvasInstance.hide();
    }catch{
 
    }
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
->>>>>>> 475a2a2901dd045ee9e6f4c5750b6035d0647839
   }
 
   function closeModalLateral() {
@@ -122,30 +114,6 @@ function Main() {
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
   }
-  // Adicione esse código após a definição das funções closeModal, closeModalLateral, closeModalFinancas
-  const [navbarClass, setNavbarClass] = useState(
-    "offcanvas offcanvas-end w-50 border-4 border-start border-danger-subtle mb-5"
-  );
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth <= 400) {
-        setNavbarClass(
-          "offcanvas offcanvas-end w-75 border-4 border-start border-danger-subtle mb-5"
-        );
-      } else {
-        setNavbarClass(
-          "offcanvas offcanvas-end w-50 border-4 border-start border-danger-subtle mb-5"
-        );
-      }
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   useEffect(() => {
     getDados();
   }, []);
@@ -272,9 +240,6 @@ function Main() {
           <SendOutlined style={{ color: "black" }} />
         </IconButton>
         <IconButton
-          onClick={() => {
-            closeOffCanvas(); // Adicione essa linha para fechar a navbar quando o ícone for clicado
-          }}
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasNavbarMain"
           aria-controls="offcanvasNavbarMain"

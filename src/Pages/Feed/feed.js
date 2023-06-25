@@ -196,7 +196,7 @@ function Feed() {
       <section id="post-list">
         {feed.length !== 0 ? (
           feed.map((post, index) => (
-            <article key={index}>
+            <article key={post._id}>
               <header>
                 <div
                   className="user-info"
@@ -249,9 +249,8 @@ function Feed() {
                     </h6>
                   </div>
                   <video
-                    className={`${
-                      post.price !== "0,00" ? "blur-effect" : ""
-                    } videoplayer-feed`}
+                    className={`${post.price !== "0,00" ? "blur-effect" : ""
+                      } videoplayer-feed`}
                     controls
                   >
                     <source src={post.content} type="video/mp4" />
@@ -303,8 +302,9 @@ function Feed() {
                 </div>
                 <strong>{post.likes} curtidas</strong>
                 <p>{post.description}</p>
-                {commentsFeed[post._id].slice(0, 2).map((comentario) => (
+                {commentsFeed[post._id].slice(0, 2).map((comentario,index) => (
                   <div
+                    key={index}
                     style={{ cursor: "pointer" }}
                     className="mb-2"
                     data-toggle="modal"
@@ -362,7 +362,7 @@ function Feed() {
                 <div
                   className="modal fade"
                   id={`exampleModalLong${post._id}`}
-                  tabindex="-1"
+                  tabIndex="-1"
                   role="dialog"
                   aria-labelledby={`exampleModalLongTitle${post._id}`}
                   aria-hidden="true"
@@ -378,11 +378,11 @@ function Feed() {
                         </h5>
                         <button
                           type="button"
-                          className=""
+                          className="btn-close"
                           data-dismiss="modal"
                           aria-label="Close"
                         >
-                          <span aria-hidden="true">&times;</span>
+                        
                         </button>
                       </div>
                       <div className="modal-body">
@@ -446,19 +446,19 @@ function Feed() {
                       </div>
                       <div className="modal-footer">
                         <div
-                          className="add-comment mb-5"
+                          className="add-comment"
                           style={{ display: "flex", alignItems: "center" }}
                         >
                           <input
+                            className="form-control border-black"
                             type="text"
                             value={commentInputs[post._id] || ""}
                             style={{ marginRight: "5px", flex: 1 }}
-                            onChange={(event) =>
-                              handleCommentChange(event, post._id)
-                            }
+                            onChange={(event) => handleCommentChange(event, post._id)}
                           />
                           <button
-                            className="btn btn-primary"
+                            className="btn text-white fw-semibold"
+                            style={{ backgroundColor: "#e46f80" }}
                             onClick={() => handleAddComment(post._id)}
                           >
                             Comentar

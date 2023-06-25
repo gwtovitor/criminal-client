@@ -167,14 +167,14 @@ function Video({
         <button
           type="button"
           onClick={scrollUp}
-          class="btn btn-primary btn-circle btn-xl"
+          className="btn btn-primary btn-circle btn-xl"
         >
           <KeyboardArrowUpIcon />
         </button>
         <button
           type="button"
           onClick={scrollDown}
-          class="btn btn-primary btn-circle btn-xl"
+          className="btn btn-primary btn-circle btn-xl"
         >
           <KeyboardArrowDownIcon />
         </button>
@@ -242,47 +242,47 @@ function Video({
           </span>
         </div>
         <div
-          class="modal fade"
+          className="modal fade"
           id={"exampleModalLong"}
           tabindex="-1"
           role="dialog"
           aria-labelledby={`exampleModalLongTitle$`}
           aria-hidden="true"
         >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id={`exampleModalLongTitle`}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id={`exampleModalLongTitle`}>
                   Comentários
                 </h5>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
-                  <span class="xClose" aria-hidden="true">
+                  <span className="xClose" aria-hidden="true">
                     &times;
                   </span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <div className="comment-list d-flex flex-column">
-                  <button type="button" class="btn btn-danger mt-2">
+                  <button type="button" className="btn btn-danger mt-2">
                     Denunciar Video
                   </button>
-                  <button type="button" class="btn btn-primary mt-2">
+                  <button type="button" className="btn btn-primary mt-2">
                     Denunciar Perfil
                   </button>
-                  <button type="button" class="btn btn-primary mt-2 mt-2">
+                  <button type="button" className="btn btn-primary mt-2 mt-2">
                     Copiar Link do Perfil
                   </button>
-                  <button type="button" class="btn btn-primary mt-2">
+                  <button type="button" className="btn btn-primary mt-2">
                     Copiar Link do Video
                   </button>
                 </div>
               </div>
-              <div class="modal-footer">
+              <div className="modal-footer">
                 <div
                   className="add-comment"
                   style={{

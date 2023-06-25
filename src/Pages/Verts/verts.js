@@ -82,6 +82,7 @@ function Verts() {
       {vertsList.map((src, index) => (
         <div
           onTouchStart={handleTouchStart(src.profileID)}
+          key={index}
         >
           <Videos
             src={src.src}
