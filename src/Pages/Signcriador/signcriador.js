@@ -201,7 +201,7 @@ function Signcriador() {
           console.log(error)
         }
 
-   //     navigate('/home')
+        navigate('../enviodocs')
 
       } catch (error) {
         toast.error(error.response.data.message, {
@@ -373,7 +373,7 @@ function Signcriador() {
             disabled={!isCheckedTermos}
             onClick={enviarsign}
           >
-            <span style={{ fontWeight: 'bold' }}>Criar Conta</span>
+            <span style={{ fontWeight: 'bold' }}>Avançar</span>
           </Button>
         </div>
 

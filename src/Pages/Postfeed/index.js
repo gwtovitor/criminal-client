@@ -43,7 +43,7 @@ function Postfeed() {
   const handleDataChange = (newValue) => {
     const currentDate = dayjs().startOf('day');
     const selectedDate = dayjs(newValue).startOf('day');
-  
+
     if (!selectedDate.isValid()) {
       // Verificar se o valor não é uma data válida
       setData(null); // Limpar a data selecionada
@@ -54,7 +54,7 @@ function Postfeed() {
       setData(newValue);
       const isoDate = selectedDate.toISOString();
       setCombinedDateTime(isoDate)
-  
+
       if (dayjs(data).isSame(currentDate, 'day')) {
         // A data selecionada é a data atual, verifique também a hora selecionada
         const currentDateTime = dayjs();
@@ -65,26 +65,26 @@ function Postfeed() {
         }
       }
     }
-  
+
     // Converter a data para o formato ISO 8601
+
+  };
+
+
+  /* 
  
-  };
-  
-  
- /* 
-
-  const handleHoraChange = (newValue) => {
-    const currentDateTime = dayjs();
-    const selectedDateTime = dayjs(data).set('hour', newValue.hour).set('minute', newValue.minute);
-
-    if (selectedDateTime.isBefore(currentDateTime) || dayjs(data).isBefore(dayjs().startOf('day'))) {
-      // A hora selecionada é anterior à hora atual ou a data selecionada é anterior à data atual
-      setHora(null); // Limpar a hora selecionada
-    } else {
-      setHora(newValue);
-    }
-  };
-*/
+   const handleHoraChange = (newValue) => {
+     const currentDateTime = dayjs();
+     const selectedDateTime = dayjs(data).set('hour', newValue.hour).set('minute', newValue.minute);
+ 
+     if (selectedDateTime.isBefore(currentDateTime) || dayjs(data).isBefore(dayjs().startOf('day'))) {
+       // A hora selecionada é anterior à hora atual ou a data selecionada é anterior à data atual
+       setHora(null); // Limpar a hora selecionada
+     } else {
+       setHora(newValue);
+     }
+   };
+ */
 
   const handleFileSelect = (event) => {
     // we only get the selected file from input element's event
@@ -101,63 +101,64 @@ function Postfeed() {
   }
 
   async function postarVerts() {
-    
-     if (selectedFile != null) {
-        const formData = new FormData();
+
+    if (selectedFile != null) {
+      const formData = new FormData();
 
 
-        formData.append("file", selectedFile);
-        console.log(formData)
+      formData.append("files", selectedFile);
+      console.log(formData)
+      try {
+        const response = await api.post("/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        })
+        console.log(response)
+        const videoPath = response.data.files[0].location
+
         try {
-          const response = await api.post("/upload", formData, {
-            headers: { "Content-Type": "multipart/form-data" }
+          const postandoFeed = await api.post(`/post`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            user: idUser,
+            content: videoPath,
+            legenda: legenda,
+            price: price,
+            agendamentoPost: combinedDateTime,
           })
-          const videoPath = response.data.file.location
+          const idPost = postandoFeed.data._id
 
+          const newPostsWithId = [...newPosts, idPost];
           try {
-            const postandoFeed = await api.post(`/post`, {
+            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               },
-              user: idUser,
-              content: videoPath,
-              legenda: legenda,
-              price: price,
-              agendamentoPost: combinedDateTime,
-            })
-            const idPost = postandoFeed.data._id
-
-            const newPostsWithId = [...newPosts, idPost];
-            try {
-              const enviandoVerts = await api.patch(`/profile/${idUser}`, {
-                headers: {
-                  'Authorization': `Bearer ${token}`
-                },
-                posts: newPostsWithId
-              });
-            } catch (error) {
-              console.log(error);
-            }
-
+              posts: newPostsWithId
+            });
           } catch (error) {
-            console.log(error)
+            console.log(error);
           }
-          window.location.reload()
+
         } catch (error) {
           console.log(error)
         }
-      } else {
-        toast.error("Selecione uma mídia para publicar", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        window.location.reload()
+      } catch (error) {
+        console.log(error)
       }
+    } else {
+      toast.error("Selecione uma mídia para publicar", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
 
 
 
@@ -191,9 +192,27 @@ function Postfeed() {
 
 
 
-  const getFileType = (file) => {
-
+  const getFileType = async (fileUrl) => {
+    try {
+      const response = await fetch(fileUrl);
+      const contentType = response.headers.get('content-type');
+  
+      if (contentType.includes('image')) {
+        return 'image';
+      } else if (contentType.includes('video')) {
+        return 'video';
+      } else {
+        return 'unknown';
+      }
+    } catch (error) {
+      console.error(error);
+      return 'unknown';
+    }
   };
+  
+  
+  
+
 
   return (
 
@@ -237,6 +256,7 @@ function Postfeed() {
           </div>
         )}
 
+
         <div className='row mt-3'>
           <div className='col-12'>
             <div className="input-group  mb-3 mt-2">
@@ -267,7 +287,7 @@ function Postfeed() {
                   role="switch"
                   id="flexSwitchCheckDefault"
                 />
-                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} for="flexSwitchCheckDefault">Agendar Postagem</label>
+                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} htmlFor="flexSwitchCheckDefault">Agendar Postagem</label>
               </div>
             </div>
           </div>

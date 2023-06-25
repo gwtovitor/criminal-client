@@ -27,6 +27,7 @@ import NivelConta from './Pages/Financas/Nivelconta'
 import Arquivados from './Pages/Arquivados'
 import Pesquisa from './Pages/Pesquisa'
 import EnvioDocs from './Pages/Signcriador/envioDocs/envioDocs'
+import UserDocs from './Pages/AdminPages/UserDocs'
 
 function RoutesApp() {
     return (
@@ -39,7 +40,9 @@ function RoutesApp() {
                 <Route path='/signcriador' element={<Signcriador />} />
                 <Route path='/enviodocs' element={<EnvioDocs />} />
 
+
                 <Route path='/' element={<Main />}>
+                    <Route path='/userDocs' element={<UserDocs />} />
                     <Route index element={<Feed />} />
                     <Route path='/compras' element={<Compras />} />
                     <Route path='/balanco' element={<Balanco />} />
@@ -60,7 +63,7 @@ function RoutesApp() {
                     <Route path='/favoritos' element={<MyGallery />} />
                     <Route path='/profile/:id' element={<Profile />} />
                     <Route path='/pesquisa' element={<Pesquisa />} />
-                
+
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -84,13 +84,14 @@ function Postverts() {
       const formData = new FormData();
 
 
-      formData.append("file", selectedFile);
+      formData.append("files", selectedFile);
 
       try {
         const response = await api.post("/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
-        const videoPath = response.data.file.location
+        const videoPath = response.data.files[0].location
+        console.log(videoPath)
 
         try {
           const postandoVerts = await api.post(`/vert`, {
