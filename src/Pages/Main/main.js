@@ -9,6 +9,8 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Avatar, IconButton } from "@mui/material";
 import { Outlet, Link } from "react-router-dom";
+import { Offcanvas } from "bootstrap";
+
 import {
   ClosedCaptionOff,
   Logout,
@@ -16,6 +18,7 @@ import {
   Menu as MenuHamburger,
   AddBoxOutlined,
 } from "@mui/icons-material";
+
 import { ArrowBack } from "@mui/icons-material";
 import { Send } from "@mui/icons-material";
 import { SendOutlined } from "@mui/icons-material";
@@ -23,7 +26,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
 import api from "../../Services/api";
 import Swal from "sweetalert2";
-import { Offcanvas } from "bootstrap";
 import { ShoppingBagOutlined } from "@mui/icons-material";
 
 function Main() {
@@ -69,10 +71,13 @@ function Main() {
     offcanvas.setAttribute("offcanvas", "offcanvas");
   }
   function closeOffCanvas() {
-    const offcanvas = document.getElementById("offcanvasBottom");
+    const offcanvas = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
-    offcanvasInstance.hide();
-    offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
+
+    if (offcanvas.classList.contains("show")) {
+      offcanvasInstance.hide();
+      offcanvas.classList.remove("show");
+    }
   }
 
   function closeModalLateral() {
@@ -96,6 +101,29 @@ function Main() {
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
   }
+  // Adicione esse código após a definição das funções closeModal, closeModalLateral, closeModalFinancas
+  const [navbarClass, setNavbarClass] = useState(
+    "offcanvas offcanvas-end w-50 border-4 border-start border-danger-subtle mb-5"
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 400) {
+        setNavbarClass(
+          "offcanvas offcanvas-end w-75 border-4 border-start border-danger-subtle mb-5"
+        );
+      } else {
+        setNavbarClass(
+          "offcanvas offcanvas-end w-50 border-4 border-start border-danger-subtle mb-5"
+        );
+      }
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     getDados();
@@ -223,6 +251,9 @@ function Main() {
           <SendOutlined style={{ color: "black" }} />
         </IconButton>
         <IconButton
+          onClick={() => {
+            closeOffCanvas(); // Adicione essa linha para fechar a navbar quando o ícone for clicado
+          }}
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasNavbarMain"
           aria-controls="offcanvasNavbarMain"
@@ -233,66 +264,52 @@ function Main() {
       </footer>
 
       <div
-        className="offcanvas offcanvas-bottom h-50 focus"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-        }}
+        className="offcanvas offcanvas-bottom h-50 focus "
         id="offcanvasBottom"
         aria-labelledby="offcanvasBottomLabel"
       >
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasBottomLabel">
-            Postagem
-          </h5>
-          <button
-            type="button"
-            className="btn-close text-reset"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div className="offcanvas-body small">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Link
-              className="btn btn-info text-white m-1"
-              component={Link}
-              to="/postverts"
-              onClick={() => closeOffCanvas()}
-            >
-              Verts
-            </Link>
-            <Link
-              className="btn btn-info text-white m-1"
-              component={Link}
-              to="/postfeed"
-              onClick={() => closeOffCanvas()}
-            >
-              Feed
-            </Link>
-            <Link
-              className="btn btn-info text-white m-1"
-              component={Link}
-              to="/verts"
-              onClick={() => closeOffCanvas()}
-            >
-              Mensagens
-            </Link>
+        <div className="container-postagem">
+          <h1 className="offcanvas-title" id="offcanvasBottomLabel">
+            Publicar{" "}
+          </h1>
+
+          <div className="container-links">
+            <button>
+              <Link
+                className="styleButtons"
+                component={Link}
+                to="/postverts"
+                onClick={() => closeOffCanvas()}
+              >
+                Verts
+              </Link>
+            </button>
+            <button>
+              <Link
+                className="styleButtons"
+                component={Link}
+                to="/postfeed"
+                onClick={() => closeOffCanvas()}
+              >
+                Feed
+              </Link>
+            </button>
+            <button>
+              <Link
+                className="styleButtons"
+                component={Link}
+                to="/verts"
+                onClick={() => closeOffCanvas()}
+              >
+                Mensagens
+              </Link>
+            </button>
           </div>
         </div>
       </div>
 
       <div
-        className="offcanvas offcanvas-end w-75 border-4 border-start border-danger-subtle border-opacity-75 mb-5"
+        className=" offcanvas offcanvas-end section-nav"
         id="offcanvasNavbarMain"
         aria-labelledby="offcanvasNavbarMainLabel"
       >
