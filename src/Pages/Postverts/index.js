@@ -103,19 +103,7 @@ function Postverts() {
             legenda: legenda
 
           })
-          // const idPost = postandoVerts.data._id
 
-          // const newPostsWithId = [...newPosts, idPost];
-          // try {
-          //   const enviandoVerts = await api.patch(`/profile/${idUser}`, {
-          //     headers: {
-          //       'Authorization': `Bearer ${token}`
-          //     },
-          //     posts: newPostsWithId
-          //   });
-          // } catch (error) {
-          //   console.log(error);
-          // }
 
         } catch (error) {
           console.log(error)
