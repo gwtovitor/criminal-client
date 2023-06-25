@@ -65,13 +65,21 @@ function Main() {
   function closeModal() {
     const offcanvas = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+   try {
     offcanvasInstance.hide();
+   } catch (error) {
+    
+   }
     offcanvas.setAttribute("offcanvas", "offcanvas");
   }
   function closeOffCanvas() {
     const offcanvas = document.getElementById("offcanvasBottom");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
+   try{
     offcanvasInstance.hide();
+   }catch{
+
+   }
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
   }
 
@@ -80,8 +88,12 @@ function Main() {
     const offcanvass = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
     const offcanvassInstance = Offcanvas.getInstance(offcanvass);
+   try {
     offcanvasInstance.hide();
     offcanvassInstance.hide();
+   } catch (error) {
+    
+   }
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
   }
@@ -91,8 +103,12 @@ function Main() {
     const offcanvass = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
     const offcanvassInstance = Offcanvas.getInstance(offcanvass);
-    offcanvasInstance.hide();
+    try {
+      offcanvasInstance.hide();
     offcanvassInstance.hide();
+    } catch (error) {
+      
+    }
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
   }
