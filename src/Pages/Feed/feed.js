@@ -8,7 +8,8 @@ import { Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import api from "../../Services/api";
 import { ThumbUp } from "@mui/icons-material";
-import { toast } from "react-toastify";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 var idsPassados = [];
 
 function Feed() {
@@ -127,6 +128,7 @@ function Feed() {
         createdAt: postData.data.createdAt,
         liked: postData.data.likes.includes(idUser) ? true : false,
         agendamentoPost: postData.data.agendamentoPost,
+        fotoCapa: postData.data.fotoCapa,
       };
 
       if (
@@ -136,6 +138,8 @@ function Feed() {
         // Fazer algo caso o post esteja agendado para o futuro
       } else {
         newFeed.push(postObj);
+        console.log(postObj)
+
       }
     }
 
@@ -191,6 +195,21 @@ function Feed() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  function verificaBlur(price, capa, index){
+    if(price != '0,00'){
+      if(capa == true){
+        if(index != 0){
+          return 'blur-effect'
+        }
+      }else{
+        return 'blur-effect'
+      }
+    }else{
+      return 'videoplayer-feed'
+    }
+
+  }
+
   return (
     <div className="container-feed">
       <section id="post-list">
@@ -229,7 +248,7 @@ function Feed() {
                 </div>
                 <img src={more} alt="Mais" />
               </header>
-              {post.content.endsWith(".mp4") ? (
+              {/*post.content[0].endsWith(".mp4") ? (
                 <div style={{ position: "relative" }}>
                   {post.price !== "0,00" && (
                     <div className="price-overlay">
@@ -282,7 +301,115 @@ function Feed() {
                     alt="A imagem do Post"
                   />
                 </div>
-              )}
+              )*/}
+
+              <Carousel
+                showThumbs={false}
+                showIndicators={false}
+                dynamicHeight={false}
+             /*   renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                  hasPrev && (
+                    <button
+                      type="button"
+                      onClick={onClickHandler}
+                      title={label}
+                      style={{ width: '40px', height: '40px', display: 'flex' }}
+                    >
+                      Anterior
+                    </button>
+                  )
+                }
+                renderArrowNext={(onClickHandler, hasNext, label) =>
+                  hasNext && (
+                    <button
+                      type="button"
+                      onClick={onClickHandler}
+                      title={label}
+                      style={{ width: '40px', height: '40px', display: 'flex' }}
+                    >
+                      Próximo
+                    </button>
+                  )
+                }*/
+              >
+                {post.content.map((contentPost, index) => (
+                  <div key={index} style={{ position: 'relative' }}>
+                    {contentPost.endsWith('.mp4') ? (
+                      <div style={{ position: 'relative' }}>
+                        {post.price !== '0,00' && (
+                          post.fotoCapa ? (
+                            index != 0 && (
+                              <div className="price-overlay">
+                                Você precisa pagar {post.price} para liberar o conteúdo
+                              </div>
+                            )
+                          ) : (
+                            <div className="price-overlay">
+                              Você precisa pagar {post.price} para liberar o conteúdo
+                            </div>
+                          )
+
+                        )}
+                        <div style={{ position: 'absolute', top: '60%', left: '3%' }}>
+                          <h6
+                            style={{
+                              color: 'rgba(255, 255, 255, 0.6)',
+                              opacity: '0.8',
+                              cursor: 'default',
+                              userSelect: 'none',
+                            }}
+                          >
+                            CC@{post.user}
+                          </h6>
+                        </div>
+                        <video
+                          className={verificaBlur(post.price, post.fotoCapa, index)}
+                          controls
+                        >
+                          <source src={contentPost} type="video/mp4" />
+                          
+                        </video>
+                       </div>
+                    ) : (
+                      <div style={{ position: 'relative' }}>
+                        {post.price !== '0,00' && (
+                          post.fotoCapa ? (
+                            index != 0 && (
+                              <div className="price-overlay">
+                                Você precisa pagar {post.price} para liberar o conteúdo
+                              </div>
+                            )
+                          ) : (
+                            <div className="price-overlay">
+                              Você precisa pagar {post.price} para liberar o conteúdo
+                            </div>
+                          )
+
+                        )}
+                        <div style={{ position: 'absolute', top: '60%', left: '3%' }}>
+                          <h6
+                            style={{
+                              color: 'rgba(255, 255, 255, 0.6)',
+                              opacity: '0.8',
+                              cursor: 'default',
+                              userSelect: 'none',
+                            }}
+                          >
+                            CC@{post.user}
+                          </h6>
+                        </div>
+                        <img
+                          style={{ width: '100%' }}
+                          className={verificaBlur(post.price, post.fotoCapa, index)}
+                          src={contentPost}
+                          alt="A imagem do Post"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </Carousel>
+
               <footer>
                 <div className="actions">
                   {post.liked ? (
@@ -302,7 +429,7 @@ function Feed() {
                 </div>
                 <strong>{post.likes} curtidas</strong>
                 <p>{post.description}</p>
-                {commentsFeed[post._id].slice(0, 2).map((comentario,index) => (
+                {commentsFeed[post._id].slice(0, 2).map((comentario, index) => (
                   <div
                     key={index}
                     style={{ cursor: "pointer" }}
@@ -382,7 +509,7 @@ function Feed() {
                           data-dismiss="modal"
                           aria-label="Close"
                         >
-                        
+
                         </button>
                       </div>
                       <div className="modal-body">
@@ -487,7 +614,7 @@ function Feed() {
           </div>
         ) : null}
       </section>
-    </div>
+    </div >
   );
 }
 

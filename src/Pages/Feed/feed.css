@@ -5,6 +5,22 @@
   margin-bottom: 50px;
 }
 
+.carousel-video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* Proporção 16:9 para vídeos responsivos */
+  overflow: hidden;
+}
+
+.carousel-video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 section#post-list {
   width: 100%;
   max-width: 550px;
@@ -146,6 +162,7 @@ section#post-list article footer p span {
     padding: 0;
   }
 }
+
 
 .img-loading {
   width: 40px;
