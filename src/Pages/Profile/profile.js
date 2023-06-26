@@ -756,14 +756,14 @@ function Profile() {
                                             return (
                                                 <div key={index} className="col-md-4 mb-4">
                                                     <div className="square-thumbnail">
-                                                        {dados.content.endsWith('.mp4') ? (
+                                                        {dados.content[0].endsWith('.mp4') ? (
                                                             <div className="thumbnail-wrapper">
                                                                 <video
                                                                     className={dados.price !== '0,00' && !isYou ? 'thumbnail-video blurred' : 'thumbnail-video'}
                                                                     poster={dados.thumbnail}
                                                                     onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda)}
                                                                 >
-                                                                    <source src={dados.content} type="video/mp4" />
+                                                                    <source src={dados.content[0]} type="video/mp4" />
                                                                 </video>
                                                                 {dados.price !== '0,00' && !isYou && (
                                                                     <div className="payment-message" style={{ textAlign: 'center' }}>
@@ -780,7 +780,7 @@ function Profile() {
                                                             <div className="thumbnail-wrapper">
                                                                 <img
                                                                     className={dados.price !== '0,00' && !isYou ? 'thumbnail-image blurred' : 'thumbnail-image'}
-                                                                    src={dados.content}
+                                                                    src={dados.content[0]}
                                                                     alt="Imagem do post"
                                                                     onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda, dados.id)}
                                                                 />

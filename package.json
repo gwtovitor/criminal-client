@@ -35,6 +35,7 @@
     "react-modal": "^3.16.1",
     "react-pro-sidebar": "^1.0.0",
     "react-responsive": "^9.0.2",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",

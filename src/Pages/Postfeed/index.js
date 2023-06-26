@@ -13,6 +13,7 @@ function Postfeed() {
   const [data, setData] = useState(null);
   const [hora, setHora] = useState(null);
   const [dataDisable, setDataDisable] = useState(false);
+  const [fotoCapa, setFotoCapa] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [legenda, setLegenda] = useState('');
   const idUser = localStorage.getItem('cc_p');
@@ -21,7 +22,6 @@ function Postfeed() {
   const [newPosts, setNewPosts] = useState([]);
   const [price, setPrice] = useState('0,00');
   const [combinedDateTime, setCombinedDateTime] = useState('');
-
 
   useEffect(() => {
     async function loadPosts() {
@@ -65,88 +65,79 @@ function Postfeed() {
         }
       }
     }
-
-    // Converter a data para o formato ISO 8601
-
   };
 
-
-  /* 
- 
-   const handleHoraChange = (newValue) => {
-     const currentDateTime = dayjs();
-     const selectedDateTime = dayjs(data).set('hour', newValue.hour).set('minute', newValue.minute);
- 
-     if (selectedDateTime.isBefore(currentDateTime) || dayjs(data).isBefore(dayjs().startOf('day'))) {
-       // A hora selecionada é anterior à hora atual ou a data selecionada é anterior à data atual
-       setHora(null); // Limpar a hora selecionada
-     } else {
-       setHora(newValue);
-     }
-   };
- */
-
   const handleFileSelect = (event) => {
-    // we only get the selected file from input element's event
     try {
-      setSelectedFile(event.target.files[0])
-      const file = event.target.files[0];
-      const fileUrl = URL.createObjectURL(file);
-      setfileUrl(fileUrl);
+      const files = event.target.files;
+      setSelectedFile(files);
+      const fileUrls = Array.from(files).map(file => ({
+        link: URL.createObjectURL(file),
+        type: file.type,
+      }));
+      setfileUrl(fileUrls);
+    } catch (error) {
+      console.log(error);
     }
-    catch {
-
-    }
-
   }
 
   async function postarVerts() {
 
     if (selectedFile != null) {
-      const formData = new FormData();
+
+      const patchs = [];
+      for (const arquivos of selectedFile) {
+
+        const formData = new FormData();
 
 
-      formData.append("files", selectedFile);
-      console.log(formData)
-      try {
-        const response = await api.post("/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" }
-        })
-        console.log(response)
-        const videoPath = response.data.files[0].location
-
+        formData.append("files", arquivos);
         try {
-          const postandoFeed = await api.post(`/post`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            user: idUser,
-            content: videoPath,
-            legenda: legenda,
-            price: price,
-            agendamentoPost: combinedDateTime,
+          const response = await api.post("/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
           })
-          const idPost = postandoFeed.data._id
-
-          const newPostsWithId = [...newPosts, idPost];
-          try {
-            const enviandoVerts = await api.patch(`/profile/${idUser}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              },
-              posts: newPostsWithId
-            });
-          } catch (error) {
-            console.log(error);
-          }
-
+          console.log(response)
+          const videoPath = response.data.files[0].location
+          patchs.push(videoPath)
+          
+         
         } catch (error) {
           console.log(error)
         }
-        window.location.reload()
+      }
+      try {
+        const postandoFeed = await api.post(`/post`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          user: idUser,
+          content: patchs,
+          legenda: legenda,
+          price: price,
+          agendamentoPost: combinedDateTime,
+          fotoCapa: fotoCapa ? true : false 
+        })
+        const idPost = postandoFeed.data._id
+        console.log(postandoFeed)
+        const newPostsWithId = [...newPosts, idPost];
+        console.log(newPostsWithId)
+
+        try {
+          const enviandoVerts = await api.patch(`/profile/${idUser}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            posts: newPostsWithId
+          });
+          console.log(enviandoVerts)
+        } catch (error) {
+          console.log(error);
+        }
+
       } catch (error) {
         console.log(error)
       }
+
     } else {
       toast.error("Selecione uma mídia para publicar", {
         position: "top-right",
@@ -159,9 +150,6 @@ function Postfeed() {
         theme: "light",
       });
     }
-
-
-
   };
 
   const changeLegenda = (event) => {
@@ -213,6 +201,7 @@ function Postfeed() {
               <input
                 id='video-upload'
                 type='file'
+                multiple
                 accept='video/mp4, image/*'
                 style={{ display: 'none' }}
                 onChange={handleFileSelect}
@@ -222,19 +211,35 @@ function Postfeed() {
           </div>
         </div>
 
-
-        {fileUrl && (
-          <div className='content-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
-            {selectedFile.type.includes('video') ? (
-              <video controls src={fileUrl} width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
-            ) : (
-              <img src={fileUrl} alt="Imagem" width='100%' height='auto' style={{ maxWidth: '100%', maxHeight: '100%' }} />
-            )}
-          </div>
+        {fileUrl && Array.isArray(fileUrl) && (
+          fileUrl.map((file, index) => (
+            <div key={index} className='content-container mt-2' style={{ alignSelf: 'center', margin: '0 auto' }}>
+              {file.type.includes('video') ? (
+                <video controls src={file.link} width='50%' height='auto' />
+              ) : (
+                <img src={file.link} alt="Imagem" width='50%' height='auto'/>
+              )}
+            </div>
+          ))
         )}
-
-
-
+        <div className='row mt-4'>
+          <div className='col-12'>
+            <p>Ative a foto de capa para voce exibir a primeira foto gratuíta como demonstrativo</p>
+            <div className="input-group">
+              <div className="form-check-reverse text-start form-switch">
+                <input
+                  className="form-check-input"
+                  style={{ width: '2.5rem', height: '1.5rem' }}
+                  onChange={(e) => setFotoCapa(e.target.checked)}
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                />
+                <label className="form-check-label mt-1" style={{ marginRight: '8px' }} htmlFor="flexSwitchCheckDefault">Foto de Capa</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className='row mt-3'>
           <div className='col-12'>
             <div className="input-group  mb-3 mt-2">
@@ -248,11 +253,9 @@ function Postfeed() {
                 aria-label="Amount (to the nearest dollar)"
                 onInput={mascaraMoeda}
               />
-
             </div>
           </div>
         </div>
-
         <div className='row mt-4'>
           <div className='col-12'>
             <div className="input-group">
@@ -272,7 +275,7 @@ function Postfeed() {
         </div>
         <div className='row mt-3'>
           <div className='col-12'>
-            {dataDisable && (<div class="input-group">
+            {dataDisable && (<div className="input-group">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateField
                   label="Data e Horário"
