@@ -67,22 +67,21 @@ function Main() {
   function closeModal() {
     const offcanvas = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
-   try {
-    offcanvasInstance.hide();
-   } catch (error) {
-    
-   }
+    try {
+      offcanvasInstance.hide();
+    } catch (error) {}
     offcanvas.setAttribute("offcanvas", "offcanvas");
+    document.body.classList.remove("offcanvas-open");
   }
+
   function closeOffCanvas() {
     const offcanvas = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
-   try{
-    offcanvasInstance.hide();
-   }catch{
-
-   }
+    try {
+      offcanvasInstance.hide();
+    } catch {}
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
+    document.body.classList.remove("offcanvas-open");
   }
 
   function closeModalLateral() {
@@ -90,14 +89,13 @@ function Main() {
     const offcanvass = document.getElementById("offcanvasNavbarMain");
     const offcanvasInstance = Offcanvas.getInstance(offcanvas);
     const offcanvassInstance = Offcanvas.getInstance(offcanvass);
-   try {
-    offcanvasInstance.hide();
-    offcanvassInstance.hide();
-   } catch (error) {
-    
-   }
+    try {
+      offcanvasInstance.hide();
+      offcanvassInstance.hide();
+    } catch (error) {}
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
+    document.body.classList.remove("offcanvas-open");
   }
 
   function closeModalFinancas() {
@@ -107,13 +105,13 @@ function Main() {
     const offcanvassInstance = Offcanvas.getInstance(offcanvass);
     try {
       offcanvasInstance.hide();
-    offcanvassInstance.hide();
-    } catch (error) {
-      
-    }
+      offcanvassInstance.hide();
+    } catch (error) {}
     offcanvass.setAttribute("data-bs-dismiss", "offcanvas");
     offcanvas.setAttribute("data-bs-dismiss", "offcanvas");
+    document.body.classList.remove("offcanvas-open");
   }
+
   useEffect(() => {
     getDados();
   }, []);
@@ -121,84 +119,257 @@ function Main() {
   return (
     <div className="row">
       <div className="col col-lg-3">
-        <div className="navlateral">
-          <img className="logobraba" src={logo} alt="logo"></img>
-          <Sidebar className="navbarside-feed">
-            <Menu>
-              <MenuItem
-                href="/verts"
-                icon={<PersonalVideoIcon style={{ color: "black" }} />}
-              >
-                Verts
-              </MenuItem>
-              <MenuItem href="/" icon={<HomeIcon style={{ color: "black" }} />}>
-                Feed
-              </MenuItem>
-              <MenuItem
-                href="/mensagens"
-                icon={<Send style={{ color: "black" }} />}
-              >
-                Mensagens
-              </MenuItem>
-              <MenuItem
-                href="/pesquisa"
-                icon={<Search style={{ color: "black" }} />}
-              >
-                Pesquisar
-              </MenuItem>
-              <MenuItem
-                icon={<ShoppingBagOutlined style={{ color: "black" }} />}
-                href="/favoritos"
-              >
-                Compras
-              </MenuItem>
-              {isCreator ? (
-                <SubMenu
-                  icon={<AddBoxOutlined style={{ color: "black" }} />}
-                  label="Publicar"
-                >
-                  <MenuItem href="/postfeed">Feed</MenuItem>
-                  <MenuItem href="/postverts">Verts</MenuItem>
-                  <MenuItem href="/postmsg">Mensagens</MenuItem>
-                </SubMenu>
-              ) : null}
-
-              <SubMenu
-                icon={<AttachMoneyIcon style={{ color: "black" }} />}
-                label="Finanças"
-              >
-                <MenuItem href="/balanco">Balanço</MenuItem>
-                <MenuItem href="/compras">Transações</MenuItem>
-                <MenuItem href="/banco">Dados Bancários</MenuItem>
-              </SubMenu>
-              <SubMenu
-                icon={<ClosedCaptionOff style={{ color: "black" }} />}
-                label="My Criminal"
-                className="scrollable-submenu"
-              >
-                <MenuItem href="/seguidores">Seguidores</MenuItem>
-                <MenuItem href="/seguindo">Seguindo</MenuItem>
-                <MenuItem href="/assinantes">Assinantes</MenuItem>
-                <MenuItem href="/assinando">Assinando</MenuItem>
-                <MenuItem onClick={() => updateUrlAndReload(`/profile/${id}`)}>
-                  Perfil
-                </MenuItem>
-                <MenuItem href="/suporte">Suporte CC</MenuItem>
+        <div className="navlateral ">
+          <Sidebar
+            className="navbarside-feed"
+            style={{ backgroundColor: "transparent" }}
+          >
+            <div className="bordernavbarside-feed">
+              <Menu>
                 <MenuItem
-                  onClick={() => {
-                    logoff();
+                  href="/"
+                  className="custom-menu-item"
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "black" },
                   }}
                 >
-                  Sair
+                  <div className="centralizelogobraba">
+                    <img className="logobraba" src={logo} alt="logo"></img>
+                  </div>
                 </MenuItem>
-              </SubMenu>
-            </Menu>
+                <MenuItem
+                  href="/verts"
+                  icon={<PersonalVideoIcon style={{ color: "black" }} />}
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item"
+                >
+                  Verts
+                </MenuItem>
+                <MenuItem
+                  href="/"
+                  icon={<HomeIcon style={{ color: "black" }} />}
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item"
+                >
+                  Feed
+                </MenuItem>
+                <MenuItem
+                  href="/mensagens"
+                  icon={<Send style={{ color: "black" }} />}
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item"
+                >
+                  Mensagens
+                </MenuItem>
+                <MenuItem
+                  href="/pesquisa"
+                  icon={<Search style={{ color: "black" }} />}
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item"
+                >
+                  Pesquisar
+                </MenuItem>
+                <MenuItem
+                  icon={<ShoppingBagOutlined style={{ color: "black" }} />}
+                  href="/favoritos"
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item"
+                >
+                  Compras
+                </MenuItem>
+                {isCreator ? (
+                  <SubMenu
+                    icon={<AddBoxOutlined style={{ color: "black" }} />}
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    label="Publicar"
+                    className="custom-menu-item scrollable-submenu "
+                  >
+                    <MenuItem
+                      href="/"
+                      style={{
+                        backgroundColor: "transparent",
+                        "&:hover": { backgroundColor: "transparent" },
+                      }}
+                      className="custom-menu-item"
+                    >
+                      Feed
+                    </MenuItem>
+                    <MenuItem
+                      style={{
+                        backgroundColor: "transparent",
+                        "&:hover": { backgroundColor: "transparent" },
+                      }}
+                      href="/postverts"
+                      className="custom-menu-item"
+                    >
+                      Verts
+                    </MenuItem>
+                    <MenuItem
+                      style={{
+                        backgroundColor: "transparent",
+                        "&:hover": { backgroundColor: "transparent" },
+                      }}
+                      href="/postmsg"
+                      className="custom-menu-item"
+                    >
+                      Mensagens
+                    </MenuItem>
+                  </SubMenu>
+                ) : null}
+
+                <SubMenu
+                  icon={<AttachMoneyIcon style={{ color: "black" }} />}
+                  label="Finanças"
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                  className="custom-menu-item scrollable-submenu "
+                >
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/balanco"
+                    className="custom-menu-item"
+                  >
+                    Balanço
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/compras"
+                    className="custom-menu-item"
+                  >
+                    Transações
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/banco"
+                    className="custom-menu-item"
+                  >
+                    Dados Bancários
+                  </MenuItem>
+                </SubMenu>
+                <SubMenu
+                  icon={<ClosedCaptionOff style={{ color: "black" }} />}
+                  label="My Criminal"
+                  className="custom-menu-item scrollable-submenu "
+                  style={{
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
+                >
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/seguidores"
+                    className="custom-menu-item "
+                  >
+                    Seguidores
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/seguindo"
+                    className="custom-menu-item "
+                  >
+                    Seguindo
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "red" },
+                    }}
+                    href="/assinantes"
+                    className="custom-menu-item "
+                  >
+                    Assinantes
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/assinando"
+                    className="custom-menu-item "
+                  >
+                    Assinando
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => updateUrlAndReload(`/profile/${id}`)}
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    className="custom-menu-item "
+                  >
+                    Perfil
+                  </MenuItem>
+                  <MenuItem
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    href="/suporte"
+                    className="custom-menu-item "
+                  >
+                    Suporte CC
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      logoff();
+                    }}
+                    style={{
+                      backgroundColor: "transparent",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
+                    className="custom-menu-item "
+                  >
+                    Sair
+                  </MenuItem>
+                </SubMenu>
+              </Menu>
+            </div>
           </Sidebar>
         </div>
       </div>
-      <div className="col-12 col-lg-9 container-outlet mb-3">
+      <div
+        id="outletContainer"
+        className="col-12 col-lg-9 container-outlet mb-3"
+      >
         <Outlet />
       </div>
+
       <footer className="footer border-top border-dark-subtle border-2">
         <IconButton
           onClick={() => {
@@ -295,7 +466,7 @@ function Main() {
       </div>
 
       <div
-        className=" offcanvas offcanvas-end section-nav"
+        className="offcanvas offcanvas-end section-nav "
         id="offcanvasNavbarMain"
         aria-labelledby="offcanvasNavbarMainLabel"
       >

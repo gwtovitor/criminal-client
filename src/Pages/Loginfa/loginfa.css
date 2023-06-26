@@ -1,159 +1,81 @@
 * {
   padding: 0;
   margin: 0;
-
 }
 
-.centralcontainer-loginfa{
-  width: 32%;
-  height: 50%;
-  display: 'flex';
-  flex-direction: column;
-
+.centralcontainer-loginfa {
   border-radius: 10px;
-  padding-top:23px;
-  background-color: rgba(255, 255, 255, 0.7);
-
+  padding: 2.3rem;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* padding-top: 23px; */
+  background: #6b6b6b4d;
+  box-shadow: 0 8px 32px 0 #000000;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border-radius: 10px;
+  /* border: 1px solid #aaaaaa; */
+  color: #fff;
 }
 
-.container-loginfa{
+.container-loginfa {
   display: flex;
   flex-direction: column;
-  align-items: center;  
+  align-items: center;
+  justify-content: center;
   height: 100vh;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('./images/fas.jpeg');
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.9)
+    ),
+    url("./images/fas.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center center;
-
-}
-#form-loginfa{
-  display: flex;
-  flex-direction: column;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  padding-top: 0;
+  background-position: center;
 }
 
-#esqueci-senha-link-login{
-  text-decoration: none;
-  font-size: 12px;
-}
-
-#form-loginfa button{
-  background-color:  #00bcd4;
-  margin-top: 10px;
-}
-
-#form-loginfa button:hover {
-  background-color: #4dd0e1;
-}
-
-.container-logofa{
-  width: 80%;
-  height: 20%;
-  margin-bottom: 100px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-
-}
-.logo-loginfa{
+.logo-loginfa {
   padding: 0;
-  width: 32%;
-  padding-top: 70px;
+  width: 48%;
+  /* padding-top: 70px; */
 }
- .socialnetworkslogin-login{
-  border-radius: 20px;
-  border: 0;
-  min-width: 100px;
-  align-self: center;
-  margin-right: 13px;
-  margin-top: 50px;
-  
- }
-
- 
-@media (min-width: 0px) and (max-width:479px) {
-
-  .centralcontainer-loginfa{
-    width: 90%;
-    height: 50%;
-    border-radius: 10px;
-    background-color:rgba(255, 255, 255, 0.7);
-  }
-
-  .logo-loginfa{
-    padding: 0;
-    width: 90%;
-
-    padding-top: 70px;
-  }
+.container-logologinfa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5vh;
 }
-
- 
-@media (min-width: 320px) and (max-width:480px) {
-
-  .centralcontainer-loginfa{
-    width: 80%;
-    height: 41%;
-    border-radius: 10px;
-    background-color:rgba(255, 255, 255, 0.7);
-  }
-
-  .logo-loginfa{
-    padding: 0;
-    width: 80%;
-
-    padding-top: 70px;
-  }
+.resetPassword {
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #0059ff;
+  font-weight: 600;
+  transition: 0.2s;
 }
-
-
-@media (min-width: 481px) and (max-width:768px) {
-
-  .centralcontainer-loginfa{
-    width: 70%;
-    height: 40%;
-    display: 'flex';
-    flex-direction: column;
-  
-    border-radius: 10px;
-    padding-top:23px;
-    background-color: rgba(255, 255, 255, 0.7);
-  }
-
-  .logo-loginfa{
-    padding: 0;
-    width: 70%;
-
-    padding-top: 70px;
-  }
+.resetPassword:hover {
+  text-decoration: underline;
+  color: #0146c5;
 }
-
-@media (min-width:769px) and (max-width:1024px) {
-
-  .centralcontainer-loginfa{
-    width: 50%;
-    height: 50%;
-    display: 'flex';
-    flex-direction: column;
-  
-    border-radius: 10px;
-    padding-top:23px;
-    background-color:rgba(255, 255, 255, 0.7);
-  }
-
-  .logo-loginfa{
-    padding: 0;
-    width: 50%;
-
-    padding-top: 70px;
-  }
+.centralizedButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
 }
-
-
-
+.login-submit-button {
+  width: 120px;
+  color: #fff;
+  font-weight: 900;
+  padding: 4.3px;
+  border-radius: 7.5px;
+  border: none;
+  transition: 0.3s;
+}
+.login-submit-button:hover {
+  letter-spacing: 0.8px;
+  color: #000;
+  color: #dbdbdb;
+}
