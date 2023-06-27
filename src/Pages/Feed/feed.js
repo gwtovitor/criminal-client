@@ -248,61 +248,7 @@ function Feed() {
                 </div>
                 <img src={more} alt="Mais" />
               </header>
-              {/*post.content[0].endsWith(".mp4") ? (
-                <div style={{ position: "relative" }}>
-                  {post.price !== "0,00" && (
-                    <div className="price-overlay">
-                      Você precisa pagar R${post.price} para liberar o conteúdo
-                    </div>
-                  )}
-                  <div style={{ position: "absolute", top: "60%", left: "3%" }}>
-                    <h6
-                      style={{
-                        color: "rgba(255, 255, 255, 0.6)",
-                        opacity: "0.8",
-                        cursor: "default",
-                        userSelect: "none",
-                      }}
-                    >
-                      CC@{post.user}
-                    </h6>
-                  </div>
-                  <video
-                    className={`${post.price !== "0,00" ? "blur-effect" : ""
-                      } videoplayer-feed`}
-                    controls
-                  >
-                    <source src={post.content} type="video/mp4" />
-                  </video>
-                </div>
-              ) : (
-                <div style={{ position: "relative" }}>
-                  {post.price !== "0,00" && (
-                    <div className="price-overlay">
-                      Você precisa pagar R${post.price} para liberar o conteúdo
-                    </div>
-                  )}
-                  <div style={{ position: "absolute", top: "60%", left: "3%" }}>
-                    <h6
-                      style={{
-                        color: "rgba(255, 255, 255, 0.6)",
-                        opacity: "0.8",
-                        cursor: "default",
-                        userSelect: "none",
-                      }}
-                    >
-                      CC@{post.user}
-                    </h6>
-                  </div>
-                  <img
-                    style={{ width: "100%" }}
-                    className={`${post.price !== "0,00" ? "blur-effect" : ""}`}
-                    src={post.content}
-                    alt="A imagem do Post"
-                  />
-                </div>
-              )*/}
-
+           
               <Carousel
                 showThumbs={false}
                 showIndicators={false}

@@ -38,9 +38,9 @@ function Loginfa() {
           console.log(user);
           localStorage.setItem("cc_t", response.data.token);
           localStorage.setItem("cc_p", profile.data._id);
-
+          navigate("../");
           if (user.data.isActive) {
-            navigate("../");
+          //  navigate("../");
           } else {
             toast.error(
               "Seu usuário ainda nao está ativo, aguarde o email com informações",

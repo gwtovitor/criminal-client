@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import './profile.css'
-//import Background from './Images/creator.jpg'
 import { faInstagram, faTiktok, faAmazon } from "@fortawesome/free-brands-svg-icons";
 import { faStar, faShareSquare } from '@fortawesome/free-regular-svg-icons';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +13,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
-
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 function Profile() {
     const { id } = useParams();
@@ -60,34 +60,32 @@ function Profile() {
     const [selectedOption, setSelectedOption] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState('opcao1')
 
-    const openModal = (content, legenda, post) => {
+    const openModal = (content) => {
         setSelectedContent(content);
-        setSelectedLegenda(legenda)
         setShowModal(true);
-        setPostModal(post)
     };
     const handleImageSelection = (event) => {
         const option = event.target.value;
         setSelectedOption(option);
-      
+
         switch (option) {
-          case 'opcao1':
-            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg');
-            break;
-          case 'opcao2':
-            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif');
-       
-            break;
-          case 'opcao3':
-            setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg');
-            break;
-          default:
-            setSelectedPhoto('');
-            break;
+            case 'opcao1':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg');
+                break;
+            case 'opcao2':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif');
+
+                break;
+            case 'opcao3':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg');
+                break;
+            default:
+                setSelectedPhoto('');
+                break;
         }
 
-      };
-      
+    };
+
 
     async function deletePost() {
         const deletando = await api.delete(`./post/${postModal}`)
@@ -173,8 +171,8 @@ function Profile() {
                     try {
                         if (id) {
                             const response = await api.get(`/post/${id}`);
-                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost } = response.data;
-                            return { id, content, legenda, likes, comments, createdAt, price, agendamentoPost };
+                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa } = response.data;
+                            return { id, content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa };
                         } else {
                             return null;
                         }
@@ -187,6 +185,7 @@ function Profile() {
 
             const sortedDados = dados.filter((dado) => dado != null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setDadosPosts(sortedDados);
+            console.log(dadosPosts)
         };
 
         obterDados();
@@ -535,6 +534,44 @@ function Profile() {
         return `${formattedDay}/${formattedMonth}/${year}`;
     };
 
+    function verificaBlurVideo(price, capa) {
+        if (price != '0,00') {
+            if (capa == true) {
+                return 'thumbnail-video'
+            } else {
+                return 'thumbnail-video blurred'
+            }
+        } else {
+            return 'thumbnail-video'
+        }
+
+    }
+    function verificaBlurImage(price, capa) {
+        if (price != '0,00') {
+            if (capa == true) {
+                return 'thumbnail-image'
+            } else {
+                return 'thumbnail-image blurred'
+            }
+        } else {
+            return 'thumbnail-image'
+        }
+
+    }
+    function verificaBlurModal(price, capa, index) {
+        if (price != '0,00') {
+            if (capa == true) {
+                if (index != 0) {
+                    return 'blur-effect'
+                }
+            } else {
+                return 'blur-effect'
+            }
+        } else {
+            return ''
+        }
+
+    }
 
     return (
         <div className="profile-container">
@@ -759,16 +796,21 @@ function Profile() {
                                                         {dados.content[0].endsWith('.mp4') ? (
                                                             <div className="thumbnail-wrapper">
                                                                 <video
-                                                                    className={dados.price !== '0,00' && !isYou ? 'thumbnail-video blurred' : 'thumbnail-video'}
+                                                                    className={verificaBlurVideo(dados.price, dados.fotoCapa)}
                                                                     poster={dados.thumbnail}
-                                                                    onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda)}
+                                                                    onClick={() => openModal(dados)}
                                                                 >
                                                                     <source src={dados.content[0]} type="video/mp4" />
                                                                 </video>
                                                                 {dados.price !== '0,00' && !isYou && (
-                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                                        Para visualizar, você precisa pagar o valor de {dados.price}
-                                                                    </div>
+                                                                    dados.fotoCapa ? (
+                                                                        <>
+                                                                        </>
+                                                                    ) : (
+                                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                            Para visualizar, você precisa pagar o valor de {dados.price}
+                                                                        </div>
+                                                                    )
                                                                 )}
                                                                 {agendamentoPostDate > currentDate && isYou && (
                                                                     <div className="payment-message" style={{ textAlign: 'center' }}>
@@ -779,15 +821,21 @@ function Profile() {
                                                         ) : (
                                                             <div className="thumbnail-wrapper">
                                                                 <img
-                                                                    className={dados.price !== '0,00' && !isYou ? 'thumbnail-image blurred' : 'thumbnail-image'}
+                                                                    className={verificaBlurImage(dados.price, dados.fotoCapa)}
                                                                     src={dados.content[0]}
                                                                     alt="Imagem do post"
-                                                                    onClick={dados.price !== '0,00' && !isYou ? null : () => openModal(dados.content, dados.legenda, dados.id)}
+                                                                    onClick={() => openModal(dados)}
                                                                 />
+
                                                                 {dados.price !== '0,00' && !isYou && (
-                                                                    <div className="payment-message" style={{ textAlign: 'center' }}>
-                                                                        Para visualizar, você precisa pagar o valor de {dados.price}
-                                                                    </div>
+                                                                    dados.fotoCapa ? (
+                                                                        <>
+                                                                        </>
+                                                                    ) : (
+                                                                        <div className="payment-message" style={{ textAlign: 'center' }}>
+                                                                            Para visualizar, você precisa pagar o valor de {dados.price}
+                                                                        </div>
+                                                                    )
                                                                 )}
                                                                 {agendamentoPostDate > currentDate && isYou && (
                                                                     <div className="payment-message" style={{ textAlign: 'center' }}>
@@ -797,6 +845,7 @@ function Profile() {
                                                             </div>
                                                         )}
                                                     </div>
+                                                    <p></p>
                                                 </div>
                                             );
                                         }
@@ -820,11 +869,103 @@ function Profile() {
 
                 <Modal show={showModal} onHide={closeModal} centered>
                     <Modal.Body style={{ flexDirection: 'column', maxHeight: '100vh', width: '100%' }} className="d-flex justify-content-center align-items-center">
-                        {selectedContent && selectedContent.endsWith('.mp4') ? (
-                            <video src={selectedContent} controls className="img-fluid" style={{ maxHeight: '50vh' }} alt="Vídeo Modal" />
-                        ) : (
-                            <img src={selectedContent} style={{ maxHeight: '90vh' }} className="img-fluid" alt="Imagem Modal" />
-                        )}
+                        <Carousel
+                            showThumbs={false}
+                            showIndicators={false}
+                            dynamicHeight={false}
+                        >
+                            {selectedContent != null && (
+                                selectedContent.content.map((post, index) => (
+                                    <div key={index} style={{ position: 'relative' }}>
+                                        {post.endsWith('.mp4') ? (
+                                            <div style={{ position: 'relative' }}>
+                                                {isYou ? (selectedContent.price != '0,00' ? (
+                                                    <div className="price-overlay">
+                                                        Você esta vendendo esse post por: {selectedContent.price}
+                                                    </div>
+                                                ) : (
+                                                    <></>
+                                                )) : (selectedContent.price !== '0,00' && (
+                                                    selectedContent.fotoCapa ? (
+                                                        index != 0 && (
+                                                            <div className="price-overlay">
+                                                                Você precisa pagar {selectedContent.price} para liberar o conteúdo
+                                                            </div>
+                                                        )
+                                                    ) : (
+                                                        <div className="price-overlay">
+                                                            Você precisa pagar {selectedContent.price} para liberar o conteúdo
+                                                        </div>
+                                                    )
+
+                                                ))}
+                                                <div style={{ position: 'absolute', top: '60%', left: '3%' }}>
+                                                    <h6
+                                                        style={{
+                                                            color: 'rgba(255, 255, 255, 0.6)',
+                                                            opacity: '0.8',
+                                                            cursor: 'default',
+                                                            userSelect: 'none',
+                                                        }}
+                                                    >
+                                                        CC@{selectedContent.user}
+                                                    </h6>
+                                                </div>
+                                                <video
+                                                    className={isYou ? 'videoplayer-feed' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
+                                                    controls
+                                                >
+                                                    <source src={post} type="video/mp4" />
+
+                                                </video>
+                                            </div>
+                                        ) : (
+                                            <div style={{ position: 'relative' }}>
+                                                {isYou ? (selectedContent.price != '0,00' ? (
+                                                    <div className="price-overlay">
+                                                        Você esta vendendo esse post por: {selectedContent.price}
+                                                    </div>
+                                                ) : (
+                                                    <></>
+                                                )) : (
+                                                    selectedContent.price !== '0,00' && (
+                                                        selectedContent.fotoCapa ? (
+                                                            index != 0 && (
+                                                                <div className="price-overlay">
+                                                                    Você precisa pagar {selectedContent.price} para liberar o conteúdo
+                                                                </div>
+                                                            )
+                                                        ) : (
+                                                            <div className="price-overlay">
+                                                                Você precisa pagar {selectedContent.price} para liberar o conteúdo
+                                                            </div>
+                                                        )
+
+                                                    )
+                                                )}
+                                                <div style={{ position: 'absolute', top: '60%', left: '3%' }}>
+                                                    <h6
+                                                        style={{
+                                                            color: 'rgba(255, 255, 255, 0.6)',
+                                                            opacity: '0.8',
+                                                            cursor: 'default',
+                                                            userSelect: 'none',
+                                                        }}
+                                                    >
+                                                        CC@{selectedContent.user}
+                                                    </h6>
+                                                </div>
+                                                <img
+                                                    style={{ width: '100%' }}
+                                                    className={isYou ? 'videoplayer-feed' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
+                                                    src={post}
+                                                    alt="A imagem do Post"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )))}
+                        </Carousel>
                         {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
                     </Modal.Body>
                     <Modal.Footer>
@@ -837,7 +978,7 @@ function Profile() {
 
             </div>
 
-        </div>
+        </div >
 
 
     )
