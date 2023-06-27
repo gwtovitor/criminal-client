@@ -79,3 +79,12 @@
   color: #000;
   color: #dbdbdb;
 }
+
+@media (max-width: 500px) {
+  .centralcontainer-loginfa {
+    width: 75%;
+  }
+  .logo-loginfa {
+    width: 55%;
+  }
+}

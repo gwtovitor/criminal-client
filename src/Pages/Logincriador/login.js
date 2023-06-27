@@ -37,25 +37,27 @@ function Login() {
         if (response.data.token) {
           const user = await api.get(`user/username/${email}`);
           const profile = await api.get(`profile/user/${user.data._id}`);
-          console.log(user)
-          console.log(profile)
+          console.log(user);
+          console.log(profile);
           localStorage.setItem("cc_t", response.data.token);
           localStorage.setItem("cc_p", profile.data._id);
           if (user.data.isActive) {
-            navigate('../')
+            navigate("../");
           } else {
-            toast.error("Seu usuário ainda nao está ativo, aguarde o email com informações", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            toast.error(
+              "Seu usuário ainda nao está ativo, aguarde o email com informações",
+              {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              }
+            );
           }
-
         }
       } catch (error) {
         if (error.message === "Request failed with status code 404") {
@@ -75,18 +77,17 @@ function Login() {
   }
 
   return (
-    <div className="container-logincriador">
-      <div className="container-logocriador">
-        <Image
-          className="logo-logincriador"
-          src={logo}
-          alt="Logo da empresa"
-          fluid
-        />
-      </div>
-      <div className="centralcontainer-logincriador">
+    <div className="container-logincreator">
+      <div className="centralcontainer-logincreator">
+        <div className="container-logologinfa">
+          <Image
+            className="logo-logincreator"
+            src={logo}
+            alt="Logo da empresa"
+          />
+        </div>
         <Form id="form-logincriador">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-2" controlId="formBasicEmail">
             <Form.Label style={{ fontWeight: "bold" }}>
               Email ou usuário
             </Form.Label>
@@ -97,7 +98,7 @@ function Login() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-2" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: "bold" }}>Senha</Form.Label>
             <Form.Control
               onChange={(e) => setPassword(e.target.value)}
@@ -105,22 +106,19 @@ function Login() {
               placeholder="Digite sua senha"
             />
           </Form.Group>
-          <a
-            href="/reset-senha"
-            id="esqueci-senha-link-login"
-            className="link-reset-senha"
-          >
+          <a href="/reset-senha" className="resetPassword">
             Esqueci a Senha
           </a>
-
-          <Button
-            variant="primary"
-            className="socialnetworkslogin-login"
-            type="submit"
-            onClick={enviarLogin}
-          >
-            <span style={{ fontWeight: "bold" }}>Entrar</span>
-          </Button>
+          <div className="centralizedButton">
+            <button
+              style={{ backgroundColor: "#e46f80" }}
+              className="login-submit-button"
+              type="submit"
+              onClick={enviarLogin}
+            >
+              Enviar
+            </button>
+          </div>
         </Form>
       </div>
     </div>
