@@ -562,13 +562,15 @@ function Profile() {
         if (price != '0,00') {
             if (capa == true) {
                 if (index != 0) {
-                    return 'blur-effect'
+                    return 'blur-effect modal-content-profile'
+                }else{
+                    return 'modal-content-profile'
                 }
             } else {
-                return 'blur-effect'
+                return 'blur-effect modal-content-profile'
             }
         } else {
-            return ''
+            return 'modal-content-profile'
         }
 
     }
@@ -867,12 +869,12 @@ function Profile() {
 
 
 
-                <Modal show={showModal} onHide={closeModal} centered>
-                    <Modal.Body style={{ flexDirection: 'column', maxHeight: '100vh', width: '100%' }} className="d-flex justify-content-center align-items-center">
+                <Modal size="md-down" centered show={showModal} onHide={closeModal} >
+                    <Modal.Body className="d-flex justify-content-center align-items-center">
                         <Carousel
                             showThumbs={false}
                             showIndicators={false}
-                            dynamicHeight={false}
+                            dynamicHeight={true}
                         >
                             {selectedContent != null && (
                                 selectedContent.content.map((post, index) => (
@@ -908,11 +910,11 @@ function Profile() {
                                                             userSelect: 'none',
                                                         }}
                                                     >
-                                                        CC@{selectedContent.user}
+                                                        CC@{username}
                                                     </h6>
                                                 </div>
                                                 <video
-                                                    className={isYou ? 'videoplayer-feed' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
+                                                    className={isYou ? 'modal-content-profile' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
                                                     controls
                                                 >
                                                     <source src={post} type="video/mp4" />
@@ -952,12 +954,12 @@ function Profile() {
                                                             userSelect: 'none',
                                                         }}
                                                     >
-                                                        CC@{selectedContent.user}
+                                                         CC@{username}
                                                     </h6>
                                                 </div>
                                                 <img
                                                     style={{ width: '100%' }}
-                                                    className={isYou ? 'videoplayer-feed' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
+                                                    className={isYou ? 'modal-content-profile' : verificaBlurModal(selectedContent.price, selectedContent.fotoCapa, index)}
                                                     src={post}
                                                     alt="A imagem do Post"
                                                 />

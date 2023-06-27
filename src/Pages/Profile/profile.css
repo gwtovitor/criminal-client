@@ -4,6 +4,12 @@
     user-select: none;
 }
 
+.modal-content-profile{
+    max-width: 80%;
+    max-height: 80%;
+    min-width: 80%;
+    min-height: auto;
+}
 .dados-profile {
     margin-top: 20px;
     display: flex;
