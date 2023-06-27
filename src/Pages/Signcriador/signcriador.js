@@ -6,7 +6,6 @@ import GetPaises from './Services/getpais';
 import api from '../../Services/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import InputGroup from 'react-bootstrap/InputGroup';
 import InputMask from 'react-input-mask';
 
 
@@ -22,12 +21,9 @@ function Signcriador() {
   const [dataNascimento, setDataNascimento] = useState('');
   const navigate = useNavigate();
   const [isCheckedTermos, setischeckdTermos] = useState(false);
-  const [isActivetermosButton, setisActivetermosButton] = useState(false);
   const [cpf, setCPF] = useState('');
   const [isCPFComplete, setIsCPFComplete] = useState(false);
-  const [isCheckedAssinatura, setischeckdAssinatura] = useState(false);
-  const [isActiveAssinaturaButton, setisActiveAssinaturaButton] = useState(false);
-  const [price, setPrice] = useState('')
+  
 
   const handleCPFChange = (e) => {
     const cpfValue = e.target.value;
@@ -99,24 +95,23 @@ function Signcriador() {
     return true;
   }
 
-
-
-  const chekboxassinatura = (f) => {
-    setisActiveAssinaturaButton(f.target.checked);
-    setischeckdAssinatura(f.target.checked);
-  };
-  const checkAssinaturaSubmmit = (f) => {
-    f.preventDefault();
-  };
-
   const chekboxtermos = (e) => {
-    setisActivetermosButton(e.target.checked);
     setischeckdTermos(e.target.checked);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  function isEmailValido(valor) {
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regexEmail.test(valor);
+  }
+
+  function handleEmailChange(event) {
+    const novoEmail = event.target.value;
+    setEmail(novoEmail)
+  }
 
   const enviarsign = async (event) => {
     event.preventDefault();
@@ -167,7 +162,32 @@ function Signcriador() {
         progress: undefined,
         theme: "light",
       });
-    } else {
+    } else if(!isEmailValido(email)){
+      toast.error("Digite um email válido", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password) || password.length < 8) {
+      // Verifica se as senhas são iguais
+      toast.error("Digite uma senha válida", {
+        // Exibe uma mensagem de erro
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }else {
       try {
         // Divide a string da data de nascimento em partes separadas (dia, mês, ano)
         const partesDataNascimento = dataNascimento.split("/");
@@ -188,10 +208,9 @@ function Signcriador() {
           cpf: cpf,
           isActive: false,
         });
-        console.log(response)
         localStorage.setItem('cc_i', response.data._id)
         try {
-          const responseUser = await api.post("/profile", {
+          await api.post("/profile", {
             creator: true,
             user: response.data._id,
             firstName: name,
@@ -271,24 +290,6 @@ function Signcriador() {
       setDataNascimento('');
     }
   };
-  function mascaraMoeda(event) {
-    const onlyDigits = event.target.value
-      .split("")
-      .filter(s => /\d/.test(s))
-      .join("")
-      .padStart(3, "0")
-    const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
-    event.target.value = maskCurrency(digitsFloat)
-  }
-
-  function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
-    const valorNew = new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency
-    }).format(valor)
-    setPrice(valorNew)
-    return valorNew
-  }
 
   return (
     <div className='container-signcriador'>
@@ -299,7 +300,7 @@ function Signcriador() {
         <Form id='form-signfa'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label style={{ fontWeight: 'bold' }}>Email</Form.Label>
-            <Form.Control onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Digite seu Email" />
+            <Form.Control onChange={(e) => handleEmailChange(e)} type="email" placeholder="Digite seu Email" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome</Form.Label>
@@ -334,6 +335,7 @@ function Signcriador() {
             <Form.Label style={{ fontWeight: 'bold' }}>Confirme a Senha</Form.Label>
             <Form.Control onChange={(e) => setConfirmaSenha(e.target.value)} type="password" placeholder="Digite a confirmação de senha" />
           </Form.Group>
+          <p>A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra e um numero</p>
           <Form.Group className='mb-3' controlId="formCpf">
             <Form.Label style={{ fontWeight: 'bold' }}>CPF</Form.Label>
             <InputMask

@@ -21,6 +21,8 @@ function Signfa() {
   const [confirmaSenha, setConfirmaSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const navigate = useNavigate();
+
+  
   const handleChangeDataNascimento = (e) => {
     const input = e.target.value;
 
@@ -84,6 +86,15 @@ function Signfa() {
     e.preventDefault();
     // ...
   };
+  function isEmailValido(valor) {
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regexEmail.test(valor);
+  }
+
+  function handleEmailChange(event) {
+    const novoEmail = event.target.value;
+    setEmail(novoEmail)
+  }
 
   const enviarsign = async (event) => {
     event.preventDefault();
@@ -98,7 +109,6 @@ function Signfa() {
       dataNascimento === "" ||
       paisSelecionado === ""
     ) {
-      // Verifica se algum campo está vazio
       toast.error("Preencha todos os campos", {
         // Exibe uma mensagem de erro
         position: "top-right",
@@ -125,7 +135,35 @@ function Signfa() {
         theme: "light",
       });
       return;
-    } else {
+    } else if (!isEmailValido(email)) {
+      // Verifica se as senhas são iguais
+      toast.error("Digite um email válido", {
+        // Exibe uma mensagem de erro
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    } else if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password) || password.length < 8) {
+      // Verifica se as senhas são iguais
+      toast.error("Digite uma senha válida", {
+        // Exibe uma mensagem de erro
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }else {
       try {
         // Divide a string da data de nascimento em partes separadas (dia, mês, ano)
         const partesDataNascimento = dataNascimento.split("/");
@@ -146,8 +184,6 @@ function Signfa() {
           isActive: true,
           cpf: '',
          });
-         
-         console.log(response)
         try {
           const responseProfile = await api.post("/profile", {
             creator: false,
@@ -166,10 +202,8 @@ function Signfa() {
               })
               if(login.data.token){
                 localStorage.setItem('cc_t', login.data.token)
-               // navigate('/')
+                navigate('/')
               }
-              
-              
             } catch (error) {
               console.log(error)
             }
@@ -177,13 +211,8 @@ function Signfa() {
         } catch (error) {
           return
         }
-       
-
-
       } catch (error) {
-
         toast.error(error.response.data.message, {
-          // Exibe uma mensagem de erro
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -194,15 +223,8 @@ function Signfa() {
           theme: "light",
         });
       }
-
-
     }
-
-
   };
-
-
-
 
   return (
     <div className='container-signfa'>
@@ -212,8 +234,8 @@ function Signfa() {
       <div className='centralcontainer-signfa'>
         <Form id='form-signfa'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label style={{ fontWeight: 'bold' }}>Email</Form.Label>
-            <Form.Control onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Digite seu Email" />
+            <Form.Label  style={{ fontWeight: 'bold' }}>Email</Form.Label>
+            <Form.Control  onChange={(e) => handleEmailChange(e)} type="email" placeholder="Digite seu Email" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={{ fontWeight: 'bold' }}>Nome</Form.Label>
@@ -248,7 +270,7 @@ function Signfa() {
             <Form.Label style={{ fontWeight: 'bold' }}>Confirme a Senha</Form.Label>
             <Form.Control onChange={(e) => setConfirmaSenha(e.target.value)} type="password" placeholder="Digite a confirmação de senha" />
           </Form.Group>
-
+          <p>A senha deve ter pelo menos 8 caracteres, incluindo pelo menos uma letra e um numero</p>
             <Form.Check
               onSubmit={handleSubmit}
               type="checkbox"
