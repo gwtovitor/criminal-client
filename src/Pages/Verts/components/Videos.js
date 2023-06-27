@@ -19,9 +19,10 @@ function Video({
   date,
   userName,
   itemId,
-  muted, 
+  muted,
   profileId,
-  onMutedChange // Adicione essa prop
+  onMutedChange,
+  autoPlay
 }) {
   const [playing, setPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -93,8 +94,11 @@ function Video({
           boundingClientRect.top >= 0 &&
           boundingClientRect.bottom <= window.innerHeight
         ) {
-          videoElement.play();
-          setPlaying(true);
+          if (autoPlay == true) {
+            videoElement.play()
+            setPlaying(true);
+          }
+
         } else {
           videoElement.pause();
           setPlaying(false);
@@ -140,7 +144,7 @@ function Video({
     verificaLike();
   };
 
-  async function navegaProfile(id){
+  async function navegaProfile(id) {
     navigate(`/profile/${id}`)
   }
 
@@ -208,7 +212,7 @@ function Video({
         </div>
         <div className="shortsVideoSideIcons">
           <div className="shortsVideoSideIcon">
-            <Avatar className="buttonsShortsSide" style={{cursor:'pointer'}} onClick={()=> {navegaProfile(profileId)}} src={avatar} />
+            <Avatar className="buttonsShortsSide" style={{ cursor: 'pointer' }} onClick={() => { navegaProfile(profileId) }} src={avatar} />
             {liked ? (
               <ThumbUp
                 className="buttonsShortsSide text-info"
@@ -224,7 +228,7 @@ function Video({
             <p>{like.length}</p>
           </div>
           <div onClick={handleMuteClick}>
-            {muted? (
+            {muted ? (
               <VolumeOff className="buttonsShortsSide" />
             ) : (
               <VolumeUp className="buttonsShortsSide" />
@@ -313,7 +317,7 @@ function Video({
                     marginRight: "5px",
                     cursor: "pointer"
                   }}
-                  onClick={()=> {navegaProfile(profileId)}}
+                  onClick={() => { navegaProfile(profileId) }}
                 >
                   {channel}
                 </p>

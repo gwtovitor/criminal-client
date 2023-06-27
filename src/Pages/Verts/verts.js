@@ -78,13 +78,12 @@ function Verts() {
   return (
 
     <div>
-
       {vertsList.map((src, index) => (
         <div
           onTouchStart={handleTouchStart(src.profileID)}
           key={index}
         >
-          <Videos
+         <Videos
             src={src.src}
             description={src.legenda}
             like={src.likes}
@@ -96,11 +95,13 @@ function Verts() {
             itemId={src.id}
             profileId={src.profileID}
             muted={muted}
-            onMutedChange={handleMutedChange} 
+            onMutedChange={handleMutedChange}
+            autoPlay={index == 0? false : true}
           />
         </div>
       ))}
     </div>
+
   );
 }
 
