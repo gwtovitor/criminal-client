@@ -204,7 +204,7 @@ function Main() {
                     className="custom-menu-item scrollable-submenu "
                   >
                     <MenuItem
-                      href="/"
+                      href="/postfeed"
                       style={{
                         backgroundColor: "transparent",
                         "&:hover": { backgroundColor: "transparent" },

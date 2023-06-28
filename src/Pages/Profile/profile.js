@@ -53,7 +53,6 @@ function Profile() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [dadosPosts, setDadosPosts] = useState([]);
     const [selectedContent, setSelectedContent] = useState(null);
-    const [selectedLegenda, setSelectedLegenda] = useState(null)
     const [postModal, setPostModal] = useState('')
     const [price, setPrice] = useState('')
     const [priceAssinatura, setPriceAssinatura] = useState('')
@@ -87,15 +86,15 @@ function Profile() {
     };
 
 
-    async function deletePost() {
-        const deletando = await api.delete(`./post/${postModal}`)
+    async function deletePost(selectedcontent) {
+        const deletando = await api.delete(`/post/${selectedcontent}`)
         const responseUser = await api.get(`/profile/${idUser}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         const oldPosts = responseUser.data.posts
-        const newPosts = oldPosts.filter((post) => post !== postModal);
+        const newPosts = oldPosts.filter((post) => post !== selectedcontent);
         const deletandoPost = await api.patch(`/profile/${idUser}`, {
             posts: newPosts
         })
@@ -135,6 +134,9 @@ function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             })
+            const postsGet = await api.get(`/post/profile/${id}`, {
+                logado: idUser
+            })
             setUser(responseUser?.data)
             if (response.data) {
                 setProfile(response?.data)
@@ -171,8 +173,8 @@ function Profile() {
                     try {
                         if (id) {
                             const response = await api.get(`/post/${id}`);
-                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa } = response.data;
-                            return { id, content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa };
+                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa, _id } = response.data;
+                            return { _id, content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa };
                         } else {
                             return null;
                         }
@@ -183,9 +185,9 @@ function Profile() {
                 })
             );
 
-            const sortedDados = dados.filter((dado) => dado != null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const sortedDados = dados.filter((dado) => dado !== null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setDadosPosts(sortedDados);
-            console.log(dadosPosts)
+
         };
 
         obterDados();
@@ -494,7 +496,7 @@ function Profile() {
 
     function seguidores(seguidores) {
         if (seguidores
-            == undefined) {
+            === undefined) {
             return '0'
 
         } else {
@@ -535,8 +537,8 @@ function Profile() {
     };
 
     function verificaBlurVideo(price, capa) {
-        if (price != '0,00') {
-            if (capa == true) {
+        if (price !== '0,00') {
+            if (capa === true) {
                 return 'thumbnail-video'
             } else {
                 return 'thumbnail-video blurred'
@@ -547,8 +549,8 @@ function Profile() {
 
     }
     function verificaBlurImage(price, capa) {
-        if (price != '0,00') {
-            if (capa == true) {
+        if (price !== '0,00') {
+            if (capa === true) {
                 return 'thumbnail-image'
             } else {
                 return 'thumbnail-image blurred'
@@ -559,11 +561,11 @@ function Profile() {
 
     }
     function verificaBlurModal(price, capa, index) {
-        if (price != '0,00') {
-            if (capa == true) {
-                if (index != 0) {
+        if (price !== '0,00') {
+            if (capa === true) {
+                if (index !== 0) {
                     return 'blur-effect modal-content-profile'
-                }else{
+                } else {
                     return 'modal-content-profile'
                 }
             } else {
@@ -697,7 +699,7 @@ function Profile() {
                                         </Button>
 
                                             <Button className="buttons-profile m-2" onClick={() => { assinar() }} variant={assino ? 'danger' : 'secondary'} type="submit">
-                                                <span className="buttons-name-profile" style={{ fontWeight: assino ? 'normal' : 'bold', fontSize: assino ? '0.6rem' : '0.7rem' }}>{assino ? 'Deixar de Assinar' : `Assinar ${price != null ? price : ''}`}</span>
+                                                <span className="buttons-name-profile" style={{ fontWeight: assino ? 'normal' : 'bold', fontSize: assino ? '0.6rem' : '0.7rem' }}>{assino ? 'Deixar de Assinar' : `Assinar ${price !== null ? price : ''}`}</span>
                                             </Button>
                                             {sigo ? (
                                                 <Button className="buttons-profile m-2" variant="secondary" type="submit">
@@ -876,12 +878,12 @@ function Profile() {
                             showIndicators={false}
                             dynamicHeight={true}
                         >
-                            {selectedContent != null && (
+                            {selectedContent !== null && (
                                 selectedContent.content.map((post, index) => (
                                     <div key={index} style={{ position: 'relative' }}>
                                         {post.endsWith('.mp4') ? (
                                             <div style={{ position: 'relative' }}>
-                                                {isYou ? (selectedContent.price != '0,00' ? (
+                                                {isYou ? (selectedContent.price !== '0,00' ? (
                                                     <div className="price-overlay">
                                                         Você esta vendendo esse post por: {selectedContent.price}
                                                     </div>
@@ -889,7 +891,7 @@ function Profile() {
                                                     <></>
                                                 )) : (selectedContent.price !== '0,00' && (
                                                     selectedContent.fotoCapa ? (
-                                                        index != 0 && (
+                                                        index !== 0 && (
                                                             <div className="price-overlay">
                                                                 Você precisa pagar {selectedContent.price} para liberar o conteúdo
                                                             </div>
@@ -923,7 +925,7 @@ function Profile() {
                                             </div>
                                         ) : (
                                             <div style={{ position: 'relative' }}>
-                                                {isYou ? (selectedContent.price != '0,00' ? (
+                                                {isYou ? (selectedContent.price !== '0,00' ? (
                                                     <div className="price-overlay">
                                                         Você esta vendendo esse post por: {selectedContent.price}
                                                     </div>
@@ -932,7 +934,7 @@ function Profile() {
                                                 )) : (
                                                     selectedContent.price !== '0,00' && (
                                                         selectedContent.fotoCapa ? (
-                                                            index != 0 && (
+                                                            index !== 0 && (
                                                                 <div className="price-overlay">
                                                                     Você precisa pagar {selectedContent.price} para liberar o conteúdo
                                                                 </div>
@@ -954,7 +956,7 @@ function Profile() {
                                                             userSelect: 'none',
                                                         }}
                                                     >
-                                                         CC@{username}
+                                                        CC@{username}
                                                     </h6>
                                                 </div>
                                                 <img
@@ -966,12 +968,21 @@ function Profile() {
                                             </div>
                                         )}
                                     </div>
+                                    
                                 )))}
+                                
+
                         </Carousel>
-                        {selectedLegenda && <span>{`Legenda: ${selectedLegenda}`}</span>}
+
+                       
                     </Modal.Body>
+                    {selectedContent && selectedContent.legenda && (
+                            <span style={{marginLeft:'2rem'}}>{`Legenda: ${selectedContent.legenda}`}</span>
+                        )}
                     <Modal.Footer>
-                        {isYou ? (<><Button onClick={() => { deletePost() }} variant="danger">Deletar</Button>
+                      
+
+                        {isYou ? (<><Button onClick={() => { deletePost(selectedContent._id) }} variant="danger">Deletar</Button>
                             <Button onClick={closeModal} variant="primary">Arquivar</Button></>) : (null)}
                         <Button onClick={closeModal} variant="primary">Fechar</Button>
 
