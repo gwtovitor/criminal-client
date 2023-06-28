@@ -1,0 +1,97 @@
+.containercontainerPostFeedcenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.containerPostFeed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #a2afff;
+  border: 1px solid black;
+  border-radius: 10px;
+  /* border: 1px solid #aaaaaa; */
+  padding: 15px;
+  /* height: 100vh; */
+  /* color: #fff; */
+  font-weight: 600;
+}
+.textareapostFeed {
+  border-radius: 5px;
+  padding: 5px;
+  width: 18rem;
+}
+.textareapostFeed:focus {
+  background-color: #fff1f3;
+  transform: scale(1.03);
+}
+.buttonMidiaLabel {
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #000;
+  padding: 8px;
+  width: 7.5rem;
+  text-align: center;
+  border-radius: 10px;
+  color: #000000;
+  font-weight: 600;
+  margin: 10px 0px 10px 0px;
+  transition: 0.4s;
+}
+.buttonMidiaLabel:hover {
+  background-color: #e46f80;
+  color: #fff;
+}
+.titlePostFeed {
+  font-size: 2rem;
+  font-weight: 500;
+}
+.testeLoukopai {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+.DateField {
+  border: 1px solid black;
+  border-radius: 5px;
+  transition: 0.2s;
+  color: black;
+}
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  border-radius: 10px;
+  align-self: center;
+}
+
+@media (max-width: 773px) {
+  .containerPostFeed {
+    margin-left: 20px;
+  }
+  .buttonMidiaLabel {
+    background-color: #e46f80;
+  }
+}
+@media (max-width: 408px) {
+  .containercontainerPostFeedcenter {
+    height: 90vh;
+  }
+  .containerPostFeed {
+    padding: 0px;
+  }
+}
+@media (max-width: 310px) {
+  .textareapostFeed {
+    border-radius: 5px;
+    padding: 5px;
+    width: 15rem;
+  }
+  .titlePostFeed {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}
