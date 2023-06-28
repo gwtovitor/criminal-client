@@ -122,7 +122,7 @@ function Main() {
         <div className="navlateral ">
           <Sidebar
             className="navbarside-feed"
-            style={{ backgroundColor: "transparent" }}
+            style={{ backgroundColor: "transparent", borderRadius: "10px" }}
           >
             <div className="bordernavbarside-feed">
               <Menu>
@@ -204,7 +204,7 @@ function Main() {
                     className="custom-menu-item scrollable-submenu "
                   >
                     <MenuItem
-                      href="/"
+                      href="/postfeed"
                       style={{
                         backgroundColor: "transparent",
                         "&:hover": { backgroundColor: "transparent" },
@@ -492,35 +492,6 @@ function Main() {
                   <h5>
                     <a
                       className="nav-link active"
-                      aria-current="page"
-                      href="../pesquisa"
-                    >
-                      <Search style={{ color: "black" }} className="me-2" />
-                      Procurar
-                    </a>
-                  </h5>
-                </li>
-                <li className="nav-item">
-                  <h5>
-                    <a
-                      className="nav-link active"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasNavbarFinancas"
-                      aria-controls="offcanvasNavbarFinancas"
-                      aria-current="page"
-                    >
-                      <AttachMoneyIcon
-                        style={{ color: "black" }}
-                        className="me-2"
-                      />
-                      Finanças
-                    </a>
-                  </h5>
-                </li>
-                <li className="nav-item">
-                  <h5>
-                    <a
-                      className="nav-link active"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#offcanvasNavbarMyCriminal"
                       aria-controls="offcanvasNavbarMyCriminal"
@@ -550,6 +521,51 @@ function Main() {
                     </Link>
                   </h5>
                 </li>
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasNavbarFinancas"
+                      aria-controls="offcanvasNavbarFinancas"
+                      aria-current="page"
+                    >
+                      <AttachMoneyIcon
+                        style={{ color: "black" }}
+                        className="me-2"
+                      />
+                      Finanças
+                    </a>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      aria-current="page"
+                      href="/favoritos"
+                    >
+                      <ShoppingBagOutlined
+                        style={{ color: "black" }}
+                        className="me-2"
+                      />
+                      Compras
+                    </a>
+                  </h5>
+                </li>
+                <li className="nav-item">
+                  <h5>
+                    <a
+                      className="nav-link active"
+                      aria-current="page"
+                      href="../pesquisa"
+                    >
+                      <Search style={{ color: "black" }} className="me-2" />
+                      Procurar
+                    </a>
+                  </h5>
+                </li>
+
                 <li className="nav-item">
                   <h5>
                     <Link
