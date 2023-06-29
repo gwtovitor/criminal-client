@@ -5,7 +5,6 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TimeField } from "@mui/x-date-pickers/TimeField";
 import api from "../../Services/api";
 import { toast } from "react-toastify";
 
@@ -113,11 +112,8 @@ function Postfeed() {
           agendamentoPost: combinedDateTime,
           fotoCapa: fotoCapa ? true : false,
         });
-        const idPost = postandoFeed.data._id;
-        console.log(postandoFeed);
+      /*  const idPost = postandoFeed.data._id;
         const newPostsWithId = [...newPosts, idPost];
-        console.log(newPostsWithId);
-
         try {
           const enviandoVerts = await api.patch(`/profile/${idUser}`, {
             headers: {
@@ -128,7 +124,7 @@ function Postfeed() {
           console.log(enviandoVerts);
         } catch (error) {
           console.log(error);
-        }
+        }*/
       } catch (error) {
         console.log(error);
       }

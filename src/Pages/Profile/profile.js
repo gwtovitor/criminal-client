@@ -42,7 +42,6 @@ function Profile() {
         { name: 'Fotos', value: '2' },
         { name: 'Videos', value: '3' },
     ];
-    const [selectedImage, setSelectedImage] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [profile, setProfile] = useState('');
     const [user, setUser] = useState('');
@@ -55,61 +54,13 @@ function Profile() {
     const [selectedContent, setSelectedContent] = useState(null);
     const [postModal, setPostModal] = useState('')
     const [price, setPrice] = useState('')
-    const [priceAssinatura, setPriceAssinatura] = useState('')
     const [selectedOption, setSelectedOption] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState('opcao1')
-
-    const openModal = (content) => {
-        setSelectedContent(content);
-        setShowModal(true);
-    };
-    const handleImageSelection = (event) => {
-        const option = event.target.value;
-        setSelectedOption(option);
-
-        switch (option) {
-            case 'opcao1':
-                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg');
-                break;
-            case 'opcao2':
-                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif');
-
-                break;
-            case 'opcao3':
-                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg');
-                break;
-            default:
-                setSelectedPhoto('');
-                break;
-        }
-
-    };
+    const [postLenght, setPostsLenght] = useState(0)
 
 
-    async function deletePost(selectedcontent) {
-        const deletando = await api.delete(`/post/${selectedcontent}`)
-        const responseUser = await api.get(`/profile/${idUser}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        const oldPosts = responseUser.data.posts
-        const newPosts = oldPosts.filter((post) => post !== selectedcontent);
-        const deletandoPost = await api.patch(`/profile/${idUser}`, {
-            posts: newPosts
-        })
-        window.location.reload()
-    }
 
-
-    const handleFileSelect = (event) => {
-        setSelectedFile(event.target.files[0])
-    }
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-
+    // funções  de pegar os dados iniciais
     async function getDados() {
         if (idUser === userId) {
             setIsYou(true)
@@ -137,10 +88,12 @@ function Profile() {
             const postsGet = await api.get(`/post/profile/${id}`, {
                 logado: idUser
             })
-            setUser(responseUser?.data)
-            if (response.data) {
+            console.log(postsGet.data)
+            const sortedDados = postsGet.data.filter((dado) => dado !== null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            if (response.data && postsGet.data) {
                 setProfile(response?.data)
-                setPosts(response?.data.posts)
+                setPosts(sortedDados)
                 setUsername(response.data.firstName)
                 setSobrenome(response.data.lastName)
                 setNetworks(response.data.networks)
@@ -166,56 +119,6 @@ function Profile() {
             }
         }
     }
-    useEffect(() => {
-        const obterDados = async () => {
-            const dados = await Promise.all(
-                posts.map(async (id) => {
-                    try {
-                        if (id) {
-                            const response = await api.get(`/post/${id}`);
-                            const { content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa, _id } = response.data;
-                            return { _id, content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa };
-                        } else {
-                            return null;
-                        }
-                    } catch (error) {
-                        console.log(`Erro ao obter dados do post ${id}:`, error);
-                        return null;
-                    }
-                })
-            );
-
-            const sortedDados = dados.filter((dado) => dado !== null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            setDadosPosts(sortedDados);
-
-        };
-
-        obterDados();
-    }, [posts]);
-
-
-    async function verificaseguidor() {
-
-        try {
-
-            const verificaseg = await api.get(`/profile/${idUser}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            const seguidoresUser = verificaseg.data.following
-            if (seguidoresUser.includes(userId)) {
-                setSigo(true)
-            } else {
-                setSigo(false)
-            }
-
-        } catch (error) {
-
-        }
-
-    }
-
 
     async function verificaAssinado() {
 
@@ -243,6 +146,263 @@ function Profile() {
         verificaseguidor()
         verificaAssinado()
     }, []);
+
+    async function verificaseguidor() {
+
+        try {
+
+            const verificaseg = await api.get(`/profile/${idUser}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            const seguidoresUser = verificaseg.data.following
+            if (seguidoresUser.includes(userId)) {
+                setSigo(true)
+            } else {
+                setSigo(false)
+            }
+
+        } catch (error) {
+
+        }
+
+    }
+
+    function seguidores(seguidores) {
+        if (seguidores
+            === undefined) {
+            return '0'
+
+        } else {
+            const value = seguidores.length
+            return value
+        }
+    }
+    function Posts(post) {
+        if (post
+            === undefined) {
+            return '0'
+
+        } else {
+            if (isYou) {
+                return post.length
+            } else {
+                var postslegth = 0
+                posts.map((e) => e.agendamentoPost < Date.now() ? postslegth++ : '')
+                console.log(postslegth)
+                return postslegth
+            }
+        }
+    }
+
+    function verificaBlurVideo(price, capa) {
+        if (price !== '0,00') {
+            if (capa === true) {
+                return 'thumbnail-video'
+            } else {
+                return 'thumbnail-video blurred'
+            }
+        } else {
+            return 'thumbnail-video'
+        }
+
+    }
+    function verificaBlurImage(price, capa) {
+        if (price !== '0,00') {
+            if (capa === true) {
+                return 'thumbnail-image'
+            } else {
+                return 'thumbnail-image blurred'
+            }
+        } else {
+            return 'thumbnail-image'
+        }
+
+    }
+
+    // fim das funções de pegar dados inicias
+
+
+
+
+    // funções de editar perfil 
+    const handleImageSelection = (event) => {
+        const option = event.target.value;
+        setSelectedOption(option);
+
+        switch (option) {
+            case 'opcao1':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/pngtree-beautiful-romantic-full-heart-pink-background-image_276913.jpg');
+                break;
+            case 'opcao2':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/19324a087a3ff2fcd50154d9979231c5.gif');
+
+                break;
+            case 'opcao3':
+                setSelectedPhoto('https://criminalclub-test.s3.amazonaws.com/p0mz9s1xs82xyx5w.jpg');
+                break;
+            default:
+                setSelectedPhoto('');
+                break;
+        }
+
+    };
+
+    const handleFileSelect = (event) => {
+        setSelectedFile(event.target.files[0])
+    }
+
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
+
+    const handleEditProfileClick = () => {
+        setEditingProfile(true);
+    };
+
+    async function handleSaveProfileClick() {
+        try {
+            const attProfile = await api.patch(`/profile/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                role: editingFunction,
+                firstName: username,
+                bio: bio,
+                lastName: sobrenome,
+                valorAssinatura: price,
+                img: selectedPhoto
+
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+        const formData = new FormData();
+
+
+        formData.append("file", selectedFile);
+
+        try {
+            const response = await api.post("/upload", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            })
+            const imgPath = response.data.file.location
+            try {
+                const attProfile = await api.patch(`/profile/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    img: imgPath
+                })
+
+            } catch (error) {
+                console.log(error)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+        setEditingProfile(false);
+        window.location.reload()
+    };
+
+
+    const handleRoleChange = (event) => {
+        setEditingFunction(event.target.value);
+    };
+    const sobrenomeChange = (event) => {
+        setSobrenome(event.target.value);
+    };
+    const bioChange = (event) => {
+        setBio(event.target.value);
+    };
+    const instagramChenge = (event) => {
+        setInstagramLink(event.target.value);
+    };
+    const tiktokChange = (event) => {
+        setTiktok(event.target.value);
+    };
+    const amazonChange = (event) => {
+        setAmazon(event.target.value);
+    };
+
+    function mascaraMoeda(event) {
+        const onlyDigits = event.target.value
+            .split("")
+            .filter(s => /\d/.test(s))
+            .join("")
+            .padStart(3, "0")
+        const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
+        event.target.value = maskCurrency(digitsFloat)
+    }
+
+    function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+        const valorNew = new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency
+        }).format(valor)
+        setPrice(valorNew)
+        return valorNew
+    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        // Adiciona um zero à esquerda para dias e meses menores que 10
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedMonth = month < 10 ? `0${month}` : month;
+
+        return `${formattedDay}/${formattedMonth}/${year}`;
+    };
+
+    // fim das funções de editar perfil
+
+
+
+    // post modal
+
+    const openModal = (content) => {
+        setSelectedContent(content);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    function verificaBlurModal(price, capa, index) {
+        if (price !== '0,00') {
+            if (capa === true) {
+                if (index !== 0) {
+                    return 'blur-effect modal-content-profile'
+                } else {
+                    return 'modal-content-profile'
+                }
+            } else {
+                return 'blur-effect modal-content-profile'
+            }
+        } else {
+            return 'modal-content-profile'
+        }
+
+    }
+
+    // fim post modal
+
+
+    // funções relativas ao perfil do usuario: excluir post, assinar e seguir usuarios
+    async function deletePost(selectedcontent) {
+        console.log(selectedcontent)
+        const deletando = await api.delete(`/post/${selectedcontent}`)
+
+        // window.location.reload()
+    }
 
     async function seguir() {
         try {
@@ -387,84 +547,43 @@ function Profile() {
         }
     }
 
-
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
-    };
-
-    const handleEditProfileClick = () => {
-        setEditingProfile(true);
-    };
-
-    async function handleSaveProfileClick() {
-        try {
-            const attProfile = await api.patch(`/profile/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                role: editingFunction,
-                firstName: username,
-                bio: bio,
-                lastName: sobrenome,
-                valorAssinatura: price,
-                img: selectedPhoto
-
-            })
-        } catch (error) {
-            console.log(error)
-        }
-
-        const formData = new FormData();
-
-
-        formData.append("file", selectedFile);
-
-        try {
-            const response = await api.post("/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" }
-            })
-            const imgPath = response.data.file.location
-            try {
-                const attProfile = await api.patch(`/profile/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    img: imgPath
-                })
-
-            } catch (error) {
-                console.log(error)
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-        setEditingProfile(false);
-        window.location.reload()
-    };
-
-
-    const handleRoleChange = (event) => {
-        setEditingFunction(event.target.value);
-    };
-    const sobrenomeChange = (event) => {
-        setSobrenome(event.target.value);
-    };
-    const bioChange = (event) => {
-        setBio(event.target.value);
-    };
-    const instagramChenge = (event) => {
-        setInstagramLink(event.target.value);
-    };
-    const tiktokChange = (event) => {
-        setTiktok(event.target.value);
-    };
-    const amazonChange = (event) => {
-        setAmazon(event.target.value);
-    };
+    // fim das funções de perfil do usuario
 
 
 
+
+
+
+    /*    antiga funcao de posts
+    useEffect(() => {
+           const obterDados = async () => {
+               const dados = await Promise.all(
+                   posts.map(async (id) => {
+                       try {
+                           if (id) {
+                               const response = await api.get(`/post/${id}`);
+                               const { content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa, _id } = response.data;
+                               return { _id, content, legenda, likes, comments, createdAt, price, agendamentoPost, fotoCapa };
+                           } else {
+                               return null;
+                           }
+                       } catch (error) {
+                           console.log(`Erro ao obter dados do post ${id}:`, error);
+                           return null;
+                       }
+                   })
+               );
+   
+               const sortedDados = dados.filter((dado) => dado !== null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+               setDadosPosts(sortedDados);
+   
+           };
+   
+           obterDados();
+       }, [posts]);
+   */
+
+       // funcao de copiar url do perfil
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
             .then(() => {
@@ -494,88 +613,25 @@ function Profile() {
     }
 
 
-    function seguidores(seguidores) {
-        if (seguidores
-            === undefined) {
-            return '0'
 
+    async function Arquivar(id) {
+        const getPost = await api.get(`/post/${id}`)
+        console.log(getPost)
+        if (getPost.data.privado) {
+            const privado = getPost.data.privado
+            const arquivandoPost = await api.patch(`/post/${id}`, {
+                privado: !privado
+            })
+            selectedContent.privado = !privado
         } else {
-            const value = seguidores.length
-            return value
+            const arquivandoPost = await api.patch(`/post/${id}`, {
+                privado: true
+            })
+            selectedContent.privado = true
         }
     }
-    function mascaraMoeda(event) {
-        const onlyDigits = event.target.value
-            .split("")
-            .filter(s => /\d/.test(s))
-            .join("")
-            .padStart(3, "0")
-        const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2)
-        event.target.value = maskCurrency(digitsFloat)
-    }
 
-    function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
-        const valorNew = new Intl.NumberFormat(locale, {
-            style: 'currency',
-            currency
-        }).format(valor)
-        setPrice(valorNew)
-        return valorNew
-    }
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-
-        // Adiciona um zero à esquerda para dias e meses menores que 10
-        const formattedDay = day < 10 ? `0${day}` : day;
-        const formattedMonth = month < 10 ? `0${month}` : month;
-
-        return `${formattedDay}/${formattedMonth}/${year}`;
-    };
-
-    function verificaBlurVideo(price, capa) {
-        if (price !== '0,00') {
-            if (capa === true) {
-                return 'thumbnail-video'
-            } else {
-                return 'thumbnail-video blurred'
-            }
-        } else {
-            return 'thumbnail-video'
-        }
-
-    }
-    function verificaBlurImage(price, capa) {
-        if (price !== '0,00') {
-            if (capa === true) {
-                return 'thumbnail-image'
-            } else {
-                return 'thumbnail-image blurred'
-            }
-        } else {
-            return 'thumbnail-image'
-        }
-
-    }
-    function verificaBlurModal(price, capa, index) {
-        if (price !== '0,00') {
-            if (capa === true) {
-                if (index !== 0) {
-                    return 'blur-effect modal-content-profile'
-                } else {
-                    return 'modal-content-profile'
-                }
-            } else {
-                return 'blur-effect modal-content-profile'
-            }
-        } else {
-            return 'modal-content-profile'
-        }
-
-    }
 
     return (
         <div className="profile-container">
@@ -600,7 +656,7 @@ function Profile() {
                         <div className="seguidores-posts-likes mt-4 mb-4">
                             <span>Seguidores <br /> <span style={{ fontWeight: 'normal', }}>{seguidores(profile?.followers)}</span> </span>
                             <span>Seguindo <br /> <span style={{ fontWeight: 'normal', margin: '0 5rem' }}>{seguidores(profile?.following)}</span>   </span>
-                            <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{seguidores(profile.posts)}</span></span>
+                            <span>Posts <br /> <span style={{ fontWeight: 'normal' }}>{Posts(posts)}</span></span>
                         </div>
                         {isYou ? (<Button className="buttons-profile" variant="secondary" type="submit" onClick={handleEditProfileClick}>
                             <span className="buttons-name-profile" style={{ fontWeight: 'bold' }}>Editar Perfil</span>
@@ -785,11 +841,11 @@ function Profile() {
                 {isCreator ? (
                     <div className="container">
                         <div className="row mb-5">
-                            {dadosPosts.length <= 0 ? (
+                            {posts.length <= 0 ? (
                                 <p>Sem posts</p>
                             ) : (
                                 <>
-                                    {dadosPosts.map((dados, index) => {
+                                    {posts.map((dados, index) => {
                                         const currentDate = new Date();
                                         const agendamentoPostDate = new Date(dados.agendamentoPost);
 
@@ -856,7 +912,7 @@ function Profile() {
                                         return null;
                                     })}
 
-                                    {!isYou && dadosPosts.every((dados) => assino === false) && (
+                                    {!isYou && posts.every((dados) => assino === false) && (
                                         <p style={{ textAlign: 'center' }}>Você precisa assinar este perfil para exibir o conteúdo</p>
                                     )}
                                 </>
@@ -968,22 +1024,25 @@ function Profile() {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                 )))}
-                                
+
 
                         </Carousel>
 
-                       
+
                     </Modal.Body>
                     {selectedContent && selectedContent.legenda && (
-                            <span style={{marginLeft:'2rem'}}>{`Legenda: ${selectedContent.legenda}`}</span>
-                        )}
+                        <span style={{ marginLeft: '2rem' }}>{`Legenda: ${selectedContent.legenda}`}</span>
+                    )}
                     <Modal.Footer>
-                      
+
 
                         {isYou ? (<><Button onClick={() => { deletePost(selectedContent._id) }} variant="danger">Deletar</Button>
-                            <Button onClick={closeModal} variant="primary">Arquivar</Button></>) : (null)}
+                            <Button onClick={() => Arquivar(selectedContent._id)} variant={selectedContent?.privado ? 'danger' : 'primary'}>
+                                {selectedContent?.privado  ? 'Desarquivar' : 'Arquivar'}
+                            </Button>
+                        </>) : (null)}
                         <Button onClick={closeModal} variant="primary">Fechar</Button>
 
                     </Modal.Footer>

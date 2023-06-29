@@ -10,6 +10,7 @@ import api from "../../Services/api";
 import { ThumbUp } from "@mui/icons-material";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import imgPNG from './Images/pngpadrao.png'
 var idsPassados = [];
 
 function Feed() {
@@ -195,6 +196,20 @@ function Feed() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  function verificaImg(price, capa, index, img){
+    if(price != '0,00'){
+      if(capa == true){
+        if(index != 0){
+          return imgPNG
+        }
+      }else{
+        return imgPNG
+      }
+    }else{
+      return img
+    }
+  }
+
   function verificaBlur(price, capa, index){
     if(price != '0,00'){
       if(capa == true){
@@ -347,7 +362,7 @@ function Feed() {
                         <img
                           style={{ width: '100%' }}
                           className={verificaBlur(post.price, post.fotoCapa, index)}
-                          src={contentPost}
+                          src={verificaImg(post.price, post.fotoCapa, index, contentPost)}
                           alt="A imagem do Post"
                         />
                       </div>
