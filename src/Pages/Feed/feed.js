@@ -281,7 +281,10 @@ function Feed() {
                 showThumbs={false}
                 showIndicators={false}
                 dynamicHeight={false}
-              /*   renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                swipeable={false}     
+          
+                        
+              renderArrowPrev={(onClickHandler, hasPrev, label) =>
                    hasPrev && (
                      <button
                        type="button"
@@ -299,12 +302,12 @@ function Feed() {
                        type="button"
                        onClick={onClickHandler}
                        title={label}
-                       style={{ width: '40px', height: '40px', display: 'flex' }}
+                       style={{ width: '40px', height: '40px', display:'absolute', top: '0%', left: '3%'}}
                      >
                        Próximo
                      </button>
                    )
-                 }*/
+                 }
               >
                 {post.content.map((contentPost, index) => (
                   <div key={index} style={{ position: 'relative' }}>
