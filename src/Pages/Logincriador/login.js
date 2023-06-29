@@ -14,7 +14,7 @@ function Login() {
 
   async function enviarLogin(event) {
     event.preventDefault();
-
+   
     if (email === "" || password === "") {
       toast.error("Preencha todos os campos", {
         position: "top-right",
@@ -33,7 +33,6 @@ function Login() {
           login: email,
           password: password,
         });
-
         if (response.data.token) {
           const user = await api.get(`user/username/${email}`);
           const profile = await api.get(`profile/user/${user.data._id}`);
@@ -41,9 +40,11 @@ function Login() {
           console.log(profile);
           localStorage.setItem("cc_t", response.data.token);
           localStorage.setItem("cc_p", profile.data._id);
+         
           if (user.data.isActive) {
-            navigate("../");
+            navigate("../home");
           } else {
+            navigate("../home");
             toast.error(
               "Seu usuário ainda nao está ativo, aguarde o email com informações",
               {
@@ -60,8 +61,8 @@ function Login() {
           }
         }
       } catch (error) {
-        if (error.message === "Request failed with status code 404") {
-          toast.error("Usuário ou senha inválido", {
+        if (error.message) {
+          toast.error(error.message, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
