@@ -278,7 +278,10 @@ function Feed() {
                 <img src={more} alt="Mais" />
               </header>
 
-              <Carousel>
+              <Carousel
+              indicators={false}
+              
+              >
                 {post.content.map((contentPost, index) => (
                   <Carousel.Item >
                     {contentPost.endsWith('.mp4') ? (
