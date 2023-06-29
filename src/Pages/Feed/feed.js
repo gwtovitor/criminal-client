@@ -9,8 +9,9 @@ import { useNavigate } from "react-router-dom";
 import api from "../../Services/api";
 import { ThumbUp } from "@mui/icons-material";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import Carousel from 'react-bootstrap/Carousel';
 import imgPNG from './Images/pngpadrao.png'
+
 var idsPassados = [];
 
 function Feed() {
@@ -277,41 +278,9 @@ function Feed() {
                 <img src={more} alt="Mais" />
               </header>
 
-              <Carousel
-                showThumbs={false}
-                showIndicators={false}
-                dynamicHeight={false}
-                swipeable={false}     
-                stopSwipingHandler={true}
-                swipeAnimationHandler={false}
-                swipeScrollTolerance={1000000}                       
-              renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                   hasPrev && (
-                     <button
-                       type="button"
-                       onClick={onClickHandler}
-                       title={label}
-                       style={{ width: '40px', height: '40px', display: 'flex' }}
-                     >
-                       Anterior
-                     </button>
-                   )
-                 }
-                 renderArrowNext={(onClickHandler, hasNext, label) =>
-                   hasNext && (
-                     <button
-                       type="button"
-                       onClick={onClickHandler}
-                       title={label}
-                       style={{ width: '40px', height: '40px', display:'absolute', top: '0%', left: '3%'}}
-                     >
-                       Próximo
-                     </button>
-                   )
-                 }
-              >
+              <Carousel>
                 {post.content.map((contentPost, index) => (
-                  <div key={index} style={{ position: 'relative' }}>
+                  <Carousel.Item >
                     {contentPost.endsWith('.mp4') ? (
                       <div style={{ position: 'relative' }}>
                         {post.price !== '0,00' && (
@@ -393,9 +362,10 @@ function Feed() {
                         />
                       </div>
                     )}
-                  </div>
+                  </Carousel.Item>
                 ))}
               </Carousel>
+
 
               <footer>
                 <div className="actions">
