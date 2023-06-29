@@ -350,7 +350,6 @@ function Feed() {
                             src={verificaImg(post.price, post.fotoCapa, index, contentPost)}
                             alt="A imagem do Post"
                           />
-
                         )}
 
                       </div>
