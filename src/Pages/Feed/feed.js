@@ -282,8 +282,9 @@ function Feed() {
                 showIndicators={false}
                 dynamicHeight={false}
                 swipeable={false}     
-          
-                        
+                stopSwipingHandler={true}
+                swipeAnimationHandler={false}
+                swipeScrollTolerance={1000000}                       
               renderArrowPrev={(onClickHandler, hasPrev, label) =>
                    hasPrev && (
                      <button
