@@ -196,30 +196,43 @@ function Feed() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  function verificaImg(price, capa, index, img){
-    if(price != '0,00'){
-      if(capa == true){
-        if(index != 0){
+  function verificaImg(price, capa, index, img) {
+    if (price != '0,00') {
+      if (capa == true) {
+        if (index != 0) {
           return imgPNG
         }
-      }else{
+      } else {
         return imgPNG
       }
-    }else{
+    } else {
       return img
     }
   }
+  function verificaVid(price, capa, index) {
+    if (price != '0,00') {
+      if (capa == true) {
+        if (index != 0) {
+          return false
+        }
+      } else {
+        return false
+      }
+    } else {
+      return true
+    }
+  }
 
-  function verificaBlur(price, capa, index){
-    if(price != '0,00'){
-      if(capa == true){
-        if(index != 0){
+  function verificaBlur(price, capa, index) {
+    if (price != '0,00') {
+      if (capa == true) {
+        if (index != 0) {
           return 'blur-effect'
         }
-      }else{
+      } else {
         return 'blur-effect'
       }
-    }else{
+    } else {
       return 'videoplayer-feed'
     }
 
@@ -263,35 +276,35 @@ function Feed() {
                 </div>
                 <img src={more} alt="Mais" />
               </header>
-           
+
               <Carousel
                 showThumbs={false}
                 showIndicators={false}
                 dynamicHeight={false}
-             /*   renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                  hasPrev && (
-                    <button
-                      type="button"
-                      onClick={onClickHandler}
-                      title={label}
-                      style={{ width: '40px', height: '40px', display: 'flex' }}
-                    >
-                      Anterior
-                    </button>
-                  )
-                }
-                renderArrowNext={(onClickHandler, hasNext, label) =>
-                  hasNext && (
-                    <button
-                      type="button"
-                      onClick={onClickHandler}
-                      title={label}
-                      style={{ width: '40px', height: '40px', display: 'flex' }}
-                    >
-                      Próximo
-                    </button>
-                  )
-                }*/
+              /*   renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                   hasPrev && (
+                     <button
+                       type="button"
+                       onClick={onClickHandler}
+                       title={label}
+                       style={{ width: '40px', height: '40px', display: 'flex' }}
+                     >
+                       Anterior
+                     </button>
+                   )
+                 }
+                 renderArrowNext={(onClickHandler, hasNext, label) =>
+                   hasNext && (
+                     <button
+                       type="button"
+                       onClick={onClickHandler}
+                       title={label}
+                       style={{ width: '40px', height: '40px', display: 'flex' }}
+                     >
+                       Próximo
+                     </button>
+                   )
+                 }*/
               >
                 {post.content.map((contentPost, index) => (
                   <div key={index} style={{ position: 'relative' }}>
@@ -323,14 +336,24 @@ function Feed() {
                             CC@{post.user}
                           </h6>
                         </div>
-                        <video
-                          className={verificaBlur(post.price, post.fotoCapa, index)}
-                          controls
-                        >
-                          <source src={contentPost} type="video/mp4" />
-                          
-                        </video>
-                       </div>
+                        {verificaVid(post.price, post.fotoCapa, index, contentPost) ? (
+                          <video
+                            className={verificaBlur(post.price, post.fotoCapa, index)}
+                            controls
+                          >
+                            <source src={contentPost} type="video/mp4" />
+                          </video>
+                        ) : (
+                          <img
+                            style={{ width: '100%' }}
+                            className={verificaBlur(post.price, post.fotoCapa, index)}
+                            src={verificaImg(post.price, post.fotoCapa, index, contentPost)}
+                            alt="A imagem do Post"
+                          />
+
+                        )}
+
+                      </div>
                     ) : (
                       <div style={{ position: 'relative' }}>
                         {post.price !== '0,00' && (

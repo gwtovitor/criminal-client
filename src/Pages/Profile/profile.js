@@ -86,9 +86,12 @@ function Profile() {
                 }
             })
             const postsGet = await api.get(`/post/profile/${id}`, {
-                logado: idUser
-            })
-            console.log(postsGet.data)
+                headers: {
+                    'logado': idUser
+                }
+            });
+
+
             const sortedDados = postsGet.data.filter((dado) => dado !== null).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
             if (response.data && postsGet.data) {
@@ -190,7 +193,7 @@ function Profile() {
             } else {
                 var postslegth = 0
                 posts.map((e) => e.agendamentoPost < Date.now() ? postslegth++ : '')
-                console.log(postslegth)
+
                 return postslegth
             }
         }
@@ -401,7 +404,26 @@ function Profile() {
         console.log(selectedcontent)
         const deletando = await api.delete(`/post/${selectedcontent}`)
 
-        // window.location.reload()
+         window.location.reload()
+    }
+
+    async function Arquivar(id) {
+        const getPost = await api.get(`/post/${id}`)
+
+        if (getPost.data.privado) {
+            const privado = getPost.data.privado
+            const arquivandoPost = await api.patch(`/post/${id}`, {
+                privado: !privado
+            })
+            selectedContent.privado = !privado
+            window.location.reload()
+        } else {
+            const arquivandoPost = await api.patch(`/post/${id}`, {
+                privado: true
+            })
+            selectedContent.privado = true
+            window.location.reload()
+        }
     }
 
     async function seguir() {
@@ -583,7 +605,7 @@ function Profile() {
        }, [posts]);
    */
 
-       // funcao de copiar url do perfil
+    // funcao de copiar url do perfil
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
             .then(() => {
@@ -614,22 +636,7 @@ function Profile() {
 
 
 
-    async function Arquivar(id) {
-        const getPost = await api.get(`/post/${id}`)
-        console.log(getPost)
-        if (getPost.data.privado) {
-            const privado = getPost.data.privado
-            const arquivandoPost = await api.patch(`/post/${id}`, {
-                privado: !privado
-            })
-            selectedContent.privado = !privado
-        } else {
-            const arquivandoPost = await api.patch(`/post/${id}`, {
-                privado: true
-            })
-            selectedContent.privado = true
-        }
-    }
+  
 
 
 
@@ -1040,7 +1047,7 @@ function Profile() {
 
                         {isYou ? (<><Button onClick={() => { deletePost(selectedContent._id) }} variant="danger">Deletar</Button>
                             <Button onClick={() => Arquivar(selectedContent._id)} variant={selectedContent?.privado ? 'danger' : 'primary'}>
-                                {selectedContent?.privado  ? 'Desarquivar' : 'Arquivar'}
+                                {selectedContent?.privado ? 'Desarquivar' : 'Arquivar'}
                             </Button>
                         </>) : (null)}
                         <Button onClick={closeModal} variant="primary">Fechar</Button>
