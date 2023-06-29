@@ -195,22 +195,23 @@ function Postfeed() {
             />
           </label>
         </div>
-
-        {fileUrl &&
-          Array.isArray(fileUrl) &&
-          fileUrl.map((file, index) => (
-            <div
-              key={index}
-              className="content-container mt-2"
-              style={{ alignSelf: "center", margin: "0 auto" }}
-            >
-              {file.type.includes("video") ? (
-                <video controls src={file.link} width="50%" height="auto" />
-              ) : (
-                <img src={file.link} alt="Imagem" width="50%" height="auto" />
-              )}
-            </div>
-          ))}
+        <div className="content-containertest">
+          {fileUrl &&
+            Array.isArray(fileUrl) &&
+            fileUrl.map((file, index) => (
+              <div key={index} className="testeContainers mt-2">
+                {file.type.includes("video") ? (
+                  <video controls src={file.link} />
+                ) : (
+                  <img
+                    src={file.link}
+                    alt="Imagem"
+                    className="content-container-img_video"
+                  />
+                )}
+              </div>
+            ))}
+        </div>
         <div>
           <div>
             <p className="paragraphpostFeed mt-3">

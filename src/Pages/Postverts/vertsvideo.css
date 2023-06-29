@@ -1,17 +1,102 @@
-.fullscreen-video-container {
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 30%;
-    border-radius: 10px;
-    align-self: center;
-    aspect-ratio: 1/1.5;
-  }
-  
-  @media (min-width: 0px) and (max-width:768px) {
+.containerPostVerts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15vh;
+}
+.textareaPostVerts {
+  border-radius: 5px;
+  padding: 5px;
+  width: 13rem;
+  border: #386cfd 2px solid;
+}
+.textareaPostVerts:focus {
+  background-color: #fff1f3;
+  transform: scale(1.05);
+}
+.containerButtonandVideo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .fullscreen-video-container{
-        width: 100%;
-    }
+.buttonLabelVideo {
+  background-color: #e46f80;
+  cursor: pointer;
+  color: #fff;
+  padding: 6px;
+  width: 10rem;
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: 0.3s;
+  border: none;
+}
+.buttonLabelVideo:hover {
+  color: #000000;
+  background-color: #f8677d;
+  transform: scale(1.03);
+}
+.videoPostVerts {
+  width: 25rem;
+
+  height: 13rem;
+  border: none;
+
+  border-radius: 20px;
+}
+.fullscreen-video-container {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  border-radius: 10px;
+  align-self: center;
+  aspect-ratio: 1/1.5;
+}
+
+@media (min-width: 0px) and (max-width: 768px) {
+  .fullscreen-video-container {
+    width: 100%;
   }
+}
+
+@media (max-width: 450px) {
+  .videoPostVerts {
+    width: 20rem;
+
+    height: 11rem;
+    border: none;
+    margin-left: 1rem;
+    border-radius: 0;
+  }
+}
+@media (max-width: 336px) {
+  .videoPostVerts {
+    width: 18rem;
+
+    height: 9.2rem;
+
+    margin-left: 1.2rem;
+  }
+}
+
+@media (max-width: 295px) {
+  .videoPostVerts {
+    width: 17.5rem;
+
+    height: 9rem;
+
+    margin-left: 1.5rem;
+  }
+}
+
+@media (max-height: 539px) {
+  .containerPostVerts {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+  }
+}
