@@ -201,7 +201,7 @@ function Postfeed() {
             fileUrl.map((file, index) => (
               <div key={index} className="testeContainers mt-2">
                 {file.type.includes("video") ? (
-                  <video controls src={file.link} />
+                  <video className="videoPostFeed" controls src={file.link} />
                 ) : (
                   <img
                     src={file.link}

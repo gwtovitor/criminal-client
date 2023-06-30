@@ -21,16 +21,40 @@
   width: 50%;
   border-left: 2px solid #5f86f1;
 }
+#offcanvasNavbarMyCriminal {
+  width: 30%;
+  border-left: 2px solid #5f86f1;
+}
 .testeh:hover {
   background-color: red;
+}
+.nav-itempersonalize {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button-close {
+  margin-right: 3rem;
 }
 .div-todo {
   display: flex;
   align-items: flex-end;
+  /* flex-direction: column; */
   /* margin-right: 1.3rem; */
   /* margin-top: 1rem; */
   /* margin-left: 0.2rem; */
   height: 80vh;
+  /* width: 100vw; */
+}
+
+.div-todoMycriminal {
+  display: flex;
+  align-items: flex-end;
+  /* flex-direction: column; */
+  /* margin-right: 1.3rem; */
+  /* margin-top: 1rem; */
+  /* margin-left: 0.2rem; */
+  height: 95vh;
   /* width: 100vw; */
 }
 
@@ -210,20 +234,31 @@
   #offcanvasNavbarMain {
     width: 40%;
   }
-}
-@media (max-width: 555px) {
-  #offcanvasNavbarMain {
-    width: 50%;
+  #offcanvasNavbarMyCriminal {
+    width: 40%;
+    border-left: 2px solid #5f86f1;
   }
 }
-@media (max-width: 445px) {
+
+@media (max-width: 468px) {
   #offcanvasNavbarMain {
     width: 60%;
   }
+  #offcanvasNavbarMyCriminal {
+    width: 60%;
+  }
 }
-@media (max-width: 376px) {
+@media (max-width: 390px) {
   #offcanvasNavbarMain {
     width: 80%;
+  }
+  #offcanvasNavbarMyCriminal {
+    width: 80%;
+  }
+}
+@media (max-width: 293px) {
+  #offcanvasNavbarMyCriminal {
+    width: 84%;
   }
 }
 @media (max-height: 610px) {
