@@ -99,7 +99,7 @@ function Feed() {
     sortedPostIds = sortedPostIds.filter(
       (postId) => !idsPassados.includes(postId)
     );
-    for (let i = 0; i < sortedPostIds.length && i < 10; i++) {
+    for (let i = 0; i < sortedPostIds.length || i < 20; i++) {
       const postId = sortedPostIds[i];
       idsPassados.push(postId);
       if (postId == undefined) {
@@ -144,7 +144,7 @@ function Feed() {
 
       }
     }
-
+    console.log(newFeed)
     setFeed(newFeed);
     setCarregando(false);
   }
@@ -244,7 +244,7 @@ function Feed() {
       <section id="post-list">
         {feed.length !== 0 ? (
           feed.map((post, index) => (
-            <article key={post._id}>
+            <article key={index}>
               <header>
                 <div
                   className="user-info"
@@ -360,9 +360,10 @@ function Feed() {
                         <img
                           style={{ width: '100%' }}
                           className={verificaBlur(post.price, post.fotoCapa, index)}
-                          src={verificaImg(post.price, post.fotoCapa, index, contentPost)}
-                          alt="A imagem do Post"
+                          src={contentPost}
+                          alt={contentPost}
                         />
+                        <p>{contentPost.legenda}</p>
                       </div>
                     )}
                   </Carousel.Item>

@@ -284,15 +284,16 @@ function Profile() {
         }
 
         const formData = new FormData();
+        console.log(selectedFile)
 
-
-        formData.append("file", selectedFile);
+        formData.append("files", selectedFile);
 
         try {
             const response = await api.post("/upload", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             })
-            const imgPath = response.data.file.location
+            const imgPath = response.data.files[0].location
+            console.log(response)
             try {
                 const attProfile = await api.patch(`/profile/${id}`, {
                     headers: {
@@ -309,7 +310,7 @@ function Profile() {
             console.log(error)
         }
         setEditingProfile(false);
-        window.location.reload()
+     window.location.reload()
     };
 
 
