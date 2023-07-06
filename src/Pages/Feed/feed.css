@@ -68,7 +68,11 @@ section#post-list article {
   flex-direction: row;
   align-items: center;
 }
-
+.carousel-control-prev,
+.carousel-control-next {
+  height: 9rem;
+  margin-top: 3.3rem;
+}
 section#post-list article header {
   padding: 20px;
   display: flex;
@@ -162,7 +166,6 @@ section#post-list article footer p span {
     padding: 0;
   }
 }
-
 
 .img-loading {
   width: 40px;

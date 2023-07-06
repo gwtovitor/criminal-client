@@ -588,114 +588,117 @@ function Main() {
       </div>
 
       <div
-        className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75"
+        className="offcanvas offcanvas-end section-nav"
         id="offcanvasNavbarMyCriminal"
         aria-labelledby="offcanvasNavbarMyCriminalLabel"
       >
-        <div className="offcanvas-header">
-          <strong className="offcanvas-title" id="offcanvasNavbarMyCriminal">
-            <ClosedCaptionOff /> My Criminal
-          </strong>
-          <a
-            type="button"
-            className="btn-close-white"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasNavbarMain"
-            aria-label="Close"
-          >
-            <ArrowBack className="text-secondary" />
-          </a>
-        </div>
-        <div className="offcanvas-body">
-          <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./seguidores"}
-                >
-                  Seguidores
-                </Link>
-              </h5>
-            </li>
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./seguindo"}
-                >
-                  Seguindo
-                </Link>
-              </h5>
-            </li>
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./assinantes"}
-                >
-                  Assinantes
-                </Link>
-              </h5>
-            </li>
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./assinando"}
-                >
-                  Assinando
-                </Link>
-              </h5>
-            </li>
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./favoritos"}
-                >
-                  Galeria
-                </Link>
-              </h5>
-            </li>
-            <li className="nav-item">
-              <h5>
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  onClick={() => {
-                    closeModalLateral();
-                  }}
-                  to={"./suporte"}
-                >
-                  Suporte CC
-                </Link>
-              </h5>
-            </li>
-          </ul>
+        <div className="div-todoMycriminal">
+          <div className="offcanvas-body">
+            <ul className="navbar-nav ul">
+              <strong className="offcanvas-title" id="">
+                <ClosedCaptionOff /> My Criminal
+              </strong>
+
+              <li className="nav-item">
+                <h5>
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    onClick={() => {
+                      closeModalLateral();
+                    }}
+                    to={"./seguidores"}
+                  >
+                    Seguidores
+                  </Link>
+                </h5>
+              </li>
+              <li className="nav-item">
+                <h5>
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    onClick={() => {
+                      closeModalLateral();
+                    }}
+                    to={"./seguindo"}
+                  >
+                    Seguindo
+                  </Link>
+                </h5>
+              </li>
+              <li className="nav-item">
+                <h5>
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    onClick={() => {
+                      closeModalLateral();
+                    }}
+                    to={"./assinantes"}
+                  >
+                    Assinantes
+                  </Link>
+                </h5>
+              </li>
+              <li className="nav-item">
+                <h5>
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    onClick={() => {
+                      closeModalLateral();
+                    }}
+                    to={"./assinando"}
+                  >
+                    Assinando
+                  </Link>
+                </h5>
+              </li>
+              <li className="nav-item">
+                <h5>
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    onClick={() => {
+                      closeModalLateral();
+                    }}
+                    to={"./favoritos"}
+                  >
+                    Galeria
+                  </Link>
+                </h5>
+              </li>
+              <li className="nav-item ">
+                <div className="nav-itempersonalize">
+                  <a
+                    type="button"
+                    className="btn-close-white button-close"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbarMain"
+                    aria-label="Close"
+                  >
+                    <ArrowBack className="text-secondary" />
+                  </a>
+
+                  <h5>
+                    <Link
+                      className="nav-link active"
+                      aria-current="page"
+                      onClick={() => {
+                        closeModalLateral();
+                      }}
+                      to={"./suporte"}
+                    >
+                      Suporte CC
+                    </Link>
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-
       <div
         className="offcanvas offcanvas-end w-75 border-4 border-start border-info border-opacity-75"
         id="offcanvasNavbarFinancas"
